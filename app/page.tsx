@@ -1,8 +1,16 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { createClient } from '@/utils/supabase/server'
+import { cookies } from 'next/headers'
 
-export default function Home() {
+export default async function Home() {
+  // const supabase = await createClient()
+
+  // const { data: countries } = await supabase.from('countries').select('*')
+
+  // console.log(countries)
+
   return (
     <main className="relative h-screen">
       <div className="absolute inset-0 z-0">

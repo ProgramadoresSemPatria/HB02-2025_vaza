@@ -3,63 +3,44 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import React from 'react'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { ArrowRight, Lock, Mail, User } from 'lucide-react'
+import { ArrowRight, Lock, Mail } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import RegisterFormSchema, { RegisterFormSchemaType } from '@/lib/validators/RegisterFormSchema'
+import LoginFormSchema, { LoginFormSchemaType } from '@/lib/validators/LoginFormSchema'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useSignup } from '@/hooks/auth/useSignup'
+import { useLogin } from '@/hooks/auth/useLogin'
 
-export default function RegisterForm() {
-  const signup = useSignup()
+export default function LoginForm() {
+  const login = useLogin()
   
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<RegisterFormSchemaType>({
-    resolver: zodResolver(RegisterFormSchema),
+  } = useForm<LoginFormSchemaType>({
+    resolver: zodResolver(LoginFormSchema),
   })
 
-  const onSubmit = (data: RegisterFormSchemaType) => {
-    signup.mutate(data)
+  const onSubmit = (data: LoginFormSchemaType) => {
+    login.mutate(data)
   }
 
-  const isSubmitting = signup.isPending
-
+  const isSubmitting = login.isPending
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1 text-center">
         <Image src="/vaza-logo.webp" alt="Vaza Logo" width={100} height={100} className="mx-auto" />
-        <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+        <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
         <CardDescription>
-          Join Vaza to start planning your journey
+          Sign in to your account to continue your journey
         </CardDescription>
       </CardHeader>
       
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-          {/* Full Name Field */}
-          <div className="space-y-2">
-            <Label htmlFor="fullName">
-              <User className="w-4 h-4" />
-              Full Name
-            </Label>
-            <Input
-              id="fullName"
-              type="text"
-              placeholder="Enter your full name"
-              {...register('fullName')}
-              aria-invalid={!!errors.fullName}
-            />
-            {errors.fullName && (
-              <p className="text-sm text-destructive">{errors.fullName.message}</p>
-            )}
-          </div>
 
           {/* Email Field */}
           <div className="space-y-2">
@@ -89,7 +70,7 @@ export default function RegisterForm() {
               <Input
                 id="password"
                 type={'password'}
-                placeholder="Create a password"
+                placeholder="Enter your password"
                 {...register('password')}
                 aria-invalid={!!errors.password}
               />
@@ -113,25 +94,25 @@ export default function RegisterForm() {
             disabled={isSubmitting}
           >
             {isSubmitting ? (
-              'Creating Account...'
+              'Signing In...'
             ) : (
               <>
-                Create Account
+                Sign In
                 <ArrowRight className="w-4 h-4 ml-2" />
               </>
             )}
           </Button>
         </form>
 
-        {/* Login Link */}
+        {/* Register Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
-            Already have an account?{' '}
+            Don't have an account?{' '}
             <Link 
-              href="/login" 
+              href="/register" 
               className="font-medium text-primary hover:underline"
             >
-              Log In
+              Create Account
             </Link>
           </p>
         </div>

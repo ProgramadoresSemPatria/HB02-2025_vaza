@@ -10,34 +10,24 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import Image from 'next/image'
-import { signUpUser, signInUser } from '@/services/auth'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+import { useSignup } from '@/hooks/useSignup'
 
 export default function RegisterForm() {
-  const router = useRouter()
+  const signup = useSignup()
+  
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<RegisterFormSchemaType>({
     resolver: zodResolver(RegisterFormSchema),
   })
 
-  const onSubmit = async (data: RegisterFormSchemaType) => {
-    try {
-      await signUpUser(data)
-      toast.success('Account created successfully')
-      try {
-        await signInUser({ email: data.email, password: data.password })
-        router.push('/dashboard/profile')
-      } catch (error) {
-        router.push('/login')
-      }
-    } catch (error) {
-      toast.error('Failed to create account')
-    }
+  const onSubmit = (data: RegisterFormSchemaType) => {
+    signup.mutate(data)
   }
+
+  const isSubmitting = signup.isPending
 
 
   return (

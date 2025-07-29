@@ -231,7 +231,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
                     : nextStep
                 }
                 disabled={!canProceed()}
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+                className="w-full bg-green-800 hover:bg-green-900 text-white"
               >
                 {currentStep === totalSteps ? "Criar meu plano" : "Próximo"}
               </Button>

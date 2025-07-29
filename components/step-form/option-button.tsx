@@ -22,8 +22,8 @@ export const OptionButton = ({
     className={cn(
       "w-full h-14 text-left justify-start transition-all duration-300 ease-out border-2",
       isSelected
-        ? "bg-purple-600 text-white border-purple-600 shadow-sm"
-        : "bg-white text-gray-700 border-gray-200 hover:border-purple-300 hover:bg-purple-50",
+        ? "bg-green-800 text-white border-green-800 shadow-sm"
+        : "bg-white text-gray-700 border-gray-200 hover:border-green-600 hover:bg-green-50",
       className
     )}
     onClick={onClick}

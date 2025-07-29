@@ -591,7 +591,7 @@ export const TargetCountryStep = ({
                   onClick={() => setActiveTab("list")}
                   className={`flex-1 py-3 px-4 text-sm font-medium ${
                     activeTab === "list"
-                      ? "text-purple-600 border-b-2 border-purple-600"
+                      ? "text-green-800 border-b-2 border-green-800"
                       : "text-gray-500"
                   }`}
                 >
@@ -601,7 +601,7 @@ export const TargetCountryStep = ({
                   onClick={() => setActiveTab("map")}
                   className={`flex-1 py-3 px-4 text-sm font-medium ${
                     activeTab === "map"
-                      ? "text-purple-600 border-b-2 border-purple-600"
+                      ? "text-green-800 border-b-2 border-green-800"
                       : "text-gray-500"
                   }`}
                 >

@@ -11,7 +11,7 @@ export const OnboardingTrigger = () => {
     <>
       <Button
         onClick={() => setShowOnboarding(true)}
-        className="bg-purple-600 hover:bg-purple-700 text-white"
+        className="bg-green-800 hover:bg-green-900 text-white"
       >
         Começar Onboarding
       </Button>

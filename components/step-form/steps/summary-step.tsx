@@ -7,7 +7,7 @@ interface SummaryStepProps {
 
 export const SummaryStep = ({ formData }: SummaryStepProps) => (
   <div className="space-y-6 text-center">
-    <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+    <div className="w-16 h-16 bg-green-800 rounded-full flex items-center justify-center mx-auto mb-4">
       <Check className="w-8 h-8 text-white" />
     </div>
     <div>
@@ -37,13 +37,16 @@ export const SummaryStep = ({ formData }: SummaryStepProps) => (
           <span className="text-gray-500">Formação:</span> {formData.degree}
         </p>
         <p>
-          <span className="text-gray-500">Instituição:</span> {formData.institution}
+          <span className="text-gray-500">Instituição:</span>{" "}
+          {formData.institution}
         </p>
         <p>
-          <span className="text-gray-500">Cidadanias:</span> {formData.citizenships}
+          <span className="text-gray-500">Cidadanias:</span>{" "}
+          {formData.citizenships}
         </p>
         <p>
-          <span className="text-gray-500">Estado Civil:</span> {formData.maritalStatus}
+          <span className="text-gray-500">Estado Civil:</span>{" "}
+          {formData.maritalStatus}
         </p>
         <p>
           <span className="text-gray-500">Filhos:</span> {formData.children}

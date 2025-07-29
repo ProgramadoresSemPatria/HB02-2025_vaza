@@ -14,7 +14,7 @@ import { useLogin } from '@/hooks/auth/useLogin'
 
 export default function LoginForm() {
   const login = useLogin()
-  
+
   const {
     register,
     handleSubmit,
@@ -38,7 +38,7 @@ export default function LoginForm() {
           Sign in to your account to continue your journey
         </CardDescription>
       </CardHeader>
-      
+
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
@@ -88,9 +88,9 @@ export default function LoginForm() {
           </div>
 
           {/* Submit Button */}
-          <Button 
-            type="submit" 
-            className="w-full" 
+          <Button
+            type="submit"
+            className="w-full"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -107,9 +107,9 @@ export default function LoginForm() {
         {/* Register Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <Link 
-              href="/register" 
+            Don&apos;t have an account?{' '}
+            <Link
+              href="/register"
               className="font-medium text-primary hover:underline"
             >
               Create Account

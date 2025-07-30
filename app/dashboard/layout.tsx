@@ -1,7 +1,8 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { getUser } from '@/hooks/getUser'
-import Sidebar from '@/components/dashboard/Sidebar'
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/app-sidebar"
 
 export default function DashboardLayout({
   children,
@@ -17,7 +18,13 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-background">
-      {children}
+      <SidebarProvider>
+        <AppSidebar />
+        <main>
+          <SidebarTrigger />
+          {children}
+        </main>
+      </SidebarProvider>
     </div>
   )
 }

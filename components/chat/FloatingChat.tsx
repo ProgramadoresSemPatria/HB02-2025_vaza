@@ -1,73 +1,91 @@
 import { Button } from "../ui/button"
-import { Input } from "@/components/ui/input"
 import {
     Popover,
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Card } from "../ui/card"
-import z from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
-import { useForm } from "react-hook-form"
-
-const FormSchema = z.object({
-  message: z.string(),
-})
+import { Card, CardContent } from "../ui/card"
+import { Send } from "lucide-react"
+import { ScrollArea } from "../ui/scroll-area"
+import { useChat } from "@ai-sdk/react"
+import { Textarea } from "../ui/textarea"
 
 export default function FloatingChat() {
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-            message: "",
-        },
-    })
+    const { messages, input, handleInputChange, handleSubmit } = useChat()
 
-    function onSubmit(data: z.infer<typeof FormSchema>) {
-        console.log(data)
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault()
+            handleSubmit(event as any)
+        }
     }
 
     return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <Button variant="outline">Open popover</Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-100 flex flex-col gap-2">
-                <div className="bg-primary flex items-center gap-4 p-4 rounded-md">
-                    <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>Vaza AI</AvatarFallback>
-                    </Avatar>
-                    <h2 className="text-secondary font-bold">
-                        VAZA AI
-                    </h2>
-                </div>
-                <Card>
-
-                </Card>
-                <Form {...form}>
+        <div className="fixed bottom-4 right-4 z-50">
+            <Popover>
+                <PopoverTrigger asChild>
+                    <Button variant="default">Open Chat</Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 md:w-100 flex flex-col gap-4 mr-4">
+                    <div className="bg-brand-primary flex items-center gap-4 p-4 rounded-md">
+                        <Avatar>
+                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarFallback>Vaza AI</AvatarFallback>
+                        </Avatar>
+                        <h2 className="text-secondary font-bold">
+                            Vaza AI
+                        </h2>
+                    </div>
+                    <Card className="flex">
+                        <CardContent className="px-4">
+                            <ScrollArea className="h-[400px]">
+                                {messages.map((message) => (
+                                    <div 
+                                        key={message.id}
+                                        className={`flex px-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                    >
+                                        <Card
+                                            className={`mb-4 max-w-[80%] ${message.role === 'user' ? 'bg-primary text-secondary' : 'bg-muted'}`}
+                                        >
+                                            <CardContent>
+                                                <div
+                                                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                                >
+                                                    <div key={message.id} className="whitespace-pre-wrap">
+                                                        {message.parts.map((part, i) => {
+                                                            switch (part.type) {
+                                                            case 'text':
+                                                                return <div key={`${message.id}-${i}`}>{part.text}</div>;
+                                                            }
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            </CardContent>
+                                        </Card>
+                                    </div>
+                                ))}
+                            </ScrollArea>
+                        </CardContent>
+                    </Card>
                     <form 
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        className="w-full flex"
+                        onSubmit={handleSubmit}
+                        className="w-full flex items-center gap-2"
                     >   
-                        <FormField
-                            control={form.control}
-                            name="message"
-                            render={({ field }) => (
-                                <FormItem>
-                                <FormControl>
-                                    <Input placeholder="Send a message..." {...field} />
-                                </FormControl>
-                                <FormMessage />
-                                </FormItem>
-                            )}
+                        <Textarea 
+                            value={input} 
+                            placeholder="Send a message..." 
+                            onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
+                            className="resize-none min-h-8 max-h-24"
                         />
-                        <Button type="submit">Submit</Button>
-
+                        <Button type="submit">
+                            <Send />
+                            Send
+                        </Button>
                     </form>
-                </Form>
-            </PopoverContent>               
-        </Popover>
+                </PopoverContent>               
+            </Popover>
+        </div>
     )
 }

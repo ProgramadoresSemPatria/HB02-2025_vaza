@@ -14,27 +14,30 @@ export const useStepForm = () => {
     try {
       const supabase = createClient();
 
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-      if (!user) {
-        throw new Error('No authenticated user found');
+      if (sessionError) {
+        throw new Error('Failed to get auth session');
+      }
+
+      if (!session) {
+        throw new Error('No authenticated session found - please log in again');
       }
 
       const { error: upsertError } = await supabase
         .from('profiles')
         .upsert({
-          user_id: user.id,
-          full_name: user.user_metadata.full_name,
-          current_country: formData.currentCountry,
+          user_id: session.user.id,
+          full_name: session.user.user_metadata?.full_name,
+          country: formData.currentCountry,
           job_title: formData.jobTitle,
           age: parseInt(formData.age),
           degree: formData.degree,
           institution: formData.institution,
-          citizenships: formData.citizenships,
+          citizenships: formData.citizenships.split(',').map(c => c.trim()),
           marital_status: formData.maritalStatus,
           children: formData.children,
-          email: user.email,
-          updated_at: new Date().toISOString(),
+          email: session.user.email,
         });
 
       if (upsertError) {

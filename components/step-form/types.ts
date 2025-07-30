@@ -9,5 +9,4 @@ export interface FormData {
   children: string;
   name: string;
   email: string;
-  phone: string;
 }

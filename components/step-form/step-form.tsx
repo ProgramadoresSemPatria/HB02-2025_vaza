@@ -6,19 +6,21 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CitizenshipStep } from "./steps/citizenship-step";
-import { ContactStep } from "./steps/contact-step";
 import { CurrentCountryStep } from "./steps/current-country-step";
 import { EducationStep } from "./steps/education-step";
 import { FamilyStep } from "./steps/family-step";
 import { PersonalInfoStep } from "./steps/personal-info-step";
 import { SummaryStep } from "./steps/summary-step";
 import { FormData } from "./types";
+import { useStepForm } from "@/hooks/useStepForm";
+import { useRouter } from "next/navigation";
 
 interface StepFormProps {
   onClose?: () => void;
 }
 
 export const StepForm = ({ onClose }: StepFormProps) => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     currentCountry: "",
@@ -31,10 +33,11 @@ export const StepForm = ({ onClose }: StepFormProps) => {
     children: "",
     name: "",
     email: "",
-    phone: "",
   });
 
-  const totalSteps = 8;
+  const { saveProfile, isLoading } = useStepForm();
+
+  const totalSteps = 6;
 
   const updateFormData = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -52,6 +55,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
     }
   };
 
+
   const closeOnboarding = () => {
     setCurrentStep(1);
     setFormData({
@@ -65,7 +69,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
       children: "",
       name: "",
       email: "",
-      phone: "",
     });
     onClose?.();
   };
@@ -124,22 +127,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
         );
 
       case 6:
-        return (
-          <ContactStep
-            name={formData.name}
-            email={formData.email}
-            phone={formData.phone}
-            onUpdate={(field: string, value: string) =>
-              updateFormData(field as keyof FormData, value)
-            }
-          />
-        );
-
-      case 7:
         return <SummaryStep formData={formData} />;
-
-      default:
-        return null;
     }
   };
 
@@ -160,10 +148,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
       case 5:
         return formData.maritalStatus !== "" && formData.children !== "";
       case 6:
-        return (
-          formData.name !== "" && formData.email !== "" && formData.phone !== ""
-        );
-      case 7:
         return true;
       default:
         return false;
@@ -212,15 +196,18 @@ export const StepForm = ({ onClose }: StepFormProps) => {
               <Button
                 onClick={
                   currentStep === totalSteps
-                    ? () => {
-                        closeOnboarding();
+                    ? async () => {
+                      const success = await saveProfile(formData);
+                      if (success) {
+                        router.push('/dashboard/countries');
                       }
+                    }
                     : nextStep
                 }
-                disabled={!canProceed()}
+                disabled={!canProceed() || (currentStep === totalSteps && isLoading)}
                 className="w-full bg-green-800 hover:bg-green-900 text-white"
               >
-                {currentStep === totalSteps ? "Criar meu plano" : "Próximo"}
+                {currentStep === totalSteps ? (isLoading ? "Salvando..." : "Criar meu plano") : "Próximo"}
               </Button>
             </div>
           </div>

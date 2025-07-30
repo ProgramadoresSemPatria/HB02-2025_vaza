@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/client'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
+import FloatingChat from '@/components/chat/FloatingChat'
 
 export default function DashboardLayout({
   children,
@@ -47,6 +48,7 @@ export default function DashboardLayout({
   return (
     <div className="min-h-screen bg-background">
       {children}
+      <FloatingChat />
     </div>
   )
 }

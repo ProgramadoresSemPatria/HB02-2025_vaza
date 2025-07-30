@@ -207,7 +207,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
                 disabled={!canProceed() || (currentStep === totalSteps && isLoading)}
                 className="w-full bg-green-800 hover:bg-green-900 text-white"
               >
-                {currentStep === totalSteps ? (isLoading ? "Salvando..." : "Criar meu plano") : "Próximo"}
+                {currentStep === totalSteps ? (isLoading ? "Salvando..." : "Salvar informações") : "Próximo"}
               </Button>
             </div>
           </div>

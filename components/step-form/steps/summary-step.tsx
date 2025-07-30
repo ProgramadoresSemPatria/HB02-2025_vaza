@@ -22,7 +22,7 @@ export const SummaryStep = ({ formData }: SummaryStepProps) => (
       </h3>
       <div className="space-y-1 text-sm">
         <p>
-          <span className="text-gray-500">De:</span> {formData.currentCountry}
+          <span className="text-gray-500">De:</span> {formData.currentCountry.charAt(0).toUpperCase() + formData.currentCountry.slice(1)}
         </p>
         <p>
           <span className="text-gray-500">Profissão:</span> {formData.jobTitle}
@@ -43,13 +43,10 @@ export const SummaryStep = ({ formData }: SummaryStepProps) => (
         </p>
         <p>
           <span className="text-gray-500">Estado Civil:</span>{" "}
-          {formData.maritalStatus}
+          {formData.maritalStatus.charAt(0).toUpperCase() + formData.maritalStatus.slice(1)}
         </p>
         <p>
           <span className="text-gray-500">Filhos:</span> {formData.children}
-        </p>
-        <p>
-          <span className="text-gray-500">Nome:</span> {formData.name}
         </p>
       </div>
     </div>

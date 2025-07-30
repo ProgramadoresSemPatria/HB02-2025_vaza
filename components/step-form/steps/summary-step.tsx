@@ -25,9 +25,6 @@ export const SummaryStep = ({ formData }: SummaryStepProps) => (
           <span className="text-gray-500">De:</span> {formData.currentCountry}
         </p>
         <p>
-          <span className="text-gray-500">Para:</span> {formData.targetCountry}
-        </p>
-        <p>
           <span className="text-gray-500">Profissão:</span> {formData.jobTitle}
         </p>
         <p>

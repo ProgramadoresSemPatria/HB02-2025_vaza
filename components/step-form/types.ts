@@ -1,6 +1,5 @@
 export interface FormData {
   currentCountry: string;
-  targetCountry: string;
   jobTitle: string;
   age: string;
   degree: string;

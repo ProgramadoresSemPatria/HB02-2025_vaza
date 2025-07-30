@@ -12,7 +12,6 @@ import { EducationStep } from "./steps/education-step";
 import { FamilyStep } from "./steps/family-step";
 import { PersonalInfoStep } from "./steps/personal-info-step";
 import { SummaryStep } from "./steps/summary-step";
-import { TargetCountryStep } from "./steps/target-country-step";
 import { FormData } from "./types";
 
 interface StepFormProps {
@@ -23,7 +22,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     currentCountry: "",
-    targetCountry: "",
     jobTitle: "",
     age: "",
     degree: "",
@@ -58,7 +56,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
     setCurrentStep(1);
     setFormData({
       currentCountry: "",
-      targetCountry: "",
       jobTitle: "",
       age: "",
       degree: "",
@@ -87,14 +84,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
 
       case 2:
         return (
-          <TargetCountryStep
-            targetCountry={formData.targetCountry}
-            onUpdate={(value: string) => updateFormData("targetCountry", value)}
-          />
-        );
-
-      case 3:
-        return (
           <PersonalInfoStep
             jobTitle={formData.jobTitle}
             age={formData.age}
@@ -104,7 +93,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           />
         );
 
-      case 4:
+      case 3:
         return (
           <EducationStep
             degree={formData.degree}
@@ -115,7 +104,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           />
         );
 
-      case 5:
+      case 4:
         return (
           <CitizenshipStep
             citizenships={formData.citizenships}
@@ -123,7 +112,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           />
         );
 
-      case 6:
+      case 5:
         return (
           <FamilyStep
             maritalStatus={formData.maritalStatus}
@@ -134,7 +123,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           />
         );
 
-      case 7:
+      case 6:
         return (
           <ContactStep
             name={formData.name}
@@ -146,7 +135,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           />
         );
 
-      case 8:
+      case 7:
         return <SummaryStep formData={formData} />;
 
       default:
@@ -162,21 +151,19 @@ export const StepForm = ({ onClose }: StepFormProps) => {
         );
       case 2:
         return (
-          formData.targetCountry !== "" && formData.targetCountry !== "map"
+          formData.jobTitle !== "" && formData.age !== ""
         );
       case 3:
-        return formData.jobTitle !== "" && formData.age !== "";
-      case 4:
         return formData.degree !== "" && formData.institution !== "";
-      case 5:
+      case 4:
         return formData.citizenships !== "";
-      case 6:
+      case 5:
         return formData.maritalStatus !== "" && formData.children !== "";
-      case 7:
+      case 6:
         return (
           formData.name !== "" && formData.email !== "" && formData.phone !== ""
         );
-      case 8:
+      case 7:
         return true;
       default:
         return false;

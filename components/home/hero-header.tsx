@@ -24,7 +24,7 @@ export function HeroHeader({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="text-left mb-4 lg:mb-8"
+      className="text-left mb-4 lg:mb-8 relative z-20"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -66,7 +66,7 @@ export function HeroHeader({
         size="lg"
         animation="fadeIn"
         delay={0.3}
-        className="text-left mb-3"
+        className="text-left mb-3 relative z-20"
       >
         {subtitle}
       </AnimatedText>
@@ -76,7 +76,7 @@ export function HeroHeader({
         size="md"
         animation="fadeIn"
         delay={0.4}
-        className="text-left max-w-xl leading-relaxed mb-6"
+        className="text-left max-w-xl leading-relaxed mb-6 relative z-20"
       >
         {description}
       </AnimatedText>

@@ -39,8 +39,8 @@ export default function GlobeHero({
             />
           </div>
 
-          <div className="w-full lg:w-[80%] flex justify-center items-center relative">
-            <div className="absolute inset-0 flex justify-center items-center">
+          <div className="w-full lg:w-[80%] flex justify-center items-center min-h-[100px] lg:min-h-[600px] relative overflow-visible">
+            <div className="absolute inset-0 flex justify-center items-center overflow-visible">
               <GlobeSection />
             </div>
           </div>

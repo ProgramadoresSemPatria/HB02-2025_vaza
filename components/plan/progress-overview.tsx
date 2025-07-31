@@ -1,0 +1,67 @@
+"use client";
+
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Separator } from "@/components/ui/separator";
+
+interface ProgressOverviewProps {
+  completedTasks: number;
+  totalTasks: number;
+  progressPercentage: number;
+  estimatedTotalDays: number;
+  remainingDays: number;
+}
+
+export function ProgressOverview({
+  completedTasks,
+  totalTasks,
+  progressPercentage,
+  estimatedTotalDays,
+  remainingDays,
+}: ProgressOverviewProps) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-lg">Progress Overview</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span>Overall Progress</span>
+            <span>{Math.round(progressPercentage)}%</span>
+          </div>
+          <Progress value={progressPercentage} className="h-2" />
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 text-sm">
+          <div className="bg-green-50 p-4 rounded-lg">
+            <div className="font-medium text-green-900 mb-2">Completed</div>
+            <div className="text-3xl font-bold text-green-600">
+              {completedTasks}
+            </div>
+            <div className="text-green-600">tasks</div>
+          </div>
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="font-medium text-blue-900 mb-2">Remaining</div>
+            <div className="text-3xl font-bold text-blue-600">
+              {totalTasks - completedTasks}
+            </div>
+            <div className="text-blue-600">tasks</div>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span>Time Estimate</span>
+            <span>{remainingDays} days left</span>
+          </div>
+          <div className="text-xs text-gray-500">
+            Total estimated: {estimatedTotalDays} days
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

@@ -1,7 +1,7 @@
 export {
   AnimatedText,
-  animatedTextVariants,
   TypewriterText,
+  animatedTextVariants,
 } from "./animated-text";
 export { Badge, badgeVariants } from "./badge";
 export { GlobeIcon } from "./globe-icon";
@@ -11,10 +11,10 @@ export { HighlightText, highlightVariants } from "./highlight-text";
 export { InteractiveHoverButton } from "./interactive-hover-button";
 export { SpringElement } from "./spring-element";
 export {
-  labelVariants,
-  numberVariants,
   Stats,
   StatsGrid,
+  labelVariants,
+  numberVariants,
   statsVariants,
 } from "./stats";
 
@@ -57,6 +57,7 @@ export {
 } from "./dropdown-menu";
 export { Input } from "./input";
 export { Label } from "./label";
+export { Progress } from "./progress";
 export { Separator } from "./separator";
 export {
   Sheet,

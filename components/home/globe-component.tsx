@@ -8,8 +8,8 @@ const cn = (...classes: string[]) => {
 };
 
 const GLOBE_CONFIG: COBEOptions = {
-  width: 1000,
-  height: 1000,
+  width: 1200,
+  height: 1200,
   onRender: () => {},
   devicePixelRatio: 2,
   phi: 0,
@@ -46,6 +46,7 @@ export function GlobeComponent({
 }: GlobeComponentProps) {
   let phi = 0;
   let width = 0;
+  let height = 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
@@ -71,9 +72,9 @@ export function GlobeComponent({
       if (!pointerInteracting.current) phi += 0.005;
       state.phi = phi + r;
       state.width = width * 2;
-      state.height = width * 2;
+      state.height = height * 2;
     },
-    [r, width]
+    [r, width, height]
   );
 
   const onResize = () => {
@@ -92,7 +93,6 @@ export function GlobeComponent({
         const newWidth = rect.width;
         const newHeight = rect.height;
 
-        // Atualizar o canvas
         canvasRef.current.width = newWidth * 2;
         canvasRef.current.height = newHeight * 2;
       }
@@ -104,7 +104,7 @@ export function GlobeComponent({
     const globe = createGlobe(canvasRef.current!, {
       ...config,
       width: width * 2,
-      height: width * 2,
+      height: height * 2,
       onRender,
     });
 
@@ -114,12 +114,12 @@ export function GlobeComponent({
       window.removeEventListener("resize", handleResize);
       globe.destroy();
     };
-  }, [width, config, onRender]);
+  }, [width, height, config, onRender]);
 
   return (
     <div
       className={cn(
-        "absolute inset-0 mx-auto aspect-[1/1] w-full h-full",
+        "absolute inset-0 mx-auto aspect-[1/1] w-full h-full min-h-[600px]",
         className ?? ""
       )}
     >

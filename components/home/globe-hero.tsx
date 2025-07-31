@@ -29,7 +29,6 @@ export default function GlobeHero({
 }: GlobeHeroProps) {
   return (
     <>
-      {/* Hero Section - Apenas heading até botão */}
       <HeroBackground>
         <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-8 lg:gap-16 px-4 py-16 container mx-auto">
           <div className="w-full lg:w-[50%] flex flex-col items-center lg:items-start">
@@ -40,13 +39,12 @@ export default function GlobeHero({
             />
           </div>
 
-          <div className="w-full lg:w-[50%] flex justify-center items-center min-h-[500px] lg:min-h-[700px] overflow-hidden p-4">
+          <div className="w-full lg:w-[50%] flex justify-center items-center min-h-[600px] lg:min-h-[800px] overflow-hidden p-4">
             <GlobeSection />
           </div>
         </div>
       </HeroBackground>
 
-      {/* Seções separadas abaixo da hero */}
       <div className="bg-background py-16">
         <div className="container mx-auto px-4">
           <motion.div

@@ -30,9 +30,13 @@ export function HeroHeader({
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mb-6"
+        className="mb-4"
       >
-        <Badge variant="metallic" size="lg" className="px-3 py-2">
+        <Badge
+          variant="metallic"
+          size="lg"
+          className="px-4 py-0 rounded-lg !rounded-lg"
+        >
           <SpringElement
             springClassName="stroke-green-400/50"
             springConfig={{ stiffness: 300, damping: 25 }}
@@ -44,14 +48,14 @@ export function HeroHeader({
               curveRatioMax: 1,
               bezierOffset: 4,
             }}
-            className="mr-2"
+            className="mr-3"
           >
-            <Avatar className="size-12">
+            <Avatar className="size-10">
               <AvatarImage draggable={false} src="/vaza-logo.webp" />
               <AvatarFallback>VAZA</AvatarFallback>
             </Avatar>
           </SpringElement>
-          Relocação Internacional
+          <span className="text-sm font-medium">Relocação Internacional</span>
         </Badge>
       </motion.div>
 
@@ -62,7 +66,7 @@ export function HeroHeader({
         size="lg"
         animation="fadeIn"
         delay={0.3}
-        className="text-center lg:text-left mb-4"
+        className="text-center lg:text-left mb-3"
       >
         {subtitle}
       </AnimatedText>
@@ -72,7 +76,7 @@ export function HeroHeader({
         size="md"
         animation="fadeIn"
         delay={0.4}
-        className="text-center lg:text-left max-w-xl lg:max-w-none mx-auto lg:mx-0 leading-relaxed mb-4"
+        className="text-center lg:text-left max-w-xl leading-relaxed mb-6"
       >
         {description}
       </AnimatedText>

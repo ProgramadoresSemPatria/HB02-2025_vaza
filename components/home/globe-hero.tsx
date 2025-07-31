@@ -30,8 +30,8 @@ export default function GlobeHero({
   return (
     <>
       <HeroBackground>
-        <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-8 lg:gap-16 px-4 py-16 container mx-auto">
-          <div className="w-full lg:w-[50%] flex flex-col items-center lg:items-start">
+        <div className="flex flex-col lg:flex-row items-center justify-center min-h-screen gap-8 lg:gap-4 px-4 py-16 lg:pl-[5%]">
+          <div className="w-full lg:w-[59%] flex flex-col items-start">
             <HeroHeader
               title={title}
               subtitle={subtitle}
@@ -39,8 +39,10 @@ export default function GlobeHero({
             />
           </div>
 
-          <div className="w-full lg:w-[50%] flex justify-center items-center min-h-[600px] lg:min-h-[800px] overflow-hidden p-4">
-            <GlobeSection />
+          <div className="w-full lg:w-[80%] flex justify-center items-center min-h-[500px] lg:min-h-[800px] relative">
+            <div className="absolute inset-0 flex justify-center items-center">
+              <GlobeSection />
+            </div>
           </div>
         </div>
       </HeroBackground>

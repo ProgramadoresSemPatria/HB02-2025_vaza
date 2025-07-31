@@ -8,8 +8,8 @@ const cn = (...classes: string[]) => {
 };
 
 const GLOBE_CONFIG: COBEOptions = {
-  width: 1200,
-  height: 1200,
+  width: 1500,
+  height: 1500,
   onRender: () => {},
   devicePixelRatio: 2,
   phi: 0,
@@ -119,7 +119,7 @@ export function GlobeComponent({
   return (
     <div
       className={cn(
-        "absolute inset-0 mx-auto aspect-[1/1] w-full h-full min-h-[600px]",
+        "absolute inset-0 aspect-[1/1] w-full h-full min-h-[800px] scale-110 lg:scale-105",
         className ?? ""
       )}
     >

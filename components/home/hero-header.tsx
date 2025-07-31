@@ -88,8 +88,9 @@ export function HeroHeader({
         className="inline-flex justify-start"
       >
         <InteractiveHoverButton
+          href="/register"
           text="Get Started"
-          className="w-40 h-12 text-sm"
+          className="w-40 h-12 z-10 text-sm"
         />
       </motion.div>
     </motion.div>

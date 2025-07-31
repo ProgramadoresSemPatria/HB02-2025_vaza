@@ -39,7 +39,7 @@ export default function GlobeHero({
             />
           </div>
 
-          <div className="w-full lg:w-[80%] flex justify-center items-center min-h-[500px] lg:min-h-[800px] relative">
+          <div className="w-full lg:w-[80%] flex justify-center items-center relative">
             <div className="absolute inset-0 flex justify-center items-center">
               <GlobeSection />
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import createGlobe, { COBEOptions } from "cobe";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const cn = (...classes: string[]) => {
   return classes.filter(Boolean).join(" ");
@@ -18,9 +18,9 @@ const GLOBE_CONFIG: COBEOptions = {
   diffuse: 0.4,
   mapSamples: 16000,
   mapBrightness: 1.2,
-  baseColor: [1, 1, 1],
-  markerColor: [251 / 255, 100 / 255, 21 / 255],
-  glowColor: [1, 1, 1],
+  baseColor: [0.8, 0.8, 0.8],
+  markerColor: [0.1, 0.9, 0.1],
+  glowColor: [0.8, 0.8, 0.8],
   markers: [
     { location: [14.5995, 120.9842], size: 0.03 },
     { location: [19.076, 72.8777], size: 0.1 },
@@ -48,33 +48,15 @@ export function GlobeComponent({
   let width = 0;
   let height = 0;
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const pointerInteracting = useRef<number | null>(null);
-  const pointerInteractionMovement = useRef(0);
-  const [r, setR] = useState(0);
-
-  const updatePointerInteraction = (value: number | null) => {
-    pointerInteracting.current = value;
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = value ? "grabbing" : "grab";
-    }
-  };
-
-  const updateMovement = (clientX: number) => {
-    if (pointerInteracting.current !== null) {
-      const delta = clientX - pointerInteracting.current;
-      pointerInteractionMovement.current = delta;
-      setR(delta / 100);
-    }
-  };
 
   const onRender = useCallback(
     (state: Record<string, unknown>) => {
-      if (!pointerInteracting.current) phi += 0.005;
-      state.phi = phi + r;
+      phi += 0.005;
+      state.phi = phi;
       state.width = width * 2;
       state.height = height * 2;
     },
-    [r, width, height]
+    [width, height]
   );
 
   const onResize = () => {
@@ -128,30 +110,6 @@ export function GlobeComponent({
           "w-full h-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
         )}
         ref={canvasRef}
-        onPointerDown={(e) => {
-          e.preventDefault();
-          updatePointerInteraction(
-            e.clientX - pointerInteractionMovement.current
-          );
-        }}
-        onPointerUp={() => updatePointerInteraction(null)}
-        onPointerOut={() => updatePointerInteraction(null)}
-        onPointerMove={(e) => updateMovement(e.clientX)}
-        onTouchStart={(e) => {
-          e.preventDefault();
-          if (e.touches[0]) {
-            updatePointerInteraction(
-              e.touches[0].clientX - pointerInteractionMovement.current
-            );
-          }
-        }}
-        onTouchEnd={() => updatePointerInteraction(null)}
-        onTouchMove={(e) => {
-          e.preventDefault();
-          if (e.touches[0]) {
-            updateMovement(e.touches[0].clientX);
-          }
-        }}
       />
     </div>
   );

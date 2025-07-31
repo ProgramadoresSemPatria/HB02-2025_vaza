@@ -5,7 +5,7 @@
 
 @theme {
   --color-brand-primary: #002776;
-  --color-brand-secondary: #317B22;
+  --color-brand-secondary: #317b22;
   --color-brand-black: #000000;
   --color-brand-white: #ffffff;
   --color-background: var(--color-brand-white);
@@ -122,5 +122,32 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-radial {
+    background: radial-gradient(var(--tw-gradient-stops));
+  }
+}
+@theme inline {
+  @keyframes animate {
+    0% {
+      grid-template-columns: 0% 3.88% 20.96%;
+    }
+    34% {
+      grid-template-columns: 75.16% 3.88% 20.96%;
+    }
+    100% {
+      grid-template-columns: 75.16% 3.88% 20.96%;
+    }
+  }
+  @keyframes logoAnimate {
+    0% {
+      transform: rotate(-360deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
   }
 }

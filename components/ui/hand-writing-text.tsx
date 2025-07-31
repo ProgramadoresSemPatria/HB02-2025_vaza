@@ -23,7 +23,6 @@ function HandWrittenTitle({
     },
   };
 
-  // Path dinâmico que envolve o texto baseado no tamanho do título
   const getTitlePath = (text: string) => {
     const length = text.length;
     const width = Math.max(800, length * 40);
@@ -59,12 +58,11 @@ function HandWrittenTitle({
             stroke="currentColor"
             strokeLinecap="round"
             strokeLinejoin="round"
-            variants={draw}
             className="text-white opacity-70"
           />
         </motion.svg>
       </div>
-      <div className="relative text-center lg:text-left z-10 flex flex-col items-center lg:items-start justify-center">
+      <div className="relative lg:text-left z-10 flex flex-col items-center lg:items-start justify-center">
         <motion.h1
           className="text-5xl md:text-7xl text-white tracking-tighter font-extrabold mb-2"
           initial={{ opacity: 0, y: 20 }}

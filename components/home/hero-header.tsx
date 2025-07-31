@@ -3,7 +3,7 @@
 import { AnimatedText } from "@/components/ui/animated-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Heading } from "@/components/ui/heading";
+import { HandWrittenTitle } from "@/components/ui/hand-writing-text";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { SpringElement } from "@/components/ui/spring-element";
 import { motion } from "framer-motion";
@@ -24,7 +24,7 @@ export function HeroHeader({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="text-center mb-4 lg:mb-8"
+      className="text-center lg:text-left mb-4 lg:mb-8"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
@@ -55,22 +55,14 @@ export function HeroHeader({
         </Badge>
       </motion.div>
 
-      <Heading
-        as="h1"
-        variant="white"
-        size="2xl"
-        align="center"
-        className="mb-6"
-      >
-        {title}
-      </Heading>
+      <HandWrittenTitle title={title} subtitle="" />
 
       <AnimatedText
         variant="white"
         size="lg"
         animation="fadeIn"
         delay={0.3}
-        className="text-center mb-4"
+        className="text-center lg:text-left mb-4"
       >
         {subtitle}
       </AnimatedText>
@@ -80,7 +72,7 @@ export function HeroHeader({
         size="md"
         animation="fadeIn"
         delay={0.4}
-        className="text-center max-w-xl mx-auto leading-relaxed mb-4"
+        className="text-center lg:text-left max-w-xl lg:max-w-none mx-auto lg:mx-0 leading-relaxed mb-4"
       >
         {description}
       </AnimatedText>
@@ -89,7 +81,7 @@ export function HeroHeader({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="inline-flex justify-center"
+        className="inline-flex justify-center lg:justify-start"
       >
         <InteractiveHoverButton
           text="Get Started"

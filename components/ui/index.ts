@@ -5,6 +5,7 @@ export {
 } from "./animated-text";
 export { Badge, badgeVariants } from "./badge";
 export { GlobeIcon } from "./globe-icon";
+export { HandWrittenTitle } from "./hand-writing-text";
 export { Heading, headingVariants } from "./heading";
 export { HighlightText, highlightVariants } from "./highlight-text";
 export { InteractiveHoverButton } from "./interactive-hover-button";

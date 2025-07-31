@@ -8,8 +8,8 @@ const cn = (...classes: string[]) => {
 };
 
 const GLOBE_CONFIG: COBEOptions = {
-  width: 800,
-  height: 800,
+  width: 1000,
+  height: 1000,
   onRender: () => {},
   devicePixelRatio: 2,
   phi: 0,
@@ -73,18 +73,33 @@ export function GlobeComponent({
       state.width = width * 2;
       state.height = width * 2;
     },
-    [r]
+    [r, width]
   );
 
   const onResize = () => {
     if (canvasRef.current) {
-      width = canvasRef.current.offsetWidth;
+      const rect = canvasRef.current.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
     }
   };
 
   useEffect(() => {
-    window.addEventListener("resize", onResize);
-    onResize();
+    const handleResize = () => {
+      onResize();
+      if (canvasRef.current) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        const newWidth = rect.width;
+        const newHeight = rect.height;
+
+        // Atualizar o canvas
+        canvasRef.current.width = newWidth * 2;
+        canvasRef.current.height = newHeight * 2;
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
 
     const globe = createGlobe(canvasRef.current!, {
       ...config,
@@ -94,19 +109,23 @@ export function GlobeComponent({
     });
 
     setTimeout(() => (canvasRef.current!.style.opacity = "1"));
-    return () => globe.destroy();
-  }, []);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      globe.destroy();
+    };
+  }, [width, config, onRender]);
 
   return (
     <div
       className={cn(
-        "absolute inset-0 mx-auto aspect-[1/1] w-full max-w-[500px] lg:max-w-[800px]",
+        "absolute inset-0 mx-auto aspect-[1/1] w-full h-full",
         className ?? ""
       )}
     >
       <canvas
         className={cn(
-          "size-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
+          "w-full h-full opacity-0 transition-opacity duration-500 [contain:layout_paint_size]"
         )}
         ref={canvasRef}
         onPointerDown={(e) => {

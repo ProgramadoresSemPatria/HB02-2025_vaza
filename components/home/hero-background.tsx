@@ -34,19 +34,21 @@ export function HeroBackground({ children }: HeroBackgroundProps) {
 
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
-      {/* Background gradient verde metálico melhorado */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a1f0a] via-[#1a3d1a] to-[#0f2a0f]" />
-      {/* Overlay metálico verde intensificado */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#2d5a2d]/30 via-[#4a7c4a]/25 to-[#1e4d1e]/35" />
-      {/* Efeito metálico adicional */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[#6b9e6b]/15 to-[#3d6b3d]/25" />
+      {/* Background gradient verde escuro com metálico preto */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#031403] via-[#0a1f0a] to-[#031403]" />
+      {/* Overlay metálico preto intensificado */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#000000]/60 via-[#1a1a1a]/50 to-[#000000]/70" />
+      {/* Efeito metálico verde escuro */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-[#1a3d1a]/40 to-[#0f2a0f]/50" />
       {/* Brilho metálico superior */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#7ab87a]/10 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#2d5a2d]/30 via-transparent to-transparent" />
       {/* Reflexo metálico lateral */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#5a8a5a]/5 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#1a1a1a]/30 to-transparent" />
+      {/* Sexta camada para efeito metálico mais profundo */}
+      <div className="absolute inset-0 bg-gradient-to-tl from-[#000000]/80 via-transparent to-[#1a3d1a]/30" />
 
-      {/* Grid pattern metálico */}
-      <div className="absolute inset-0 opacity-15">
+      {/* Grid pattern metálico escuro */}
+      <div className="absolute inset-0 opacity-30">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern
@@ -58,9 +60,9 @@ export function HeroBackground({ children }: HeroBackgroundProps) {
               <path
                 d="M 80 0 L 0 0 0 80"
                 fill="none"
-                stroke="rgba(74, 124, 74, 0.2)"
-                strokeWidth="0.3"
-                opacity="0.4"
+                stroke="rgba(45, 90, 45, 0.5)"
+                strokeWidth="0.6"
+                opacity="0.7"
               />
             </pattern>
           </defs>
@@ -68,7 +70,7 @@ export function HeroBackground({ children }: HeroBackgroundProps) {
         </svg>
       </div>
 
-      {/* Mouse gradient effect */}
+      {/* Mouse gradient effect escuro */}
       <div
         className="fixed pointer-events-none w-96 h-96 rounded-full blur-3xl transition-opacity duration-300 z-10"
         style={{
@@ -76,14 +78,12 @@ export function HeroBackground({ children }: HeroBackgroundProps) {
           top: mouseGradientStyle.top,
           opacity: mouseGradientStyle.opacity,
           background:
-            "radial-gradient(circle, rgba(74, 124, 74, 0.08), rgba(45, 90, 45, 0.06), transparent 70%)",
+            "radial-gradient(circle, rgba(45, 90, 45, 0.2), rgba(26, 26, 26, 0.15), transparent 70%)",
           transform: "translate(-50%, -50%)",
         }}
       />
 
-      <div className="relative z-20 container mx-auto px-4 py-16">
-        {children}
-      </div>
+      <div className="relative z-20 w-full h-full">{children}</div>
     </div>
   );
 }

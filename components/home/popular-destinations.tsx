@@ -1,6 +1,5 @@
 "use client";
 
-import { Heading } from "@/components/ui/heading";
 import { HighlightText } from "@/components/ui/highlight-text";
 import { motion } from "framer-motion";
 import { TrendingUp } from "lucide-react";
@@ -33,39 +32,39 @@ export function PopularDestinations({
 }: PopularDestinationsProps) {
   return (
     <div className="space-y-4">
-      <Heading
-        as="h3"
-        variant="white"
-        size="lg"
-        align="center"
-        className="mb-6"
-      >
-        Destinos Populares
-      </Heading>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          Destinos Populares
+        </h2>
+        <p className="text-muted-foreground text-lg">
+          Os países mais escolhidos pelos nossos clientes
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
         {locations.map((location, index) => (
           <motion.div
             key={location.name}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 1 + index * 0.1 }}
-            className="flex items-center justify-between p-4 rounded-lg border border-border bg-background/30 backdrop-blur-sm hover:bg-background/50 transition-colors"
+            className="flex items-center justify-between p-4 rounded-lg border border-border bg-card hover:bg-accent/50 transition-colors"
           >
             <div>
               <HighlightText
-                variant="white"
+                variant="default"
                 size="md"
                 className="font-semibold"
               >
                 {location.name}
               </HighlightText>
-              <div className="text-sm text-gray-200 font-medium">
+              <div className="text-sm text-muted-foreground font-medium">
                 {location.country}
               </div>
             </div>
             <div className="text-right">
               <HighlightText
-                variant="white"
+                variant="default"
                 size="md"
                 className="font-semibold"
               >

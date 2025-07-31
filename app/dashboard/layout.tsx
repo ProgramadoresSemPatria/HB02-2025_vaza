@@ -1,30 +1,34 @@
-'use client'
-import { useRouter } from 'next/navigation'
-import { getUser } from '@/hooks/getUser'
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
+"use client";
+import { AppSidebar } from "@/components/app-sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { getUser } from "@/hooks/getUser";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const router = useRouter()
-  const user = getUser()
+  const router = useRouter();
+  const user = getUser();
 
   if (!user) {
-    router.push('/login')
+    router.push("/login");
   }
 
   return (
     <div className="min-h-screen bg-background">
       <SidebarProvider>
         <AppSidebar />
-        <main>
+        <SidebarInset>
           <SidebarTrigger />
           {children}
-        </main>
+        </SidebarInset>
       </SidebarProvider>
     </div>
-  )
+  );
 }

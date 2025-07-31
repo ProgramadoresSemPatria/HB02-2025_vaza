@@ -1,0 +1,251 @@
+import { Country, PlanTask, RequiredDocument, VisaType } from "../types";
+
+export const countries: Country[] = [
+  {
+    id: "italy",
+    name: "Italy",
+    flag: "🇮🇹",
+    difficulty: "Medium",
+    avgTime: "6-12 months",
+  },
+  {
+    id: "spain",
+    name: "Spain",
+    flag: "🇪🇸",
+    difficulty: "Easy",
+    avgTime: "4-8 months",
+  },
+  {
+    id: "france",
+    name: "France",
+    flag: "🇫🇷",
+    difficulty: "Hard",
+    avgTime: "8-18 months",
+  },
+  {
+    id: "germany",
+    name: "Germany",
+    flag: "🇩🇪",
+    difficulty: "Medium",
+    avgTime: "6-12 months",
+  },
+  {
+    id: "portugal",
+    name: "Portugal",
+    flag: "🇵🇹",
+    difficulty: "Easy",
+    avgTime: "3-6 months",
+  },
+  {
+    id: "netherlands",
+    name: "Netherlands",
+    flag: "🇳🇱",
+    difficulty: "Medium",
+    avgTime: "6-10 months",
+  },
+  {
+    id: "canada",
+    name: "Canada",
+    flag: "🇨🇦",
+    difficulty: "Medium",
+    avgTime: "8-14 months",
+  },
+  {
+    id: "australia",
+    name: "Australia",
+    flag: "🇦🇺",
+    difficulty: "Medium",
+    avgTime: "6-12 months",
+  },
+];
+
+export const visaTypes: VisaType[] = [
+  {
+    id: "work",
+    name: "Work Visa",
+    description: "Employment-based immigration",
+  },
+  {
+    id: "study",
+    name: "Student Visa",
+    description: "Education opportunities",
+  },
+  {
+    id: "family",
+    name: "Family Reunion",
+    description: "Join family members",
+  },
+  {
+    id: "investment",
+    name: "Investment Visa",
+    description: "Business or investment",
+  },
+  {
+    id: "refugee",
+    name: "Refugee Status",
+    description: "Asylum and protection",
+  },
+];
+
+export const planTasks: Record<string, PlanTask[]> = {
+  italy: [
+    {
+      id: 1,
+      text: "Research visa requirements and eligibility",
+      completed: false,
+      estimatedDays: 7,
+      category: "research",
+    },
+    {
+      id: 2,
+      text: "Gather required documents (passport, photos, certificates)",
+      completed: false,
+      estimatedDays: 14,
+      category: "documents",
+    },
+    {
+      id: 3,
+      text: "Get documents translated and apostilled",
+      completed: false,
+      estimatedDays: 21,
+      category: "documents",
+    },
+    {
+      id: 4,
+      text: "Schedule medical examination",
+      completed: false,
+      estimatedDays: 7,
+      category: "medical",
+    },
+    {
+      id: 5,
+      text: "Obtain police clearance certificate",
+      completed: false,
+      estimatedDays: 30,
+      category: "documents",
+    },
+    {
+      id: 6,
+      text: "Book visa appointment at Italian consulate",
+      completed: false,
+      estimatedDays: 14,
+      category: "appointment",
+    },
+    {
+      id: 7,
+      text: "Prepare for visa interview",
+      completed: false,
+      estimatedDays: 7,
+      category: "preparation",
+    },
+    {
+      id: 8,
+      text: "Submit visa application",
+      completed: false,
+      estimatedDays: 1,
+      category: "submission",
+    },
+    {
+      id: 9,
+      text: "Wait for visa processing",
+      completed: false,
+      estimatedDays: 90,
+      category: "waiting",
+    },
+    {
+      id: 10,
+      text: "Receive visa and plan travel",
+      completed: false,
+      estimatedDays: 14,
+      category: "travel",
+    },
+  ],
+  spain: [
+    {
+      id: 1,
+      text: "Research Spanish visa options",
+      completed: false,
+      estimatedDays: 5,
+      category: "research",
+    },
+    {
+      id: 2,
+      text: "Gather personal documents",
+      completed: false,
+      estimatedDays: 10,
+      category: "documents",
+    },
+    {
+      id: 3,
+      text: "Get documents legalized",
+      completed: false,
+      estimatedDays: 15,
+      category: "documents",
+    },
+    {
+      id: 4,
+      text: "Complete medical checkup",
+      completed: false,
+      estimatedDays: 5,
+      category: "medical",
+    },
+    {
+      id: 5,
+      text: "Obtain criminal record certificate",
+      completed: false,
+      estimatedDays: 20,
+      category: "documents",
+    },
+    {
+      id: 6,
+      text: "Schedule consulate appointment",
+      completed: false,
+      estimatedDays: 10,
+      category: "appointment",
+    },
+    {
+      id: 7,
+      text: "Prepare interview materials",
+      completed: false,
+      estimatedDays: 5,
+      category: "preparation",
+    },
+    {
+      id: 8,
+      text: "Submit application package",
+      completed: false,
+      estimatedDays: 1,
+      category: "submission",
+    },
+    {
+      id: 9,
+      text: "Monitor application status",
+      completed: false,
+      estimatedDays: 60,
+      category: "waiting",
+    },
+    {
+      id: 10,
+      text: "Plan relocation to Spain",
+      completed: false,
+      estimatedDays: 10,
+      category: "travel",
+    },
+  ],
+};
+
+export const requiredDocuments: RequiredDocument[] = [
+  { name: "Valid Passport", required: true, status: "pending" },
+  { name: "Birth Certificate", required: true, status: "pending" },
+  {
+    name: "Marriage Certificate (if applicable)",
+    required: false,
+    status: "pending",
+  },
+  { name: "Educational Certificates", required: true, status: "pending" },
+  { name: "Employment Records", required: true, status: "pending" },
+  { name: "Bank Statements", required: true, status: "pending" },
+  { name: "Medical Certificate", required: true, status: "pending" },
+  { name: "Police Clearance", required: true, status: "pending" },
+  { name: "Travel Insurance", required: false, status: "pending" },
+];

@@ -7,6 +7,7 @@ export { Badge, badgeVariants } from "./badge";
 export { GlobeIcon } from "./globe-icon";
 export { Heading, headingVariants } from "./heading";
 export { HighlightText, highlightVariants } from "./highlight-text";
+export { InteractiveHoverButton } from "./interactive-hover-button";
 export { SpringElement } from "./spring-element";
 export {
   labelVariants,

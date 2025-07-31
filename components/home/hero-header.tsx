@@ -4,6 +4,7 @@ import { AnimatedText } from "@/components/ui/animated-text";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Heading } from "@/components/ui/heading";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { SpringElement } from "@/components/ui/spring-element";
 import { motion } from "framer-motion";
 
@@ -88,14 +89,12 @@ export function HeroHeader({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="inline-flex flex-col sm:flex-row gap-4"
+        className="inline-flex justify-center"
       >
-        <button className="px-8 py-4 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors">
-          Get Started
-        </button>
-        <button className="px-8 py-4 border border-border rounded-full font-medium hover:bg-background/50 transition-colors">
-          Learn More
-        </button>
+        <InteractiveHoverButton
+          text="Get Started"
+          className="w-40 h-12 text-sm"
+        />
       </motion.div>
     </motion.div>
   );

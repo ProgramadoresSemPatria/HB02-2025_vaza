@@ -3,30 +3,29 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-} from "@/components/ui/sidebar"
-import { GlobeIcon, LayoutIcon, UserIcon } from "lucide-react"
-import Image from "next/image"
-import Link from "next/link"
-import { Button } from "./ui/button"
+} from "@/components/ui/sidebar";
+import { GlobeIcon, LayoutIcon, UserIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "./ui/button";
 
 const navigationItems = [
   {
-    label: 'Countries',
-    href: '/dashboard/countries',
+    label: "Countries",
+    href: "/dashboard/countries",
     icon: GlobeIcon,
   },
   {
-    label: 'Plan',
-    href: '/dashboard/plan',
+    label: "Your plan",
+    href: "/dashboard/plan",
     icon: LayoutIcon,
   },
-]
+];
 
 export function AppSidebar() {
   return (
@@ -45,7 +44,7 @@ export function AppSidebar() {
           </p>
         </div>
       </SidebarHeader>
-      
+
       <SidebarContent>
         <SidebarGroup>
           <hr className="my-2 border-border" />
@@ -53,8 +52,14 @@ export function AppSidebar() {
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton className="hover:bg-brand-secondary hover:text-white" asChild>
-                    <Link href={item.href} className="flex items-center gap-3 px-3 py-6 rounded-md hover:bg-accent">
+                  <SidebarMenuButton
+                    className="hover:bg-brand-secondary hover:text-white"
+                    asChild
+                  >
+                    <Link
+                      href={item.href}
+                      className="flex items-center gap-3 px-3 py-6 rounded-md hover:bg-accent"
+                    >
                       <item.icon className="h-4 w-4 hover:text-white" />
                       <span className="text-sm font-medium">{item.label}</span>
                     </Link>
@@ -67,13 +72,20 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-4">
-        <Button asChild variant="ghost" className="w-full justify-start hover:bg-brand-secondary hover:text-white">
-          <Link href="/dashboard/profile" className="flex items-center gap-3 px-3 py-6 rounded-md hover:bg-accent">
+        <Button
+          asChild
+          variant="ghost"
+          className="w-full justify-start hover:bg-brand-secondary hover:text-white"
+        >
+          <Link
+            href="/dashboard/profile"
+            className="flex items-center gap-3 px-3 py-6 rounded-md hover:bg-accent"
+          >
             <UserIcon className="mr-2 h-4 w-4" />
             <span className="text-sm font-medium">Profile</span>
           </Link>
         </Button>
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

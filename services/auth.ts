@@ -20,12 +20,12 @@ export async function signUpUser({
   const supabase = await createClient()
   // 1) sign up at the auth layer
   const { data: { user }, error: signUpError } = await supabase.auth.signUp({
-     email, 
-     password,
-     options: {
+    email,
+    password,
+    options: {
       data: { full_name: fullName }
-     }
-    })
+    }
+  })
 
   if (signUpError) throw signUpError
 
@@ -45,4 +45,11 @@ export async function signInUser({
   if (signInError) throw signInError
 
   return user!
+}
+
+export async function signOutUser(): Promise<void> {
+  const supabase = await createClient()
+  const { error } = await supabase.auth.signOut()
+
+  if (error) throw error
 }

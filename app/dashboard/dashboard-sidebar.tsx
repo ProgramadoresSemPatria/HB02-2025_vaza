@@ -1,10 +1,12 @@
 "use client";
 
-import { SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { SidebarBody, SidebarLink, useSidebar } from "@/components/ui/sidebar";
 import { motion } from "framer-motion";
 import { GlobeIcon, LayoutIcon, LogOut, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { signOutUser } from "@/services/auth";
+import { useRouter } from "next/navigation";
 
 const navigationItems = [
   {
@@ -28,16 +30,21 @@ const navigationItems = [
       <UserIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
     ),
   },
-  {
-    label: "Logout",
-    href: "/logout",
-    icon: (
-      <LogOut className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
-    ),
-  },
 ];
 
 export function DashboardSidebar() {
+  const router = useRouter();
+  const { open } = useSidebar();
+
+  const handleLogout = async () => {
+    try {
+      await signOutUser();
+      router.push("/login");
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  };
+
   return (
     <SidebarBody className="justify-between gap-10">
       <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
@@ -48,23 +55,21 @@ export function DashboardSidebar() {
           ))}
         </div>
       </div>
-      <div>
-        <SidebarLink
-          link={{
-            label: "User Profile",
-            href: "/dashboard/profile",
-            icon: (
-              <Image
-                src="/vaza-logo.webp"
-                className="h-7 w-7 flex-shrink-0 rounded-full"
-                width={50}
-                height={50}
-                alt="Avatar"
-              />
-            ),
+      <button
+        onClick={handleLogout}
+        className="flex items-center gap-2 group/sidebar cursor-pointer py-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-700 transition duration-150 text-neutral-700 dark:text-neutral-200 text-sm w-full text-left"
+      >
+        <LogOut className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+        <motion.span
+          animate={{
+            display: open ? "inline-block" : "none",
+            opacity: open ? 1 : 0,
           }}
-        />
-      </div>
+          className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre"
+        >
+          Logout
+        </motion.span>
+      </button>
     </SidebarBody>
   );
 }

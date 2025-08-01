@@ -11,10 +11,11 @@ import { ScrollArea } from "../ui/scroll-area"
 import { useChat } from "@ai-sdk/react"
 import { Textarea } from "../ui/textarea"
 import { useState, useEffect, useRef } from "react"
+import { useChatContext } from "./ChatContext"
 
 export default function FloatingChat() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
-    const [isOpen, setIsOpen] = useState(false)
+    const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat()
+    const { isOpen, setIsOpen, initialMessage, clearInitialMessage } = useChatContext()
     const [isTyping, setIsTyping] = useState(false)
     const scrollAreaRef = useRef<HTMLDivElement>(null)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -41,6 +42,14 @@ export default function FloatingChat() {
             setIsTyping(false)
         }
     }, [isLoading])
+
+    // Handle initial message from context
+    useEffect(() => {
+        if (initialMessage && isOpen) {
+            setInput(initialMessage)
+            clearInitialMessage()
+        }
+    }, [initialMessage, isOpen, setInput, clearInitialMessage])
 
     return (
         <div className="fixed bottom-6 right-6 z-50">

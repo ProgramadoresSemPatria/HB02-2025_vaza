@@ -4,6 +4,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { getUser } from "@/hooks/getUser";
 import { redirect } from "next/navigation";
 import { DashboardSidebar } from "./dashboard-sidebar";
+import FloatingChat from "@/components/chat/FloatingChat";
 
 export default function DashboardLayout({
   children,
@@ -22,6 +23,7 @@ export default function DashboardLayout({
         <DashboardSidebar />
         <main className="flex-1 overflow-auto">{children}</main>
       </SidebarProvider>
+      <FloatingChat />
     </div>
   );
 }

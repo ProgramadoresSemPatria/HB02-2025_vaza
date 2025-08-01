@@ -98,12 +98,14 @@ export const CurrentCountryStep = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
-        <h2 className="text-xl md:text-2xl font-bold mb-2">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">
           De onde você está partindo? 🛫
         </h2>
-        <p className="text-sm md:text-base text-gray-600">Seu país de origem</p>
+        <p className="text-xs sm:text-sm md:text-base text-gray-600">
+          Seu país de origem
+        </p>
       </div>
 
       <div className="space-y-2 sm:space-y-3">
@@ -111,7 +113,6 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "brazil"}
           onClick={() => onUpdate("brazil")}
           icon={MapPin}
-          className="h-12 sm:h-14"
         >
           🇧🇷 Brasil
         </OptionButton>
@@ -120,7 +121,6 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "argentina"}
           onClick={() => onUpdate("argentina")}
           icon={MapPin}
-          className="h-12 sm:h-14"
         >
           🇦🇷 Argentina
         </OptionButton>
@@ -129,7 +129,6 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "colombia"}
           onClick={() => onUpdate("colombia")}
           icon={MapPin}
-          className="h-12 sm:h-14"
         >
           🇨🇴 Colômbia
         </OptionButton>
@@ -138,7 +137,6 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "other"}
           onClick={() => setShowMap(true)}
           icon={Globe}
-          className="h-12 sm:h-14"
         >
           🌍 Outro país
         </OptionButton>
@@ -146,8 +144,8 @@ export const CurrentCountryStep = ({
 
       {/* Mapa do país selecionado */}
       {currentCountry && currentCountry !== "other" && (
-        <div className="mt-6">
-          <div className="h-48 md:h-64 bg-gray-100 rounded-lg overflow-hidden">
+        <div className="mt-4 sm:mt-6">
+          <div className="h-40 sm:h-48 md:h-64 bg-gray-100 rounded-lg overflow-hidden">
             <iframe
               width="100%"
               height="100%"
@@ -158,7 +156,7 @@ export const CurrentCountryStep = ({
               src={`https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&center=${coordinates.lat},${coordinates.lng}&zoom=3`}
             />
           </div>
-          <p className="text-xs md:text-sm text-gray-600 mt-2 text-center">
+          <p className="text-xs sm:text-sm text-gray-600 mt-2 text-center">
             Localização do seu país de origem
           </p>
         </div>
@@ -166,44 +164,44 @@ export const CurrentCountryStep = ({
 
       {/* Modal para outros países */}
       {showMap && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 z-[60]">
-          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-[60]">
+          <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden">
             {/* Header */}
-            <div className="p-3 md:p-4 border-b flex justify-between items-center">
-              <h3 className="text-sm md:text-base lg:text-lg font-semibold">
+            <div className="p-3 sm:p-4 border-b flex justify-between items-center">
+              <h3 className="text-sm sm:text-base lg:text-lg font-semibold">
                 Escolha seu país de origem
               </h3>
               <button
                 onClick={() => setShowMap(false)}
-                className="text-gray-500 hover:text-gray-700 p-1 md:p-2 text-lg"
+                className="text-gray-500 hover:text-gray-700 p-1 sm:p-2 text-lg transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <div className="p-3 md:p-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
+            <div className="p-3 sm:p-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                 {/* Lista de países */}
                 <div className="space-y-2">
-                  <h4 className="font-medium text-gray-700 mb-3 text-sm md:text-base">
+                  <h4 className="font-medium text-gray-700 mb-3 text-sm sm:text-base">
                     Outros países da América do Sul:
                   </h4>
-                  <div className="max-h-64 md:max-h-80 overflow-y-auto space-y-2">
+                  <div className="max-h-48 sm:max-h-64 md:max-h-80 overflow-y-auto space-y-2 scrollbar-hide">
                     {otherCountries.map((country) => (
                       <button
                         key={country.id}
                         onClick={() => handleMapCountrySelect(country)}
-                        className="w-full p-2 md:p-3 text-left border rounded-lg hover:bg-gray-50 transition-colors"
+                        className="w-full p-2 sm:p-3 text-left border rounded-lg hover:bg-gray-50 transition-colors"
                       >
                         <div className="flex items-center">
-                          <span className="text-xl md:text-2xl mr-2 md:mr-3">
+                          <span className="text-lg sm:text-xl md:text-2xl mr-2 sm:mr-3 flex-shrink-0">
                             {country.flag}
                           </span>
-                          <div>
-                            <div className="font-medium text-sm md:text-base">
+                          <div className="min-w-0 flex-1">
+                            <div className="font-medium text-sm sm:text-base truncate">
                               {country.name}
                             </div>
-                            <div className="text-xs md:text-sm text-gray-500">
+                            <div className="text-xs sm:text-sm text-gray-500 truncate">
                               {country.description}
                             </div>
                           </div>
@@ -214,7 +212,7 @@ export const CurrentCountryStep = ({
                 </div>
 
                 {/* Mapa */}
-                <div className="h-48 md:h-64 bg-gray-100 rounded-lg overflow-hidden">
+                <div className="h-40 sm:h-48 md:h-64 bg-gray-100 rounded-lg overflow-hidden">
                   <iframe
                     width="100%"
                     height="100%"
@@ -227,8 +225,8 @@ export const CurrentCountryStep = ({
                 </div>
               </div>
 
-              <div className="mt-3 md:mt-4 text-center">
-                <p className="text-xs md:text-sm text-gray-600">
+              <div className="mt-3 sm:mt-4 text-center">
+                <p className="text-xs sm:text-sm text-gray-600">
                   Clique em um país da lista ou explore o mapa para escolher seu
                   país de origem
                 </p>

@@ -275,7 +275,7 @@ const ScrollExpandMedia = ({
                         className="w-full h-full object-cover rounded-xl"
                         controls={false}
                         disablePictureInPicture
-                      disableRemotePlayback
+                        disableRemotePlayback
                       />
                       <div
                         className="absolute inset-0 z-10"

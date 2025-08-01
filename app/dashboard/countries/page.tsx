@@ -1,16 +1,18 @@
 "use client";
 
-import { GoogleMaps } from "@/components/google-maps";
 import { useChatContext } from "@/components/chat/ChatContext";
+import { GoogleMaps } from "@/components/google-maps";
 
 const CountriesPage = () => {
   const { openChatWithMessage } = useChatContext();
 
   const handleCountrySelect = (countryName: string, countryCode: string) => {
     console.log(`Selected country: ${countryName} (${countryCode})`);
-    
+
     // Open chat with personalized message
-    openChatWithMessage(`I'd like to move to ${countryName}. What's the process like?`);
+    openChatWithMessage(
+      `I'd like to move to ${countryName}. What's the process like?`
+    );
   };
 
   return (
@@ -21,11 +23,11 @@ const CountriesPage = () => {
           Select your destination country to start planning your journey.
         </p>
       </div>
-      
+
       <div className="mt-6">
-        <GoogleMaps 
+        <GoogleMaps
           onCountrySelect={handleCountrySelect}
-          height="600px"
+          height="400px"
           className="w-full"
         />
       </div>

@@ -21,15 +21,6 @@ export default function ProfilePage() {
     return (
       <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
         <div className="max-w-7xl mx-auto space-y-6">
-          <div className="bg-white rounded-lg p-6 shadow-sm border">
-            <div className="flex items-center gap-6">
-              <div className="h-24 w-24 bg-gray-200 rounded-full animate-pulse" />
-              <div className="space-y-2">
-                <div className="h-8 w-48 bg-gray-200 rounded animate-pulse" />
-                <div className="h-4 w-32 bg-gray-200 rounded animate-pulse" />
-              </div>
-            </div>
-          </div>
           <ProfileLoadingModern />
         </div>
       </div>
@@ -68,7 +59,7 @@ export default function ProfilePage() {
           <div className="lg:col-span-1">
             <ProfileStatsOverview profile={profile} />
           </div>
-    
+
           <div className="lg:col-span-2">
             <ProfileDetails profile={profile} />
           </div>

@@ -3,7 +3,6 @@ export { ProfileDetails } from "./profile-details";
 export { ProfileEmptyState } from "./profile-empty-state";
 export { ProfileHeader } from "./profile-header";
 export { ProfileInfo } from "./profile-info";
-export { ProfileLoading } from "./profile-loading";
 export { ProfileLoadingModern } from "./profile-loading-modern";
 export { ProfileStats } from "./profile-stats";
 export { ProfileStatsOverview } from "./profile-stats-overview";

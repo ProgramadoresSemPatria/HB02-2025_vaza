@@ -4,7 +4,6 @@ import {
   DesktopSidebar,
   MobileSidebar,
   SidebarLink,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import { signOutUser } from "@/services/auth";
 import { GlobeIcon, LayoutIcon, LogOut, UserIcon } from "lucide-react";

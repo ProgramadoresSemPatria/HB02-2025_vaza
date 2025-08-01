@@ -53,15 +53,7 @@ const animationVariants = {
   },
   bounce: {
     initial: { opacity: 0, y: 20 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 200,
-        damping: 10,
-      },
-    },
+    animate: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 },
   },
 };
@@ -88,7 +80,6 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
       delay = 0,
       duration = 0.5,
       repeat = false,
-      ...props
     },
     ref
   ) => {
@@ -107,7 +98,6 @@ const AnimatedText = React.forwardRef<HTMLDivElement, AnimatedTextProps>(
           repeat: repeat ? Infinity : 0,
           repeatType: repeat ? "reverse" : undefined,
         }}
-        {...props}
       >
         {children}
       </motion.div>

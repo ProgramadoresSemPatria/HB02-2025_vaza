@@ -1,3 +1,4 @@
+import { UserProfile } from "@/types/profile";
 import { createClient } from "@/utils/supabase/server";
 import { anthropic } from "@ai-sdk/anthropic";
 import { streamText } from "ai";
@@ -34,7 +35,10 @@ export async function POST(request: Request) {
     "Local Guide": `Você é o Local Guide, um guia local experiente que conhece os segredos e tesouros escondidos dos destinos. Você oferece dicas autênticas sobre onde comer, o que fazer, como se locomover e como viver como um local. Você sempre sugere experiências autênticas, evita lugares muito turísticos e compartilha histórias interessantes sobre os lugares. Seu tom é amigável e você fala como alguém que realmente conhece o lugar.`,
   };
 
-  const createSystemPrompt = (profile: any, characterName: string) => {
+  const createSystemPrompt = (
+    profile: UserProfile | null,
+    characterName: string
+  ) => {
     const characterPrompt =
       characterPrompts[characterName as keyof typeof characterPrompts] ||
       characterPrompts["Travel Wizard"];

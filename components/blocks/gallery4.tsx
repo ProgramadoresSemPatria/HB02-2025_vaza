@@ -10,6 +10,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import Image from "next/image";
+import Link from "next/link";
 
 export interface Gallery4Item {
   id: string;
@@ -98,18 +100,20 @@ const Gallery4 = ({
             },
           }}
         >
-          <CarouselContent className="ml-0 2xl:ml-[max(8rem,calc(50vw-700px))] 2xl:mr-[max(0rem,calc(50vw-700px))]">
+          <CarouselContent className="ml-0">
             {items.map((item) => (
               <CarouselItem
                 key={item.id}
                 className="max-w-[320px] pl-[20px] lg:max-w-[360px]"
               >
-                <a href={item.href} className="group rounded-xl">
+                <Link href={item.href} className="group rounded-xl">
                   <div className="group relative h-full min-h-[27rem] max-w-full overflow-hidden rounded-xl md:aspect-[5/4] lg:aspect-[16/9]">
-                    <img
+                    <Image
                       src={item.image}
                       alt={item.title}
                       className="absolute h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                      width={340}
+                      height={430}
                     />
                     <div className="absolute inset-0 h-full bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-6 text-white md:p-6">
@@ -125,7 +129,7 @@ const Gallery4 = ({
                       </div>
                     </div>
                   </div>
-                </a>
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>

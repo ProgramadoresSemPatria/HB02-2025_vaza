@@ -3,18 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { Popover, PopoverTrigger, PopoverContent, Button } from "@/components/ui";
+import { fetchCountryDetails } from "@/services/countries";
+import { CountryData } from "@/types/country";
 
 interface GoogleMapsProps {
-  onCountrySelect?: (country: string, countryCode: string) => void;
+  onCountrySelect?: (country: string, countryCode: string, countryData?: CountryData) => void;
   className?: string;
   height?: string;
-}
-
-interface CountryData {
-  name: string;
-  code: string;
-  position: { x: number; y: number };
-  coordinates: { lat: number; lng: number };
 }
 
 declare global {
@@ -52,8 +47,8 @@ export const GoogleMaps = ({
           featureType: "administrative.country",
           elementType: "geometry.stroke",
           stylers: [
-            { color: "#4285f4" },
-            { weight: 2 }
+            { color: "#317b22" },
+            { weight: 1 }
           ]
         }
       ]
@@ -105,14 +100,26 @@ export const GoogleMaps = ({
                 }
               });
 
-              // Set popover data and open it
-              setPopoverData({
+              // Set initial popover data with loading state
+              const initialData: CountryData = {
                 name: countryName,
                 code: countryCode,
                 position: { x: clickX, y: clickY },
-                coordinates: { lat, lng }
-              });
+                coordinates: { lat, lng },
+                isLoading: true
+              };
+              
+              setPopoverData(initialData);
               setIsPopoverOpen(true);
+
+              // Fetch rich country data in the background
+              fetchCountryDetails(countryCode).then(additionalData => {
+                setPopoverData(prev => prev ? {
+                  ...prev,
+                  ...additionalData,
+                  isLoading: false
+                } : null);
+              });
             }
           }
         }
@@ -126,7 +133,7 @@ export const GoogleMaps = ({
 
   const handleCountrySelect = () => {
     if (popoverData) {
-      onCountrySelect?.(popoverData.name, popoverData.code);
+      onCountrySelect?.(popoverData.name, popoverData.code, popoverData);
       setIsPopoverOpen(false);
       setPopoverData(null);
     }
@@ -146,12 +153,12 @@ export const GoogleMaps = ({
       />
       
       <div className="relative">
-        <div 
-          ref={mapRef} 
-          style={{ width: "100%", height }}
-          className="rounded-lg border border-gray-200 shadow-sm"
-        />
-        
+      <div 
+        ref={mapRef} 
+        style={{ width: "100%", height }}
+        className="rounded-lg border border-gray-200 shadow-sm"
+      />
+      
         {/* Popover for country selection */}
         {popoverData && (
           <div
@@ -167,24 +174,102 @@ export const GoogleMaps = ({
               <PopoverTrigger asChild>
                 <div className="w-0 h-0" />
               </PopoverTrigger>
-              <PopoverContent className="w-80 p-4">
+              <PopoverContent className="w-96 p-4 max-h-96 overflow-y-auto">
                 <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {popoverData.name}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Country Code: {popoverData.code}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      Coordinates: {popoverData.coordinates.lat.toFixed(4)}, {popoverData.coordinates.lng.toFixed(4)}
-                    </p>
+                  {/* Header with flag */}
+                  <div className="flex items-center gap-3">
+                    {popoverData.flag && !popoverData.isLoading && (
+                      <img 
+                        src={popoverData.flag} 
+                        alt={`${popoverData.name} flag`}
+                        className="w-8 h-6 object-cover rounded border"
+                      />
+                    )}
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                        {popoverData.name}
+                        {popoverData.isLoading && (
+                          <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                        )}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {popoverData.code} • {popoverData.region}{popoverData.subregion && `, ${popoverData.subregion}`}
+                      </p>
+                    </div>
                   </div>
+
+                  {/* Country Details */}
+                  {!popoverData.isLoading && (
+                    <div className="grid grid-cols-1 gap-3 text-sm">
+                      {popoverData.capital && (
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-700">Capital:</span>
+                          <span className="text-gray-900">{popoverData.capital}</span>
+                        </div>
+                      )}
+                      
+                      {popoverData.population && (
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-700">Population:</span>
+                          <span className="text-gray-900">{popoverData.population.toLocaleString()}</span>
+                        </div>
+                      )}
+                      
+                      {popoverData.area && (
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-700">Area:</span>
+                          <span className="text-gray-900">{popoverData.area.toLocaleString()} km²</span>
+                        </div>
+                      )}
+                      
+                      {popoverData.currencies && (
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-700">Currency:</span>
+                          <span className="text-gray-900">
+                            {Object.values(popoverData.currencies).map(currency => 
+                              `${currency.name} (${currency.symbol})`
+                            ).join(', ')}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {popoverData.languages && (
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-700">Languages:</span>
+                          <span className="text-gray-900">
+                            {Object.values(popoverData.languages).join(', ')}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {popoverData.timezones && (
+                        <div className="flex justify-between">
+                          <span className="font-medium text-gray-700">Timezone:</span>
+                          <span className="text-gray-900">{popoverData.timezones[0]}</span>
+                        </div>
+                      )}
+                      
+                      <div className="flex justify-between text-xs text-gray-500 pt-2 border-t">
+                        <span>Coordinates:</span>
+                        <span>{popoverData.coordinates.lat.toFixed(4)}, {popoverData.coordinates.lng.toFixed(4)}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Loading State */}
+                  {popoverData.isLoading && (
+                    <div className="text-center py-4">
+                      <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-2" />
+                      <p className="text-sm text-gray-600">Loading country details...</p>
+                    </div>
+                  )}
                   
-                  <div className="flex gap-2">
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 pt-2 border-t">
                     <Button 
                       onClick={handleCountrySelect}
                       className="flex-1"
+                      disabled={popoverData.isLoading}
                     >
                       Select {popoverData.name}
                     </Button>
@@ -199,8 +284,8 @@ export const GoogleMaps = ({
                 </div>
               </PopoverContent>
             </Popover>
-          </div>
-        )}
+        </div>
+      )}
       </div>
     </div>
   );

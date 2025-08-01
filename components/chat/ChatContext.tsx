@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, ReactNode, useContext, useState } from "react";
 
 interface ChatContextType {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 export const useChatContext = () => {
   const context = useContext(ChatContext);
   if (context === undefined) {
-    throw new Error('useChatContext must be used within a ChatProvider');
+    throw new Error("useChatContext must be used within a ChatProvider");
   }
   return context;
 };
@@ -55,9 +55,5 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     clearMessageFlag,
   };
 
-  return (
-    <ChatContext.Provider value={value}>
-      {children}
-    </ChatContext.Provider>
-  );
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };

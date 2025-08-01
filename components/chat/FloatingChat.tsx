@@ -1,161 +1,209 @@
 "use client";
 
-import { Character, MessageDock } from "@/components/ui/message-dock";
-import { useState } from "react";
-import ExpandedChat from "./ExpandedChat";
-
-interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
-
-interface Conversation {
-  character: Character;
-  messages: ChatMessage[];
-}
-
-const travelAgents: Character[] = [
-  {
-    emoji: "🧙‍♂️",
-    name: "Travel Wizard",
-    online: true,
-    backgroundColor: "bg-green-300",
-    gradientColors: "#86efac, #dcfce7",
-  },
-  {
-    emoji: "📋",
-    name: "Visa Expert",
-    online: true,
-    backgroundColor: "bg-blue-300",
-    gradientColors: "#93c5fd, #dbeafe",
-  },
-  {
-    emoji: "🗺️",
-    name: "Local Guide",
-    online: true,
-    backgroundColor: "bg-purple-300",
-    gradientColors: "#c084fc, #f3e8ff",
-  },
-];
+import { Button } from "../ui/button"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import { Card, CardContent } from "../ui/card"
+import { Send, MessageCircle, Sparkles, X, RefreshCw } from "lucide-react"
+import { ScrollArea } from "../ui/scroll-area"
+import { useChat } from "@ai-sdk/react"
+import { Textarea } from "../ui/textarea"
+import { useState, useEffect, useRef } from "react"
+import { useChatContext } from "./ChatContext"
 
 export default function FloatingChat() {
-  const [expandedChatOpen, setExpandedChatOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
-    null
-  );
-  const [initialMessage, setInitialMessage] = useState("");
-  const [conversations, setConversations] = useState<Map<string, Conversation>>(
-    new Map()
-  );
+    const { messages, input, handleInputChange, handleSubmit, isLoading, setInput, setMessages } = useChat()
+    const { isOpen, setIsOpen, initialMessage, clearInitialMessage, shouldClearMessages, clearMessageFlag } = useChatContext()
+    const [isTyping, setIsTyping] = useState(false)
+    const scrollAreaRef = useRef<HTMLDivElement>(null)
+    const messagesEndRef = useRef<HTMLDivElement>(null)
 
-  const handleMessageSend = (
-    message: string,
-    character: Character,
-    index: number
-  ) => {
-    console.log("Message from dock (opening chat only):", {
-      message,
-      character: character.name,
-      index,
-    });
-
-    if (!message.trim()) {
-      console.log("Empty message, opening chat directly");
-      setSelectedCharacter(character);
-      setExpandedChatOpen(true);
-      setInitialMessage("");
-      return;
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault()
+            if (input.trim() && !isLoading) {
+                handleSubmit(e as any)
+            }
+        }
     }
 
-    console.log("Opening chat with message:", message);
-    setInitialMessage(message);
-    setSelectedCharacter(character);
-    setExpandedChatOpen(true);
-  };
-
-  const handleCharacterSelect = (character: Character) => {
-    console.log("Character selected:", character.name);
-
-    const characterKey = character.name;
-    const existingConversation = conversations.get(characterKey);
-
-    if (existingConversation && existingConversation.messages.length > 0) {
-      setSelectedCharacter(character);
-      setExpandedChatOpen(true);
-      setInitialMessage("");
-    } else {
-      setSelectedCharacter(character);
+    const handleNewChat = () => {
+        setMessages([])
+        setInput('')
     }
-  };
 
-  const handleDockToggle = (isExpanded: boolean) => {
-    console.log("Dock expanded:", isExpanded);
-  };
+    // Auto-scroll to bottom when new messages arrive
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    }, [messages])
 
-  const handleExpandedChatClose = () => {
-    setExpandedChatOpen(false);
-    setSelectedCharacter(null);
-    setInitialMessage("");
-  };
+    // Show typing indicator when loading
+    useEffect(() => {
+        if (isLoading) {
+            setIsTyping(true)
+            const timer = setTimeout(() => setIsTyping(false), 2000)
+            return () => clearTimeout(timer)
+        } else {
+            setIsTyping(false)
+        }
+    }, [isLoading])
 
-  const handleExpandedChatMessage = (message: string, character: Character) => {
-    console.log("Expanded chat message:", {
-      message,
-      character: character.name,
-    });
-  };
+    // Handle clearing messages and setting initial message from context
+    useEffect(() => {
+        if (shouldClearMessages && isOpen) {
+            // Clear existing messages for a fresh start
+            setMessages([])
+            clearMessageFlag()
+        }
+        
+        if (initialMessage && isOpen) {
+            setInput(initialMessage)
+            clearInitialMessage()
+        }
+    }, [initialMessage, isOpen, setInput, clearInitialMessage, shouldClearMessages, setMessages, clearMessageFlag])
 
-  const handleSaveConversation = (messages: ChatMessage[]) => {
-    if (selectedCharacter) {
-      const characterKey = selectedCharacter.name;
-      const updatedConversation: Conversation = {
-        character: selectedCharacter,
-        messages: messages,
-      };
-      setConversations(
-        new Map(conversations.set(characterKey, updatedConversation))
-      );
-    }
-  };
+    return (
+        <div className="fixed bottom-6 right-6 z-50">
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
+                <PopoverTrigger asChild>
+                    <Button 
+                        size="lg"
+                        className="group relative h-14 w-14 rounded-full bg-brand-secondary p-0 shadow-xl transition-all duration-300 hover:shadow-2xl hover:scale-110 border-0"
+                    >
+                        <div className="relative flex items-center justify-center">
+                            {isOpen ? (
+                                <X className="h-6 w-6 text-white transition-transform duration-200" />
+                            ) : (
+                                <MessageCircle className="h-6 w-6 text-white transition-transform duration-200 group-hover:scale-110" />
+                            )}
+                        </div>
+                        {/* Pulsing ring animation */}
+                        <div className="absolute inset-0 rounded-full bg-brand-secondary animate-pulse opacity-30"></div>
+                        {/* New message indicator */}
+                        {messages.length > 0 && !isOpen && (
+                            <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 flex items-center justify-center">
+                                <span className="text-xs text-white font-semibold">{messages.length}</span>
+                            </div>
+                        )}
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent 
+                    className="w-96 md:w-[420px] mr-6 mb-4 p-0 border-0 shadow-2xl bg-white/95 backdrop-blur-lg rounded-2xl overflow-hidden"
+                    sideOffset={10}
+                >
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-brand-primary to-brand-secondary p-4 text-white">
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                    <Sparkles className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold">Travel Assistant</h3>
+                                    <p className="text-sm text-white/80">Ask me anything about your travel plans!</p>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {messages.length > 0 && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={handleNewChat}
+                                        className="text-white/80 hover:text-white hover:bg-white/10 p-2 h-8 w-8"
+                                        title="Start new chat"
+                                    >
+                                        <RefreshCw className="h-4 w-4" />
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
 
-  const hasActiveConversation = (character: Character): boolean => {
-    const conversation = conversations.get(character.name);
-    return conversation ? conversation.messages.length > 0 : false;
-  };
+                    {/* Messages Container */}
+                    <ScrollArea className="h-[370px] px-4" ref={scrollAreaRef}>
+                        <div className="py-4 space-y-4">
+                                {messages.length === 0 ? (
+                                    <div className="text-center py-8">
+                                        <div className="w-16 h-16 mx-auto mb-4 bg-brand-primary/10 rounded-full flex items-center justify-center">
+                                            <MessageCircle className="h-8 w-8 text-brand-primary" />
+                                        </div>
+                                        <h3 className="font-semibold text-gray-800 mb-2">Start a conversation</h3>
+                                        <p className="text-sm text-gray-600">Ask me anything about your travel plans!</p>
+                                    </div>
+                                ) : (
+                                    messages.map((message, index) => (
+                                        <div 
+                                            key={message.id}
+                                            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in-up`}
+                                            style={{ animationDelay: `${index * 0.1}s` }}
+                                        >
+                                            <div
+                                                className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                                                    message.role === 'user' 
+                                                        ? 'bg-brand-primary text-white ml-auto' 
+                                                        : 'bg-brand-secondary/10 text-gray-800 mr-auto border border-brand-secondary/20'
+                                                }`}
+                                            >
+                                                <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                                                    {message.parts.map((part, i) => {
+                                                        switch (part.type) {
+                                                        case 'text':
+                                                            return <div key={`${message.id}-${i}`}>{part.text}</div>;
+                                                        }
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
+                                
+                                {/* Typing indicator */}
+                                {isTyping && (
+                                    <div className="flex justify-start animate-fade-in">
+                                        <div className="bg-gray-100 rounded-2xl px-4 py-3 border border-gray-200">
+                                            <div className="flex space-x-1">
+                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            <div ref={messagesEndRef} />
+                        </div>
+                    </ScrollArea>
 
-  return (
-    <>
-      <MessageDock
-        characters={travelAgents}
-        onMessageSend={handleMessageSend}
-        onCharacterSelect={handleCharacterSelect}
-        onDockToggle={handleDockToggle}
-        expandedWidth={500}
-        placeholder={(name) => `Ask ${name} about your travel plans...`}
-        theme="light"
-        enableAnimations={true}
-        closeOnSend={true}
-        autoFocus={true}
-        position="bottom"
-        showSparkleButton={false}
-        showMenuButton={true}
-        hasActiveConversations={hasActiveConversation}
-      />
-
-      {selectedCharacter && (
-        <ExpandedChat
-          character={selectedCharacter}
-          isOpen={expandedChatOpen}
-          onClose={handleExpandedChatClose}
-          onSendMessage={handleExpandedChatMessage}
-          initialMessage={initialMessage}
-          existingMessages={
-            conversations.get(selectedCharacter.name)?.messages || []
-          }
-          onSaveConversation={handleSaveConversation}
-        />
-      )}
-    </>
-  );
+                    {/* Input Form */}
+                    <div className="p-4 bg-gray-50/80 backdrop-blur-sm border-t border-gray-200">
+                        <form 
+                            onSubmit={handleSubmit}
+                            className="flex items-end gap-2"
+                        >   
+                            <div className="flex-1 relative">
+                                <Textarea 
+                                    value={input} 
+                                    placeholder="Type your message..." 
+                                    onChange={handleInputChange}
+                                    onKeyDown={handleKeyDown}
+                                    disabled={isLoading}
+                                    className="resize-none min-h-[44px] max-h-32 border-gray-300 focus:border-brand-primary focus:ring-brand-primary/20 rounded-xl bg-white shadow-sm transition-all duration-200 pr-12"
+                                />
+                            </div>
+                            <Button 
+                                type="submit" 
+                                disabled={!input.trim() || isLoading}
+                                className="h-11 w-11 p-0 rounded-xl bg-brand-primary hover:bg-brand-secondary disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+                            >
+                                <Send className="h-4 w-4 text-white" />
+                            </Button>
+                        </form>
+                    </div>
+                </PopoverContent>               
+            </Popover>
+        </div>
+    )
 }

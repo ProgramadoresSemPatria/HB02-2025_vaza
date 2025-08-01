@@ -1,15 +1,16 @@
 "use client";
 
 import { GoogleMaps } from "@/components/google-maps";
+import { useChatContext } from "@/components/chat/ChatContext";
 
 const CountriesPage = () => {
+  const { openChatWithMessage } = useChatContext();
 
   const handleCountrySelect = (countryName: string, countryCode: string) => {
-    // TODO: Open chat dialogue here
     console.log(`Selected country: ${countryName} (${countryCode})`);
     
-    // For now, let's show an alert - you can replace this with your chat implementation
-    alert(`You selected ${countryName}! This is where we'll open the chat dialogue.`);
+    // Open chat with personalized message
+    openChatWithMessage(`I'd like to move to ${countryName}. What's the process like?`);
   };
 
   return (

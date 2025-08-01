@@ -159,15 +159,15 @@ const Gallery4 = ({
                       alt={item.title}
                       className="absolute h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 h-full bg-[linear-gradient(hsl(var(--primary)/0),hsl(var(--primary)/0.4),hsl(var(--primary)/0.8)_100%)] mix-blend-multiply" />
-                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-6 text-primary-foreground md:p-8">
+                    <div className="absolute inset-0 h-full bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
+                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-start p-8 text-white md:p-8">
                       <div className="mb-2 pt-4 text-xl font-semibold md:mb-3 md:pt-4 lg:pt-4">
                         {item.title}
                       </div>
-                      <div className="mb-8 line-clamp-2 md:mb-12 lg:mb-9">
+                      <div className="mb-8 line-clamp-2 md:mb-12 lg:mb-9 text-white/90">
                         {item.description}
                       </div>
-                      <div className="flex items-center text-sm">
+                      <div className="flex items-center text-sm text-white">
                         Criar meu plano{" "}
                         <ArrowRight className="ml-2 size-5 transition-transform group-hover:translate-x-1" />
                       </div>

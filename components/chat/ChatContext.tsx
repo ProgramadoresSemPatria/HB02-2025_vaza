@@ -8,6 +8,8 @@ interface ChatContextType {
   openChatWithMessage: (message: string) => void;
   initialMessage: string | null;
   clearInitialMessage: () => void;
+  shouldClearMessages: boolean;
+  clearMessageFlag: () => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -27,8 +29,10 @@ interface ChatProviderProps {
 export const ChatProvider = ({ children }: ChatProviderProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [initialMessage, setInitialMessage] = useState<string | null>(null);
+  const [shouldClearMessages, setShouldClearMessages] = useState(false);
 
   const openChatWithMessage = (message: string) => {
+    setShouldClearMessages(true); // Flag to clear messages
     setInitialMessage(message);
     setIsOpen(true);
   };
@@ -37,12 +41,18 @@ export const ChatProvider = ({ children }: ChatProviderProps) => {
     setInitialMessage(null);
   };
 
+  const clearMessageFlag = () => {
+    setShouldClearMessages(false);
+  };
+
   const value: ChatContextType = {
     isOpen,
     setIsOpen,
     openChatWithMessage,
     initialMessage,
     clearInitialMessage,
+    shouldClearMessages,
+    clearMessageFlag,
   };
 
   return (

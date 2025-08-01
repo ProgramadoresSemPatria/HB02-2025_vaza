@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/popover"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Card, CardContent } from "../ui/card"
-import { Send, MessageCircle, Sparkles, X } from "lucide-react"
+import { Send, MessageCircle, Sparkles, X, RefreshCw } from "lucide-react"
 import { ScrollArea } from "../ui/scroll-area"
 import { useChat } from "@ai-sdk/react"
 import { Textarea } from "../ui/textarea"
@@ -14,8 +14,8 @@ import { useState, useEffect, useRef } from "react"
 import { useChatContext } from "./ChatContext"
 
 export default function FloatingChat() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading, setInput } = useChat()
-    const { isOpen, setIsOpen, initialMessage, clearInitialMessage } = useChatContext()
+    const { messages, input, handleInputChange, handleSubmit, isLoading, setInput, setMessages } = useChat()
+    const { isOpen, setIsOpen, initialMessage, clearInitialMessage, shouldClearMessages, clearMessageFlag } = useChatContext()
     const [isTyping, setIsTyping] = useState(false)
     const scrollAreaRef = useRef<HTMLDivElement>(null)
     const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -25,6 +25,11 @@ export default function FloatingChat() {
             event.preventDefault()
             handleSubmit(event as any)
         }
+    }
+
+    const handleNewChat = () => {
+        setMessages([])
+        setInput('')
     }
 
     // Auto-scroll to bottom when new messages arrive
@@ -43,13 +48,19 @@ export default function FloatingChat() {
         }
     }, [isLoading])
 
-    // Handle initial message from context
+    // Handle clearing messages and setting initial message from context
     useEffect(() => {
+        if (shouldClearMessages && isOpen) {
+            // Clear existing messages for a fresh start
+            setMessages([])
+            clearMessageFlag()
+        }
+        
         if (initialMessage && isOpen) {
             setInput(initialMessage)
             clearInitialMessage()
         }
-    }, [initialMessage, isOpen, setInput, clearInitialMessage])
+    }, [initialMessage, isOpen, setInput, clearInitialMessage, shouldClearMessages, setMessages, clearMessageFlag])
 
     return (
         <div className="fixed bottom-6 right-6 z-50">
@@ -102,6 +113,17 @@ export default function FloatingChat() {
                                 </h2>
                                 <p className="text-white/80 text-sm">Your travel assistant</p>
                             </div>
+                            {messages.length > 0 && (
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleNewChat}
+                                    className="text-white/80 hover:text-white hover:bg-white/10 p-2 h-8 w-8"
+                                    title="Start new chat"
+                                >
+                                    <RefreshCw className="h-4 w-4" />
+                                </Button>
+                            )}
                         </div>
                     </div>
 

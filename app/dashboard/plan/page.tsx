@@ -13,11 +13,8 @@ import {
   visaTypes,
   VisaTypeSelector,
 } from "@/components/plan";
-import { useSidebar } from "@/components/ui/sidebar";
 
 export default function PlanPage() {
-  const { state: sidebarState } = useSidebar();
-
   const {
     selectedCountry,
     selectedVisaType,
@@ -40,7 +37,7 @@ export default function PlanPage() {
   });
 
   return (
-    <div className="w-full min-h-screen bg-gray-50 p-6">
+    <div className="w-full h-full bg-gray-50 p-6">
       <div className="w-full space-y-6">
         <PlanHeader
           planStatus={planStatus.status}
@@ -49,12 +46,7 @@ export default function PlanPage() {
           onCompletePlan={completePlan}
         />
 
-        <div
-          className={`grid grid-cols-1 gap-6 ${
-            sidebarState === "expanded" ? "xl:grid-cols-3" : "xl:grid-cols-4"
-          }`}
-        >
-          {/* Left Column - Country & Visa Selection */}
+        <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <div className="xl:col-span-1 space-y-6">
             <CountrySelector
               countries={countries}
@@ -77,12 +69,7 @@ export default function PlanPage() {
             />
           </div>
 
-          {/* Right Column - Tasks and Documents */}
-          <div
-            className={`space-y-6 ${
-              sidebarState === "expanded" ? "xl:col-span-2" : "xl:col-span-3"
-            }`}
-          >
+          <div className="xl:col-span-3 space-y-6">
             <TasksList tasks={tasks} onToggleTask={toggleTask} />
 
             <RequiredDocuments

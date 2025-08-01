@@ -1,91 +1,161 @@
-import { Button } from "../ui/button"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
-import { Card, CardContent } from "../ui/card"
-import { Send } from "lucide-react"
-import { ScrollArea } from "../ui/scroll-area"
-import { useChat } from "@ai-sdk/react"
-import { Textarea } from "../ui/textarea"
+"use client";
+
+import { Character, MessageDock } from "@/components/ui/message-dock";
+import { useState } from "react";
+import ExpandedChat from "./ExpandedChat";
+
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+
+interface Conversation {
+  character: Character;
+  messages: ChatMessage[];
+}
+
+const travelAgents: Character[] = [
+  {
+    emoji: "🧙‍♂️",
+    name: "Travel Wizard",
+    online: true,
+    backgroundColor: "bg-green-300",
+    gradientColors: "#86efac, #dcfce7",
+  },
+  {
+    emoji: "📋",
+    name: "Visa Expert",
+    online: true,
+    backgroundColor: "bg-blue-300",
+    gradientColors: "#93c5fd, #dbeafe",
+  },
+  {
+    emoji: "🗺️",
+    name: "Local Guide",
+    online: true,
+    backgroundColor: "bg-purple-300",
+    gradientColors: "#c084fc, #f3e8ff",
+  },
+];
 
 export default function FloatingChat() {
-    const { messages, input, handleInputChange, handleSubmit } = useChat()
+  const [expandedChatOpen, setExpandedChatOpen] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(
+    null
+  );
+  const [initialMessage, setInitialMessage] = useState("");
+  const [conversations, setConversations] = useState<Map<string, Conversation>>(
+    new Map()
+  );
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault()
-            handleSubmit(event as any)
-        }
+  const handleMessageSend = (
+    message: string,
+    character: Character,
+    index: number
+  ) => {
+    console.log("Message from dock (opening chat only):", {
+      message,
+      character: character.name,
+      index,
+    });
+
+    if (!message.trim()) {
+      console.log("Empty message, opening chat directly");
+      setSelectedCharacter(character);
+      setExpandedChatOpen(true);
+      setInitialMessage("");
+      return;
     }
 
-    return (
-        <div className="fixed bottom-4 right-4 z-50">
-            <Popover>
-                <PopoverTrigger asChild>
-                    <Button variant="default">Open Chat</Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 md:w-100 flex flex-col gap-4 mr-4">
-                    <div className="bg-brand-primary flex items-center gap-4 p-4 rounded-md">
-                        <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png" />
-                            <AvatarFallback>Vaza AI</AvatarFallback>
-                        </Avatar>
-                        <h2 className="text-secondary font-bold">
-                            Vaza AI
-                        </h2>
-                    </div>
-                    <Card className="flex">
-                        <CardContent className="px-4">
-                            <ScrollArea className="h-[400px]">
-                                {messages.map((message) => (
-                                    <div 
-                                        key={message.id}
-                                        className={`flex px-2 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                                    >
-                                        <Card
-                                            className={`mb-4 max-w-[80%] ${message.role === 'user' ? 'bg-primary text-secondary' : 'bg-muted'}`}
-                                        >
-                                            <CardContent>
-                                                <div
-                                                    className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                                                >
-                                                    <div key={message.id} className="whitespace-pre-wrap">
-                                                        {message.parts.map((part, i) => {
-                                                            switch (part.type) {
-                                                            case 'text':
-                                                                return <div key={`${message.id}-${i}`}>{part.text}</div>;
-                                                            }
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            </CardContent>
-                                        </Card>
-                                    </div>
-                                ))}
-                            </ScrollArea>
-                        </CardContent>
-                    </Card>
-                    <form 
-                        onSubmit={handleSubmit}
-                        className="w-full flex items-center gap-2"
-                    >   
-                        <Textarea 
-                            value={input} 
-                            placeholder="Send a message..." 
-                            onChange={handleInputChange}
-                            onKeyDown={handleKeyDown}
-                            className="resize-none min-h-8 max-h-24"
-                        />
-                        <Button type="submit">
-                            <Send />
-                            Send
-                        </Button>
-                    </form>
-                </PopoverContent>               
-            </Popover>
-        </div>
-    )
+    console.log("Opening chat with message:", message);
+    setInitialMessage(message);
+    setSelectedCharacter(character);
+    setExpandedChatOpen(true);
+  };
+
+  const handleCharacterSelect = (character: Character) => {
+    console.log("Character selected:", character.name);
+
+    const characterKey = character.name;
+    const existingConversation = conversations.get(characterKey);
+
+    if (existingConversation && existingConversation.messages.length > 0) {
+      setSelectedCharacter(character);
+      setExpandedChatOpen(true);
+      setInitialMessage("");
+    } else {
+      setSelectedCharacter(character);
+    }
+  };
+
+  const handleDockToggle = (isExpanded: boolean) => {
+    console.log("Dock expanded:", isExpanded);
+  };
+
+  const handleExpandedChatClose = () => {
+    setExpandedChatOpen(false);
+    setSelectedCharacter(null);
+    setInitialMessage("");
+  };
+
+  const handleExpandedChatMessage = (message: string, character: Character) => {
+    console.log("Expanded chat message:", {
+      message,
+      character: character.name,
+    });
+  };
+
+  const handleSaveConversation = (messages: ChatMessage[]) => {
+    if (selectedCharacter) {
+      const characterKey = selectedCharacter.name;
+      const updatedConversation: Conversation = {
+        character: selectedCharacter,
+        messages: messages,
+      };
+      setConversations(
+        new Map(conversations.set(characterKey, updatedConversation))
+      );
+    }
+  };
+
+  const hasActiveConversation = (character: Character): boolean => {
+    const conversation = conversations.get(character.name);
+    return conversation ? conversation.messages.length > 0 : false;
+  };
+
+  return (
+    <>
+      <MessageDock
+        characters={travelAgents}
+        onMessageSend={handleMessageSend}
+        onCharacterSelect={handleCharacterSelect}
+        onDockToggle={handleDockToggle}
+        expandedWidth={500}
+        placeholder={(name) => `Ask ${name} about your travel plans...`}
+        theme="light"
+        enableAnimations={true}
+        closeOnSend={true}
+        autoFocus={true}
+        position="bottom"
+        showSparkleButton={false}
+        showMenuButton={true}
+        hasActiveConversations={hasActiveConversation}
+      />
+
+      {selectedCharacter && (
+        <ExpandedChat
+          character={selectedCharacter}
+          isOpen={expandedChatOpen}
+          onClose={handleExpandedChatClose}
+          onSendMessage={handleExpandedChatMessage}
+          initialMessage={initialMessage}
+          existingMessages={
+            conversations.get(selectedCharacter.name)?.messages || []
+          }
+          onSaveConversation={handleSaveConversation}
+        />
+      )}
+    </>
+  );
 }

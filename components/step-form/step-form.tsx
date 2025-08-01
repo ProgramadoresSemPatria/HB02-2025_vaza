@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useStepForm } from "@/hooks/useStepForm";
+import { useRouter } from "next/navigation";
 import { CitizenshipStep } from "./steps/citizenship-step";
 import { CurrentCountryStep } from "./steps/current-country-step";
 import { EducationStep } from "./steps/education-step";
@@ -12,8 +14,6 @@ import { FamilyStep } from "./steps/family-step";
 import { PersonalInfoStep } from "./steps/personal-info-step";
 import { SummaryStep } from "./steps/summary-step";
 import { FormData } from "./types";
-import { useStepForm } from "@/hooks/useStepForm";
-import { useRouter } from "next/navigation";
 
 interface StepFormProps {
   onClose?: () => void;
@@ -54,7 +54,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
       setCurrentStep(currentStep - 1);
     }
   };
-
 
   const closeOnboarding = () => {
     setCurrentStep(1);
@@ -138,9 +137,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           formData.currentCountry !== "" && formData.currentCountry !== "other"
         );
       case 2:
-        return (
-          formData.jobTitle !== "" && formData.age !== ""
-        );
+        return formData.jobTitle !== "" && formData.age !== "";
       case 3:
         return formData.degree !== "" && formData.institution !== "";
       case 4:
@@ -197,17 +194,23 @@ export const StepForm = ({ onClose }: StepFormProps) => {
                 onClick={
                   currentStep === totalSteps
                     ? async () => {
-                      const success = await saveProfile(formData);
-                      if (success) {
-                        router.push('/dashboard/countries');
+                        const success = await saveProfile(formData);
+                        if (success) {
+                          router.push("/dashboard/countries");
+                        }
                       }
-                    }
                     : nextStep
                 }
-                disabled={!canProceed() || (currentStep === totalSteps && isLoading)}
+                disabled={
+                  !canProceed() || (currentStep === totalSteps && isLoading)
+                }
                 className="w-full bg-green-800 hover:bg-green-900 text-white"
               >
-                {currentStep === totalSteps ? (isLoading ? "Salvando..." : "Salvar informações") : "Próximo"}
+                {currentStep === totalSteps
+                  ? isLoading
+                    ? "Salvando..."
+                    : "Salvar informações"
+                  : "Próximo"}
               </Button>
             </div>
           </div>

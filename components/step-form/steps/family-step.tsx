@@ -37,17 +37,17 @@ export const FamilyStep = ({
         <p className="text-gray-600">Conte-nos sobre sua situação familiar</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="space-y-6">
         {/* Marital Status */}
         <div className="space-y-3">
           <h3 className="text-sm font-semibold text-gray-900">Estado Civil</h3>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {maritalStatusOptions.map((option) => (
               <OptionButton
                 key={option.value}
                 isSelected={maritalStatus === option.value}
                 onClick={() => onUpdate("maritalStatus", option.value)}
-                className="h-10 text-sm"
+                className="h-12 sm:h-10 text-sm"
               >
                 {option.label}
               </OptionButton>
@@ -58,13 +58,13 @@ export const FamilyStep = ({
         {/* Children */}
         <div className="space-y-3">
           <h3 className="text-sm font-semibold text-gray-900">Filhos</h3>
-          <div className="grid grid-cols-5 gap-2">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
             {childrenOptions.map((option) => (
               <OptionButton
                 key={option.value}
                 isSelected={childrenCount === option.value}
                 onClick={() => onUpdate("children", option.value)}
-                className="h-10 text-sm"
+                className="h-12 sm:h-10 text-sm"
               >
                 {option.label}
               </OptionButton>

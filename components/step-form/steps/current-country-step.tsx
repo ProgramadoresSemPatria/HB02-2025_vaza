@@ -106,11 +106,12 @@ export const CurrentCountryStep = ({
         <p className="text-sm md:text-base text-gray-600">Seu país de origem</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 sm:space-y-3">
         <OptionButton
           isSelected={currentCountry === "brazil"}
           onClick={() => onUpdate("brazil")}
           icon={MapPin}
+          className="h-12 sm:h-14"
         >
           🇧🇷 Brasil
         </OptionButton>
@@ -119,6 +120,7 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "argentina"}
           onClick={() => onUpdate("argentina")}
           icon={MapPin}
+          className="h-12 sm:h-14"
         >
           🇦🇷 Argentina
         </OptionButton>
@@ -127,6 +129,7 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "colombia"}
           onClick={() => onUpdate("colombia")}
           icon={MapPin}
+          className="h-12 sm:h-14"
         >
           🇨🇴 Colômbia
         </OptionButton>
@@ -135,6 +138,7 @@ export const CurrentCountryStep = ({
           isSelected={currentCountry === "other"}
           onClick={() => setShowMap(true)}
           icon={Globe}
+          className="h-12 sm:h-14"
         >
           🌍 Outro país
         </OptionButton>
@@ -166,7 +170,7 @@ export const CurrentCountryStep = ({
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden">
             {/* Header */}
             <div className="p-3 md:p-4 border-b flex justify-between items-center">
-              <h3 className="text-base md:text-lg font-semibold">
+              <h3 className="text-sm md:text-base lg:text-lg font-semibold">
                 Escolha seu país de origem
               </h3>
               <button
@@ -178,7 +182,7 @@ export const CurrentCountryStep = ({
             </div>
 
             <div className="p-3 md:p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
                 {/* Lista de países */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-gray-700 mb-3 text-sm md:text-base">

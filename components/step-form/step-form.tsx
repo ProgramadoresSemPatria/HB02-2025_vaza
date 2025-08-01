@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useStepForm } from "@/hooks/useStepForm";
+import { useRouter } from "next/navigation";
 import { CitizenshipStep } from "./steps/citizenship-step";
 import { CurrentCountryStep } from "./steps/current-country-step";
 import { EducationStep } from "./steps/education-step";
@@ -12,8 +14,6 @@ import { FamilyStep } from "./steps/family-step";
 import { PersonalInfoStep } from "./steps/personal-info-step";
 import { SummaryStep } from "./steps/summary-step";
 import { FormData } from "./types";
-import { useStepForm } from "@/hooks/useStepForm";
-import { useRouter } from "next/navigation";
 
 interface StepFormProps {
   onClose?: () => void;
@@ -54,7 +54,6 @@ export const StepForm = ({ onClose }: StepFormProps) => {
       setCurrentStep(currentStep - 1);
     }
   };
-
 
   const closeOnboarding = () => {
     setCurrentStep(1);
@@ -138,9 +137,7 @@ export const StepForm = ({ onClose }: StepFormProps) => {
           formData.currentCountry !== "" && formData.currentCountry !== "other"
         );
       case 2:
-        return (
-          formData.jobTitle !== "" && formData.age !== ""
-        );
+        return formData.jobTitle !== "" && formData.age !== "";
       case 3:
         return formData.degree !== "" && formData.institution !== "";
       case 4:
@@ -155,8 +152,8 @@ export const StepForm = ({ onClose }: StepFormProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-md mx-auto shadow-2xl border-0">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 lg:p-6 z-50">
+      <Card className="w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl mx-auto shadow-2xl border-0 max-h-[95vh] sm:max-h-[90vh] overflow-y-auto scrollbar-hide">
         <CardContent className="p-0">
           <div className="relative">
             <div className="w-full h-1 bg-gray-200">
@@ -166,13 +163,13 @@ export const StepForm = ({ onClose }: StepFormProps) => {
               />
             </div>
 
-            <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
+            <div className="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 flex justify-between items-center">
               {currentStep > 1 && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={prevStep}
-                  className="h-8 w-8 p-0 hover:bg-gray-100"
+                  className="h-8 w-8 p-0 hover:bg-gray-100 transition-colors"
                 >
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
@@ -182,32 +179,38 @@ export const StepForm = ({ onClose }: StepFormProps) => {
                 variant="ghost"
                 size="sm"
                 onClick={closeOnboarding}
-                className="h-8 w-8 p-0 hover:bg-gray-100"
+                className="h-8 w-8 p-0 hover:bg-gray-100 transition-colors"
               >
                 <X className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
-          <div className="p-6 pt-16">
+          <div className="p-4 sm:p-6 lg:p-8 pt-14 sm:pt-16">
             {renderStep()}
 
-            <div className="mt-8">
+            <div className="mt-6 sm:mt-8">
               <Button
                 onClick={
                   currentStep === totalSteps
                     ? async () => {
-                      const success = await saveProfile(formData);
-                      if (success) {
-                        router.push('/dashboard/countries');
+                        const success = await saveProfile(formData);
+                        if (success) {
+                          router.push("/dashboard/countries");
+                        }
                       }
-                    }
                     : nextStep
                 }
-                disabled={!canProceed() || (currentStep === totalSteps && isLoading)}
-                className="w-full bg-green-800 hover:bg-green-900 text-white"
+                disabled={
+                  !canProceed() || (currentStep === totalSteps && isLoading)
+                }
+                className="w-full h-12 sm:h-11 bg-green-800 hover:bg-green-900 text-white font-medium transition-colors"
               >
-                {currentStep === totalSteps ? (isLoading ? "Salvando..." : "Salvar informações") : "Próximo"}
+                {currentStep === totalSteps
+                  ? isLoading
+                    ? "Salvando..."
+                    : "Salvar informações"
+                  : "Próximo"}
               </Button>
             </div>
           </div>

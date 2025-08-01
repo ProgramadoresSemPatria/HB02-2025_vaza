@@ -20,7 +20,7 @@ export const OptionButton = ({
     type="button"
     variant="outline"
     className={cn(
-      "w-full h-14 text-left justify-start transition-all duration-300 ease-out border-2",
+      "w-full h-12 sm:h-14 text-left justify-start transition-all duration-300 ease-out border-2 text-sm sm:text-base font-medium",
       isSelected
         ? "bg-green-800 text-white border-green-800 shadow-sm"
         : "bg-white text-gray-700 border-gray-200 hover:border-green-600 hover:bg-green-50",
@@ -28,7 +28,9 @@ export const OptionButton = ({
     )}
     onClick={onClick}
   >
-    {Icon && <Icon className="w-5 h-5 mr-3" />}
-    {children}
+    {Icon && (
+      <Icon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3 flex-shrink-0" />
+    )}
+    <span className="truncate">{children}</span>
   </Button>
 );

@@ -34,9 +34,15 @@ export const GoogleMaps = ({
     }
   }, [isLoaded]);
 
+  // Failsafe: Also check if Google Maps API becomes available
+  useEffect(() => {
+    if (mapRef.current && window.google && !isLoaded) {
+      setIsLoaded(true);
+    }
+  }, [isLoaded]);
+
   const initializeMap = () => {
     if (!mapRef.current || !window.google) return;
-
     // Initialize the map
     const map = new window.google.maps.Map(mapRef.current, {
       zoom: 2,
@@ -116,6 +122,13 @@ export const GoogleMaps = ({
     setIsLoaded(true);
   };
 
+  const handleScriptReady = () => {
+    // Handle case where script is cached and onLoad doesn't fire
+    if (window.google) {
+      setIsLoaded(true);
+    }
+  };
+
   const handleCountrySelect = () => {
     if (popoverData) {
       onCountrySelect?.(popoverData.name, popoverData.code, popoverData);
@@ -134,6 +147,7 @@ export const GoogleMaps = ({
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=geometry`}
         onLoad={handleScriptLoad}
+        onReady={handleScriptReady}
         strategy="afterInteractive"
       />
       

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
+import { Popover, PopoverTrigger, PopoverContent, Button } from "@/components/ui";
 
 interface GoogleMapsProps {
   onCountrySelect?: (country: string, countryCode: string) => void;
@@ -9,10 +10,16 @@ interface GoogleMapsProps {
   height?: string;
 }
 
+interface CountryData {
+  name: string;
+  code: string;
+  position: { x: number; y: number };
+  coordinates: { lat: number; lng: number };
+}
+
 declare global {
   interface Window {
     google: typeof google;
-    selectCountry: (country: string, code: string) => void;
   }
 }
 
@@ -23,7 +30,8 @@ export const GoogleMaps = ({
 }: GoogleMapsProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+  const [popoverData, setPopoverData] = useState<CountryData | null>(null);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {
@@ -56,10 +64,15 @@ export const GoogleMaps = ({
 
     // Add click listener to the map
     map.addListener("click", (event: google.maps.MapMouseEvent) => {
-      if (!event.latLng) return;
+      if (!event.latLng || !mapRef.current) return;
       
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
+      
+      // Get the center position for the popover (simplified approach)
+      const mapRect = mapRef.current.getBoundingClientRect();
+      const clickX = mapRect.width / 2;
+      const clickY = mapRect.height / 3; // Position it in the upper third of the map
       
       // Reverse geocode to get country information
       geocoder.geocode(
@@ -75,8 +88,6 @@ export const GoogleMaps = ({
             if (countryComponent) {
               const countryName = countryComponent.long_name;
               const countryCode = countryComponent.short_name;
-              
-              setSelectedCountry(countryName);
               
               // Add a marker at the clicked location
               const marker = new window.google.maps.Marker({
@@ -94,42 +105,14 @@ export const GoogleMaps = ({
                 }
               });
 
-              // Create info window
-              const infoWindow = new window.google.maps.InfoWindow({
-                content: `
-                  <div style="padding: 8px;">
-                    <h3 style="margin: 0 0 8px 0; font-size: 16px; font-weight: bold;">${countryName}</h3>
-                    <button 
-                      onclick="window.selectCountry('${countryName}', '${countryCode}')"
-                      style="
-                        background: #4285f4; 
-                        color: white; 
-                        border: none; 
-                        padding: 8px 16px; 
-                        border-radius: 4px; 
-                        cursor: pointer;
-                        font-size: 14px;
-                      "
-                    >
-                      Select ${countryName}
-                    </button>
-                  </div>
-                `
+              // Set popover data and open it
+              setPopoverData({
+                name: countryName,
+                code: countryCode,
+                position: { x: clickX, y: clickY },
+                coordinates: { lat, lng }
               });
-
-              // Open info window on marker click
-              marker.addListener("click", () => {
-                infoWindow.open(map, marker);
-              });
-
-              // Open info window immediately
-              infoWindow.open(map, marker);
-              
-              // Set up global function for button click
-              (window as any).selectCountry = (country: string, code: string) => {
-                onCountrySelect?.(country, code);
-                infoWindow.close();
-              };
+              setIsPopoverOpen(true);
             }
           }
         }
@@ -141,6 +124,19 @@ export const GoogleMaps = ({
     setIsLoaded(true);
   };
 
+  const handleCountrySelect = () => {
+    if (popoverData) {
+      onCountrySelect?.(popoverData.name, popoverData.code);
+      setIsPopoverOpen(false);
+      setPopoverData(null);
+    }
+  };
+
+  const handlePopoverClose = () => {
+    setIsPopoverOpen(false);
+    setPopoverData(null);
+  };
+
   return (
     <div className={className}>
       <Script
@@ -149,19 +145,63 @@ export const GoogleMaps = ({
         strategy="afterInteractive"
       />
       
-      <div 
-        ref={mapRef} 
-        style={{ width: "100%", height }}
-        className="rounded-lg border border-gray-200 shadow-sm"
-      />
-      
-      {selectedCountry && (
-        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-800">
-            <strong>Selected:</strong> {selectedCountry}
-          </p>
-        </div>
-      )}
+      <div className="relative">
+        <div 
+          ref={mapRef} 
+          style={{ width: "100%", height }}
+          className="rounded-lg border border-gray-200 shadow-sm"
+        />
+        
+        {/* Popover for country selection */}
+        {popoverData && (
+          <div
+            style={{
+              position: "absolute",
+              left: popoverData.position.x,
+              top: popoverData.position.y,
+              transform: "translate(-50%, -100%)",
+              zIndex: 50,
+            }}
+          >
+            <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
+              <PopoverTrigger asChild>
+                <div className="w-0 h-0" />
+              </PopoverTrigger>
+              <PopoverContent className="w-80 p-4">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {popoverData.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Country Code: {popoverData.code}
+                    </p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      Coordinates: {popoverData.coordinates.lat.toFixed(4)}, {popoverData.coordinates.lng.toFixed(4)}
+                    </p>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={handleCountrySelect}
+                      className="flex-1"
+                    >
+                      Select {popoverData.name}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      onClick={handlePopoverClose}
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

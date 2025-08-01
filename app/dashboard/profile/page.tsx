@@ -62,17 +62,13 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header */}
         <ProfileHeader profile={profile} onEditProfile={handleEditProfile} />
 
-        {/* Layout Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Sidebar */}
           <div className="lg:col-span-1">
             <ProfileStatsOverview profile={profile} />
           </div>
-
-          {/* Main Content */}
+    
           <div className="lg:col-span-2">
             <ProfileDetails profile={profile} />
           </div>

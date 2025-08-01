@@ -15,17 +15,19 @@ export const PersonalInfoStep = ({
   onUpdate,
 }: PersonalInfoStepProps) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
           Informações Pessoais
         </h2>
-        <p className="text-gray-600">Conte-nos sobre sua carreira e idade</p>
+        <p className="text-xs sm:text-sm md:text-base text-gray-600">
+          Conte-nos sobre sua carreira e idade
+        </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         {/* Job Title */}
-        <div className="space-y-2">
+        <div className="space-y-1 sm:space-y-2">
           <Label
             htmlFor="jobTitle"
             className="text-sm font-medium text-gray-700"
@@ -38,12 +40,12 @@ export const PersonalInfoStep = ({
             placeholder="Ex: Desenvolvedor Full Stack, Médico, Professor..."
             value={jobTitle}
             onChange={(e) => onUpdate("jobTitle", e.target.value)}
-            className="w-full"
+            className="w-full h-11 sm:h-10 text-sm sm:text-base"
           />
         </div>
 
         {/* Age */}
-        <div className="space-y-2">
+        <div className="space-y-1 sm:space-y-2">
           <Label htmlFor="age" className="text-sm font-medium text-gray-700">
             Idade
           </Label>
@@ -53,7 +55,7 @@ export const PersonalInfoStep = ({
             placeholder="Ex: 28"
             value={age}
             onChange={(e) => onUpdate("age", e.target.value)}
-            className="w-full"
+            className="w-full h-11 sm:h-10 text-sm sm:text-base"
             min="18"
             max="100"
           />

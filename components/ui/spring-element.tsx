@@ -2,10 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import {
-  type HTMLMotionProps,
   motion,
   useMotionValue,
   useSpring,
+  type HTMLMotionProps,
+  type MotionValue,
 } from "framer-motion";
 import * as React from "react";
 
@@ -53,7 +54,7 @@ const generateSpringPath = (
   const perpX = -uy,
     perpY = ux;
 
-  let path = [];
+  const path = [];
   for (let i = 0; i < coilCount; i++) {
     const sx = x1 + ux * (i * d);
     const sy = y1 + uy * (i * d);
@@ -80,7 +81,7 @@ const generateSpringPath = (
   return path.join(" ");
 };
 
-function useMotionValueValue(mv: any) {
+function useMotionValueValue(mv: MotionValue<number>) {
   return React.useSyncExternalStore(
     (callback) => {
       const unsub = mv.on("change", callback);

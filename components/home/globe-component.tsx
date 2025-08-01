@@ -51,7 +51,7 @@ export function GlobeComponent({
   const pointerInteracting = useRef<number | null>(null);
   const pointerInteractionMovement = useRef(0);
   const [r, setR] = useState(0);
-  let phi = 0;
+  const phiRef = useRef(0);
 
   const updatePointerInteraction = (value: number | null) => {
     pointerInteracting.current = value;
@@ -70,8 +70,8 @@ export function GlobeComponent({
 
   const onRender = useCallback(
     (state: Record<string, unknown>) => {
-      if (!pointerInteracting.current) phi += 0.005;
-      state.phi = phi + r;
+      if (!pointerInteracting.current) phiRef.current += 0.005;
+      state.phi = phiRef.current + r;
       state.width = dimensions.width * 2;
       state.height = dimensions.width * 2;
     },

@@ -14,7 +14,7 @@ interface InteractiveHoverButtonProps {
 const InteractiveHoverButton = React.forwardRef<
   HTMLButtonElement | HTMLAnchorElement,
   InteractiveHoverButtonProps
->(({ text = "Button", href, className, onClick, children, ...props }, ref) => {
+>(({ text = "Button", href, className, onClick, ...props }, ref) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
   const baseClasses = cn(
@@ -39,6 +39,7 @@ const InteractiveHoverButton = React.forwardRef<
   if (href) {
     return (
       <Link
+        ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         className={baseClasses}
         onMouseEnter={() => setIsHovered(true)}
@@ -52,6 +53,7 @@ const InteractiveHoverButton = React.forwardRef<
 
   return (
     <button
+      ref={ref as React.Ref<HTMLButtonElement>}
       className={baseClasses}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}

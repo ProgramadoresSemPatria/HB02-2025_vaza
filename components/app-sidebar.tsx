@@ -1,91 +1,104 @@
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { GlobeIcon, LayoutIcon, UserIcon } from "lucide-react";
+"use client";
+
+import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { motion } from "framer-motion";
+import { GlobeIcon, LayoutIcon, LogOut, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { useState } from "react";
 
 const navigationItems = [
   {
     label: "Countries",
     href: "/dashboard/countries",
-    icon: GlobeIcon,
+    icon: (
+      <GlobeIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
   },
   {
     label: "Your plan",
     href: "/dashboard/plan",
-    icon: LayoutIcon,
+    icon: (
+      <LayoutIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
+  },
+  {
+    label: "Profile",
+    href: "/dashboard/profile",
+    icon: (
+      <UserIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
+  },
+  {
+    label: "Logout",
+    href: "/logout",
+    icon: (
+      <LogOut className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
   },
 ];
 
 export function AppSidebar() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Sidebar>
-      <SidebarHeader className="flex items-start justify-center pt-6 pb-2">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/vaza-logo.webp"
-            alt="VAZA Logo"
-            width={40}
-            height={40}
-            className="dark:invert"
-          />
-          <p className="text-xl font-bold bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">
-            VAZA
-          </p>
+    <Sidebar open={open} setOpen={setOpen}>
+      <SidebarBody className="justify-between gap-10">
+        <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+          {open ? <Logo /> : <LogoIcon />}
+          <div className="mt-8 flex flex-col gap-2">
+            {navigationItems.map((item, idx) => (
+              <SidebarLink key={idx} link={item} />
+            ))}
+          </div>
         </div>
-      </SidebarHeader>
-
-      <SidebarContent>
-        <SidebarGroup>
-          <hr className="my-2 border-border" />
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton
-                    className="hover:bg-brand-secondary hover:text-white"
-                    asChild
-                  >
-                    <Link
-                      href={item.href}
-                      className="flex items-center gap-3 px-3 py-6 rounded-md hover:bg-accent"
-                    >
-                      <item.icon className="h-4 w-4 hover:text-white" />
-                      <span className="text-sm font-medium">{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      <SidebarFooter className="p-4">
-        <Button
-          asChild
-          variant="ghost"
-          className="w-full justify-start hover:bg-brand-secondary hover:text-white"
-        >
-          <Link
-            href="/dashboard/profile"
-            className="flex items-center gap-3 px-3 py-6 rounded-md hover:bg-accent"
-          >
-            <UserIcon className="mr-2 h-4 w-4" />
-            <span className="text-sm font-medium">Profile</span>
-          </Link>
-        </Button>
-      </SidebarFooter>
+        <div>
+          <SidebarLink
+            link={{
+              label: "User Profile",
+              href: "/dashboard/profile",
+              icon: (
+                <Image
+                  src="/vaza-logo.webp"
+                  className="h-7 w-7 flex-shrink-0 rounded-full"
+                  width={50}
+                  height={50}
+                  alt="Avatar"
+                />
+              ),
+            }}
+          />
+        </div>
+      </SidebarBody>
     </Sidebar>
   );
 }
+
+export const Logo = () => {
+  return (
+    <Link
+      href="/dashboard"
+      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+    >
+      <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+      <motion.span
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="font-medium text-black dark:text-white whitespace-pre"
+      >
+        VAZA
+      </motion.span>
+    </Link>
+  );
+};
+
+export const LogoIcon = () => {
+  return (
+    <Link
+      href="/dashboard"
+      className="font-normal flex space-x-2 items-center text-sm text-black py-1 relative z-20"
+    >
+      <div className="h-5 w-6 bg-black dark:bg-white rounded-br-lg rounded-tr-sm rounded-tl-lg rounded-bl-sm flex-shrink-0" />
+    </Link>
+  );
+};

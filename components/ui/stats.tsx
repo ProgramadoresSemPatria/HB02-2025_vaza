@@ -107,7 +107,6 @@ const Stats = React.forwardRef<HTMLDivElement, StatsProps>(
       labelSize,
       animate = true,
       delay = 0,
-      ...props
     },
     ref
   ) => {
@@ -151,7 +150,6 @@ const Stats = React.forwardRef<HTMLDivElement, StatsProps>(
         initial={animate ? { opacity: 0, y: 20 } : undefined}
         animate={animate ? { opacity: 1, y: 0 } : undefined}
         transition={{ duration: 0.5, delay }}
-        {...props}
       >
         {Icon && (
           <Icon

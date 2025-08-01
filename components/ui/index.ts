@@ -71,10 +71,10 @@ export {
 } from "./sheet";
 export {
   Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarTrigger,
+  SidebarBody,
+  SidebarLink,
+  SidebarProvider,
+  useSidebar,
 } from "./sidebar";
 export { Skeleton } from "./skeleton";
 export { Toaster } from "./sonner";

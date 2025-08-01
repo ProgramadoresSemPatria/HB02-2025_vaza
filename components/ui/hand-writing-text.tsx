@@ -11,18 +11,6 @@ function HandWrittenTitle({
   title = "Hand Written",
   subtitle = "Optional subtitle",
 }: HandWrittenTitleProps) {
-  const draw = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: {
-      pathLength: 1,
-      opacity: 1,
-      transition: {
-        pathLength: { duration: 3, ease: [0.43, 0.13, 0.23, 0.96] },
-        opacity: { duration: 0.5 },
-      },
-    },
-  };
-
   const getTitlePath = (text: string) => {
     const length = text.length;
     const width = Math.max(800, length * 40);

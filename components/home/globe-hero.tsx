@@ -1,6 +1,7 @@
 "use client";
 
 import { Gallery4Demo } from "@/components/blocks/gallery4-demo";
+import VideoExpansionSection from "@/components/blocks/video-expansion-section";
 import { motion } from "framer-motion";
 import { GlobeSection } from "./globe-section";
 import { HeroBackground } from "./hero-background";
@@ -63,6 +64,7 @@ export default function GlobeHero({
       </div>
 
       <Gallery4Demo />
+      <VideoExpansionSection />
     </>
   );
 }

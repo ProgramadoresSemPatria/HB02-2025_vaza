@@ -1,4 +1,5 @@
 import {
+  FooterSection,
   GallerySection,
   Navbar,
   StatsDestinationsSection,
@@ -42,6 +43,8 @@ export default function Home() {
       <TestimonialSection />
 
       <VideoExpansionSectionComponent />
+
+      <FooterSection />
     </>
   );
 }

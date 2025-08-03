@@ -1,3 +1,4 @@
+export { FooterSection } from "./footer-section";
 export { GallerySection } from "./gallery-section";
 export { GlobeComponent } from "./globe-component";
 export { GlobeSection } from "./globe-section";

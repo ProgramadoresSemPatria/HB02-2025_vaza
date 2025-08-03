@@ -8,6 +8,7 @@ import {
 } from "@/components/ui";
 import { fetchCountryDetails } from "@/services/countries";
 import { CountryData } from "@/types/country";
+import { useCreatePlan } from "@/hooks/useCreatePlan";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 
@@ -36,6 +37,13 @@ export const GoogleMaps = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [popoverData, setPopoverData] = useState<CountryData | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  
+  const createPlanMutation = useCreatePlan({
+    onSuccess: () => {
+      setIsPopoverOpen(false);
+      setPopoverData(null);
+    }
+  });
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {
@@ -167,6 +175,14 @@ export const GoogleMaps = ({
   const handlePopoverClose = () => {
     setIsPopoverOpen(false);
     setPopoverData(null);
+  };
+
+  const handleCreatePlan = () => {
+    if (!popoverData) return;
+
+    createPlanMutation.mutate({
+      targetCountry: popoverData.name,
+    });
   };
 
   return (
@@ -327,10 +343,11 @@ export const GoogleMaps = ({
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={handlePopoverClose}
+                      onClick={handleCreatePlan}
                       className="flex-1"
+                      disabled={popoverData.isLoading || createPlanMutation.isPending}
                     >
-                      Cancel
+                      {createPlanMutation.isPending ? "Creating..." : "Create Plan"}
                     </Button>
                   </div>
                 </div>

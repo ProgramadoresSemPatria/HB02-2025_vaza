@@ -221,7 +221,7 @@ export const GoogleMaps = ({
                         src={popoverData.flag}
                         alt={`${popoverData.name} flag`}
                         width={32}
-                        height={24}
+                        height={32}
                         className="w-8 h-6 object-cover rounded border"
                       />
                     )}

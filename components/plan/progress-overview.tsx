@@ -20,42 +20,48 @@ export function ProgressOverview({
   remainingDays,
 }: ProgressOverviewProps) {
   return (
-    <Card>
+    <Card className="border-gray-200 shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg">Progress Overview</CardTitle>
+        <CardTitle className="text-lg font-semibold text-gray-900">
+          Progress Overview
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
+      <CardContent className="space-y-6">
+        <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span>Overall Progress</span>
-            <span>{Math.round(progressPercentage)}%</span>
+            <span className="font-medium text-gray-700">Overall Progress</span>
+            <span className="font-semibold text-gray-900">
+              {Math.round(progressPercentage)}%
+            </span>
           </div>
-          <Progress value={progressPercentage} className="h-2" />
+          <Progress value={progressPercentage} className="h-3" />
         </div>
 
-        <div className="grid grid-cols-1 gap-3 text-sm">
-          <div className="bg-green-50 p-4 rounded-lg">
+        <div className="grid grid-cols-1 gap-4 text-sm">
+          <div className="bg-green-50 p-5 rounded-xl border border-green-100">
             <div className="font-medium text-green-900 mb-2">Completed</div>
-            <div className="text-3xl font-bold text-green-600">
+            <div className="text-3xl font-bold text-green-600 mb-1">
               {completedTasks}
             </div>
-            <div className="text-green-600">tasks</div>
+            <div className="text-green-600 font-medium">tasks</div>
           </div>
-          <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="bg-blue-50 p-5 rounded-xl border border-blue-100">
             <div className="font-medium text-blue-900 mb-2">Remaining</div>
-            <div className="text-3xl font-bold text-blue-600">
+            <div className="text-3xl font-bold text-blue-600 mb-1">
               {totalTasks - completedTasks}
             </div>
-            <div className="text-blue-600">tasks</div>
+            <div className="text-blue-600 font-medium">tasks</div>
           </div>
         </div>
 
-        <Separator />
+        <Separator className="my-6" />
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           <div className="flex justify-between text-sm">
-            <span>Time Estimate</span>
-            <span>{remainingDays} days left</span>
+            <span className="font-medium text-gray-700">Time Estimate</span>
+            <span className="font-semibold text-gray-900">
+              {remainingDays} days left
+            </span>
           </div>
           <div className="text-xs text-gray-500">
             Total estimated: {estimatedTotalDays} days

@@ -61,8 +61,8 @@ export const ProfileStats = ({ profile }: ProfileStatsProps) => {
   const percentage = completionPercentage();
 
   return (
-    <div className="space-y-6">
-      <Card>
+    <div className="space-y-4">
+      <Card className="border-gray-200 shadow-sm">
         <CardHeader>
           <CardTitle className="text-lg font-semibold flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-green-600" />
@@ -70,7 +70,7 @@ export const ProfileStats = ({ profile }: ProfileStatsProps) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium text-gray-700">
                 {percentage}% Completo
@@ -100,13 +100,16 @@ export const ProfileStats = ({ profile }: ProfileStatsProps) => {
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
         {stats.map((stat, index) => (
-          <Card key={index} className="hover:shadow-md transition-shadow">
+          <Card
+            key={index}
+            className="hover:shadow-md transition-shadow border-gray-200 shadow-sm"
+          >
             <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+              <div className="flex items-center gap-2">
+                <div className={`p-1.5 rounded-lg ${stat.bgColor}`}>
+                  <stat.icon className={`h-4 w-4 ${stat.color}`} />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-gray-700 truncate">

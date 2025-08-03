@@ -6,9 +6,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui";
+import { useCreatePlan } from "@/hooks/useCreatePlan";
 import { fetchCountryDetails } from "@/services/countries";
 import { CountryData } from "@/types/country";
-import { useCreatePlan } from "@/hooks/useCreatePlan";
 import Image from "next/image";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
@@ -38,12 +38,12 @@ export const GoogleMaps = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [popoverData, setPopoverData] = useState<CountryData | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  
+
   const createPlanMutation = useCreatePlan({
     onSuccess: () => {
       setIsPopoverOpen(false);
       setPopoverData(null);
-    }
+    },
   });
 
   useEffect(() => {
@@ -220,6 +220,8 @@ export const GoogleMaps = ({
                       <Image
                         src={popoverData.flag}
                         alt={`${popoverData.name} flag`}
+                        width={32}
+                        height={24}
                         className="w-8 h-6 object-cover rounded border"
                       />
                     )}
@@ -341,9 +343,13 @@ export const GoogleMaps = ({
                       variant="outline"
                       onClick={handleCreatePlan}
                       className="flex-1"
-                      disabled={popoverData.isLoading || createPlanMutation.isPending}
+                      disabled={
+                        popoverData.isLoading || createPlanMutation.isPending
+                      }
                     >
-                      {createPlanMutation.isPending ? "Creating..." : "Create Plan"}
+                      {createPlanMutation.isPending
+                        ? "Creating..."
+                        : "Create Plan"}
                     </Button>
                   </div>
                 </div>

@@ -19,7 +19,7 @@ export default function ProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
           <ProfileLoadingModern />
         </div>
@@ -29,17 +29,17 @@ export default function ProfilePage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto space-y-6">
-          <div className="bg-white rounded-lg p-6 shadow-sm border">
-            <div className="text-center">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">Erro</h1>
-              <p className="text-red-600 mb-4">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+            <div className="text-center space-y-3">
+              <h1 className="text-3xl font-bold text-gray-900">Erro</h1>
+              <p className="text-red-600 text-lg">
                 Erro ao carregar perfil: {error}
               </p>
               <button
                 onClick={refetch}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                className="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 font-medium"
               >
                 Tentar Novamente
               </button>
@@ -51,7 +51,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
         <ProfileHeader profile={profile} onEditProfile={handleEditProfile} />
 

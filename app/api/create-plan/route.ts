@@ -1,4 +1,4 @@
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import { createClient } from "@/utils/supabase/server";
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject, jsonSchema } from "ai";
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     }
 
     // Get user profile
-    let userProfile: UserProfile | null = null;
+    let userProfile: Profile | null = null;
     try {
       const supabase = await createClient();
       const {
@@ -88,7 +88,7 @@ export async function POST(request: Request) {
     }
 
     const createImmigrationPrompt = (
-      profile: UserProfile | null,
+      profile: Profile | null,
       targetCountry: string
     ) => {
       const profileContext = profile
@@ -100,7 +100,7 @@ User Profile Context:
 - Age: ${profile.age || "Not specified"}
 - Education: ${profile.degree || "Not specified"} ${profile.institution ? `from ${profile.institution}` : ""
         }
-- Citizenships: ${profile.citizenships?.join(", ") || "Not specified"
+- Citizenships: ${profile.citizenships.join(", ") || "Not specified"
         }
 - Marital Status: ${profile.marital_status || "Not specified"}
 - Children: ${profile.children || "Not specified"}
@@ -180,7 +180,7 @@ Ensure all information is current, accurate, and tailored to the user's specific
     let { data: country, error: countryError } = await supabase
       .from("countries")
       .select("*")
-      .eq("profile_id", user.id)
+      .eq("profile_id", userProfile?.id)
       .eq("name", targetCountry)
       .single();
 
@@ -189,7 +189,7 @@ Ensure all information is current, accurate, and tailored to the user's specific
       const { data: newCountry, error: createCountryError } = await supabase
         .from("countries")
         .insert({
-          profile_id: user.id,
+          profile_id: userProfile?.id,
           name: targetCountry,
           chat: {},
         })

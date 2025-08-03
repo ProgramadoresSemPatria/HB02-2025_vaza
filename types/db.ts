@@ -9,7 +9,7 @@ export interface Profile {
   institution: string;
   city: string;
   country: string;
-  citizenship: string;
+  citizenships: string[];
   marital_status: string;
   children: number;
   created_at: Date;

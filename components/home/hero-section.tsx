@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
   return (
@@ -29,7 +30,7 @@ export default function HeroSection() {
           <div className="row-[2_/_span_1] flex flex-col gap-4 md:flex-row md:justify-between md:col-[2_/_span_21] col-[1_/_span_22] pb-16">
             <ul className="cta-list flex flex-col gap-2 md:flex-row h-fit">
               <li>
-                <a
+                <Link
                   href="/dashboard/get-started"
                   className="box-border button bg-transparent border-none no-underline blue group p-0 w-full text-left"
                 >
@@ -72,10 +73,10 @@ export default function HeroSection() {
                       </svg>
                     </span>
                   </span>
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/dashboard/plan"
                   className="box-border button bg-transparent border-none no-underline dark-gray group p-0 w-full text-left"
                 >
@@ -118,7 +119,7 @@ export default function HeroSection() {
                       </svg>
                     </span>
                   </span>
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

@@ -1,8 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { CheckIcon, PauseIcon } from "lucide-react";
-
 export function PlanHeader() {
   return (
     <div className="bg-white rounded-lg p-6 shadow-sm">

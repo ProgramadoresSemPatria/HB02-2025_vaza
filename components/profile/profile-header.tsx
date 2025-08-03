@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import { Edit, Settings, Shield, User } from "lucide-react";
 import { ProfileAvatar } from "./profile-avatar";
 
 interface ProfileHeaderProps {
-  profile: UserProfile | null;
+  profile: Profile | null;
   onEditProfile: () => void;
 }
 

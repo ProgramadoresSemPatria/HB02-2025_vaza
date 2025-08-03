@@ -1,7 +1,8 @@
 "use client";
 
 import { Character, MessageDock } from "@/components/ui/message-dock";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useChatContext } from "./ChatContext";
 import ExpandedChat from "./ExpandedChat";
 
 interface ChatMessage {
@@ -45,9 +46,49 @@ export default function FloatingChat() {
     null
   );
   const [initialMessage, setInitialMessage] = useState("");
+  const [country, setCountry] = useState<string | undefined>(undefined);
   const [conversations, setConversations] = useState<Map<string, Conversation>>(
     new Map()
   );
+
+  // Integration with ChatContext
+  const { 
+    isOpen, 
+    setIsOpen, 
+    initialMessage: contextInitialMessage, 
+    clearInitialMessage,
+    shouldClearMessages,
+    clearMessageFlag,
+    country: contextCountry
+  } = useChatContext();
+
+  // Listen for ChatContext openChatWithMessage calls
+  useEffect(() => {
+    if (isOpen && contextInitialMessage) {
+      // Find Visa Expert character
+      const visaExpert = travelAgents.find(agent => agent.name === "Visa Expert");
+      if (visaExpert) {
+        setSelectedCharacter(visaExpert);
+        setInitialMessage(contextInitialMessage);
+        setCountry(contextCountry || undefined);
+        setExpandedChatOpen(true);
+        
+        // Clear messages if requested
+        if (shouldClearMessages) {
+          const conversationKey = visaExpert.name;
+          setConversations(prev => {
+            const newConversations = new Map(prev);
+            newConversations.delete(conversationKey);
+            return newConversations;
+          });
+          clearMessageFlag();
+        }
+        
+        clearInitialMessage();
+      }
+      setIsOpen(false); // Reset the context state
+    }
+  }, [isOpen, contextInitialMessage, contextCountry, clearInitialMessage, setIsOpen, shouldClearMessages, clearMessageFlag]);
 
   const handleMessageSend = (
     message: string,
@@ -154,6 +195,7 @@ export default function FloatingChat() {
             conversations.get(selectedCharacter.name)?.messages || []
           }
           onSaveConversation={handleSaveConversation}
+          country={country}
         />
       )}
     </>

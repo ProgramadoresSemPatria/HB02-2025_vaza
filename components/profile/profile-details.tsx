@@ -3,6 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Profile } from "@/types/db";
 import { UserProfile } from "@/types/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -34,7 +35,7 @@ const FormSchema = z.object({
 type FormData = z.infer<typeof FormSchema>
 
 interface ProfileDetailsProps {
-  profile: UserProfile | null;
+  profile: Profile | null;
 }
 
 export function ProfileDetails({ profile }: ProfileDetailsProps) {

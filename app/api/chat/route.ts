@@ -1,12 +1,63 @@
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import { createClient } from "@/utils/supabase/server";
 import { anthropic } from "@ai-sdk/anthropic";
 import { streamText } from "ai";
 
+const saveChat = async (profile_id: string, user_message: string, ai_message: string, country_name: string) => {
+  const supabase = await createClient();
+
+  const chatMessages = [
+    { message: user_message, sender: "user" },
+    { message: ai_message, sender: "ai" }
+  ];
+
+  // First try to get the existing country
+  const { data: country } = await supabase
+    .from("countries")
+    .select("*")
+    .eq("name", country_name)
+    .eq("profile_id", profile_id)
+    .single();
+
+  if (!country) {
+    const { data: newCountry, error: createError } = await supabase
+      .from("countries")
+      .insert({
+        name: country_name,
+        profile_id: profile_id,
+        chat: chatMessages,
+      })
+      .select()
+      .single();
+
+    if (createError) {
+      console.error("Error creating country:", createError);
+      throw createError;
+    }
+
+    return newCountry;
+  }
+
+  // Update existing country with appended chat messages
+  const updatedChat = [...(country.chat || []), ...chatMessages];
+  const { error: updateError } = await supabase
+    .from("countries")
+    .update({ chat: updatedChat })
+    .eq("id", country.id);  // Use the specific ID we already have
+
+  if (updateError) {
+    console.error("Error updating country chat:", updateError);
+    throw updateError;
+  }
+
+  return country;
+}
+
 export async function POST(request: Request) {
-  const { messages, character = "Travel Wizard" } = await request.json();
+  const { messages, character = "Travel Wizard", country } = await request.json();
 
   let userProfile = null;
+
   try {
     const supabase = await createClient();
     const {
@@ -24,19 +75,19 @@ export async function POST(request: Request) {
       userProfile = profile;
     }
   } catch (error) {
-    console.log("Error fetching user profile:", error);
+    console.log("Error fetching user profile or country:", error);
   }
 
   const characterPrompts = {
-    "Travel Wizard": `Você é o Travel Wizard, um especialista em planejamento de viagens mágico e encantador. Você tem conhecimento profundo sobre destinos turísticos, melhores épocas para viajar, dicas de economia e experiências únicas. Você sempre responde com entusiasmo e criatividade, sugerindo lugares mágicos e experiências inesquecíveis. Use emojis ocasionalmente para tornar as respostas mais envolventes.`,
+    "Travel Wizard": `You are the Travel Wizard, a magical and enchanting travel planning expert. You have deep knowledge about tourist destinations, best times to travel, money-saving tips and unique experiences. You always respond with enthusiasm and creativity, suggesting magical places and unforgettable experiences. Use emojis occasionally to make responses more engaging.`,
 
-    "Visa Expert": `Você é o Visa Expert, um especialista em documentação de viagem e processos de visto. Você conhece profundamente os requisitos de visto para diferentes países, prazos de processamento, documentos necessários e dicas para facilitar o processo. Suas respostas são precisas, detalhadas e sempre incluem informações sobre prazos e procedimentos. Mantenha um tom profissional mas acessível.`,
+    "Visa Expert": `You are the Visa Expert, a specialist in travel documentation and visa processes. You have deep knowledge of visa requirements for different countries, processing times, required documents and tips to facilitate the process. Your answers are accurate, detailed and always include information about timelines and procedures. Maintain a professional but accessible tone.`,
 
-    "Local Guide": `Você é o Local Guide, um guia local experiente que conhece os segredos e tesouros escondidos dos destinos. Você oferece dicas autênticas sobre onde comer, o que fazer, como se locomover e como viver como um local. Você sempre sugere experiências autênticas, evita lugares muito turísticos e compartilha histórias interessantes sobre os lugares. Seu tom é amigável e você fala como alguém que realmente conhece o lugar.`,
+    "Local Guide": `You are the Local Guide, an experienced local guide who knows the secrets and hidden treasures of destinations. You offer authentic tips about where to eat, what to do, how to get around and how to live like a local. You always suggest authentic experiences, avoid very touristy places and share interesting stories about places. Your tone is friendly and you speak like someone who really knows the place.`,
   };
 
   const createSystemPrompt = (
-    profile: UserProfile | null,
+    profile: Profile | null,
     characterName: string
   ) => {
     const characterPrompt =
@@ -45,37 +96,35 @@ export async function POST(request: Request) {
 
     let basePrompt = `${characterPrompt}
 
-    Você ajuda usuários com:
-    - Planejamento de viagens e destinos
-    - Requisitos de visto e processos de aplicação
-    - Documentação e preparação de documentos
-    - Informações específicas de países
-    - Dicas locais e experiências autênticas
+    You help users with:
+    - Travel and destination planning
+    - Visa requirements and application processes
+    - Documentation and document preparation
+    - Country-specific information
+    - Local tips and authentic experiences
 
-    Sempre seja útil, conciso e entusiasmado sobre viagens e imigração. Se alguém perguntar sobre algo fora do escopo de viagens/imigração, redirecione educadamente para tópicos relacionados.`;
+    Always be helpful, concise and enthusiastic about travel and immigration. If someone asks about something outside the scope of travel/immigration, politely redirect to related topics.`;
 
     if (profile) {
-      basePrompt += `\n\nContexto do Usuário:
-      - Nome: ${profile.full_name || "Não fornecido"}
-      - País Atual: ${profile.country || "Não especificado"}
-      - Cargo: ${profile.job_title || "Não especificado"}
-      - Idade: ${profile.age || "Não especificado"}
-      - Educação: ${profile.degree || "Não especificado"} ${
-        profile.institution ? `de ${profile.institution}` : ""
-      }
-      - Cidadanias: ${
-        profile.citizenships
+      basePrompt += `\n\nUser Context:
+      - Name: ${profile.full_name || "Not provided"}
+      - Current Country: ${profile.country || "Not specified"}
+      - Job Title: ${profile.job_title || "Not specified"}
+      - Age: ${profile.age || "Not specified"}
+      - Education: ${profile.degree || "Not specified"} ${profile.institution ? `from ${profile.institution}` : ""
+        }
+      - Citizenships: ${profile.citizenships
           ? profile.citizenships.join(", ")
-          : "Não especificado"
-      }
-      - Estado Civil: ${profile.marital_status || "Não especificado"}
-      - Filhos: ${profile.children || "Não especificado"}
+          : "Not specified"
+        }
+      - Marital Status: ${profile.marital_status || "Not specified"}
+      - Children: ${profile.children || "Not specified"}
 
-      Use essas informações para fornecer conselhos personalizados. Por exemplo:
-      - Considere o país atual ao discutir requisitos de visto
-      - Adapte recomendações com base no histórico e situação familiar
-      - Referencie a(s) cidadania(s) ao discutir opções de viagem sem visto
-      - Seja atencioso com a idade e trabalho ao sugerir tipos de viagem ou destinos`;
+      Use this information to provide personalized advice. For example:
+      - Consider current country when discussing visa requirements
+      - Adapt recommendations based on background and family situation
+      - Reference citizenship(s) when discussing visa-free travel options
+      - Be mindful of age and work when suggesting types of travel or destinations`;
     }
 
     return basePrompt;
@@ -93,6 +142,28 @@ export async function POST(request: Request) {
     messages: allMessages,
     maxTokens: 500,
     temperature: 0.7,
+    onFinish: async (completion) => {
+      console.log("Starting onFinish");
+      console.log("Country", country);
+      if (userProfile && country) {
+        try {
+          // Get the last user message from the messages array
+          const lastUserMessage = messages[messages.length - 1].content;
+
+          // Save the chat interaction
+          console.log("Saving chat");
+          await saveChat(
+            userProfile.id,
+            lastUserMessage,
+            completion.text,
+            country
+          );
+          console.log("Chat saved");
+        } catch (error) {
+          console.error("Error saving chat:", error);
+        }
+      }
+    }
   });
 
   return result.toDataStreamResponse();

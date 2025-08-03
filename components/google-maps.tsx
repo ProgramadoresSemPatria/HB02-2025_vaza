@@ -63,7 +63,7 @@ export const GoogleMaps = ({
     if (!mapRef.current || !window.google) return;
     // Initialize the map
     const map = new window.google.maps.Map(mapRef.current, {
-      zoom: 2.5,
+      zoom: 3,
       center: { lat: 20, lng: 0 }, // Center of the world
       mapTypeId: "roadmap",
       minZoom: 2,

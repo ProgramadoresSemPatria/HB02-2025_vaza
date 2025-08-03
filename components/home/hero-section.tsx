@@ -1,9 +1,42 @@
 "use client";
 
+import { getUser } from "@/hooks/getUser";
+import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function HeroSection() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    const checkAuth = async () => {
+      try {
+        const user = await getUser();
+        setIsLoggedIn(!!user);
+      } catch {
+        setIsLoggedIn(false);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log("Auth state changed:", event, !!session);
+      setIsLoggedIn(!!session);
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <section
       data-bp-location="header"
@@ -29,52 +62,54 @@ export default function HeroSection() {
           </div>
           <div className="row-[2_/_span_1] flex flex-col gap-4 md:flex-row md:justify-between md:col-[2_/_span_21] col-[1_/_span_22] pb-16">
             <ul className="cta-list flex flex-col gap-2 md:flex-row h-fit">
-              <li>
-                <Link
-                  href="/dashboard/get-started"
-                  className="box-border button bg-transparent border-none no-underline blue group p-0 w-full text-left"
-                >
-                  <span className="cursor-pointer w-full md:w-auto button-inner max-w-full border-0 p-0 inline-flex items-center justify-between font-sans font-medium no-underline rounded-xl relative overflow-hidden gap-4 z-0 group-focus-within:outline-btn-focus-outline before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:bg-blue-600 before:transition-all motion-reduce:before:transition-none before:delay-0 before:duration-0 before:-z-20 after:content-[''] after:absolute after:left-full after:top-0 after:h-full after:w-full after:rounded-xl after:border after:border-blue-700 after:bg-blue-700 after:transition-all motion-reduce:after:transition-none after:ease-in-out after:duration-350 after:-z-10 py-3.5 px-5 text-body-2 group-hover:before:bg-blue-700 group-hover:before:delay-350 group-hover:after:left-0">
-                    <span className="button-title leading-body-1 font-medium text-white transition-all motion-reduce:transition-none ease-in-out duration-500 group-hover:text-white">
-                      Get Started
+              {!isLoading && !isLoggedIn && (
+                <li>
+                  <Link
+                    href="/dashboard/get-started"
+                    className="box-border button bg-transparent border-none no-underline blue group p-0 w-full text-left"
+                  >
+                    <span className="cursor-pointer w-full md:w-auto button-inner max-w-full border-0 p-0 inline-flex items-center justify-between font-sans font-medium no-underline rounded-xl relative overflow-hidden gap-4 z-0 group-focus-within:outline-btn-focus-outline before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:bg-blue-600 before:transition-all motion-reduce:before:transition-none before:delay-0 before:duration-0 before:-z-20 after:content-[''] after:absolute after:left-full after:top-0 after:h-full after:w-full after:rounded-xl after:border after:border-blue-700 after:bg-blue-700 after:transition-all motion-reduce:after:transition-none after:ease-in-out after:duration-350 after:-z-10 py-3.5 px-5 text-body-2 group-hover:before:bg-blue-700 group-hover:before:delay-350 group-hover:after:left-0">
+                      <span className="button-title leading-body-1 font-medium text-white transition-all motion-reduce:transition-none ease-in-out duration-500 group-hover:text-white">
+                        Get Started
+                      </span>
+                      <span className="button-icon-container overflow-hidden flex justify-start transition-all motion-reduce:transition-none duration-500 ease-in-out gap-3 py-1 px-3.5 rounded-md w-12 bg-white/20 group-hover:bg-white/30 group-focus-within:bg-white/30">
+                        <svg
+                          width="20px"
+                          height="20px"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="shrink-0 fill-btn-hover-content transition-all motion-reduce:transition-none duration-500 ease-in-out group-hover:ml-0 -ml-8 mr-0"
+                        >
+                          <path
+                            d="M5 12h14M12 5l7 7-7 7"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                        <svg
+                          width="20px"
+                          height="20px"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="shrink-0 mx-0 fill-btn-content"
+                        >
+                          <path
+                            d="M5 12h14M12 5l7 7-7 7"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </span>
                     </span>
-                    <span className="button-icon-container overflow-hidden flex justify-start transition-all motion-reduce:transition-none duration-500 ease-in-out gap-3 py-1 px-3.5 rounded-md w-12 bg-white/20 group-hover:bg-white/30 group-focus-within:bg-white/30">
-                      <svg
-                        width="20px"
-                        height="20px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="shrink-0 fill-btn-hover-content transition-all motion-reduce:transition-none duration-500 ease-in-out group-hover:ml-0 -ml-8 mr-0"
-                      >
-                        <path
-                          d="M5 12h14M12 5l7 7-7 7"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      <svg
-                        width="20px"
-                        height="20px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="shrink-0 mx-0 fill-btn-content"
-                      >
-                        <path
-                          d="M5 12h14M12 5l7 7-7 7"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
-                  </span>
-                </Link>
-              </li>
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
                   href="/dashboard/plan"
@@ -148,7 +183,7 @@ export default function HeroSection() {
               <h2 className="flex overflow-visible mb-component-1/3 text-display-mobile-6 md:text-display-7 break-auto">
                 Discover Countries
               </h2>
-              <div className="text-card-sub-content flex text-body-2 md:flex-grow [&_ul]:gap-2 [&_a]:text-generic-card-hyperlink text-card-sub-content [&_p+p]:mt-4 [&_p]:leading-[1.58] [&_p]:max-w-[100%] [&_p]:whitespace-pre-wrap [&_ul]:list-disc [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-y-3 [&_ul]:pl-[1.5em] [&_ul]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))] [&_a]:underline [&_a]:text-hyperlink [&_a]:font-medium hover:[&_a]:text-hyperlink-hover [&_ol]:list-decimal [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-3 [&_ol]:pl-[1.5em] [&_ol]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))]">
+              <div className="text-card-sub-content flex text-body-2 md:flex-grow">
                 <p>
                   Explore amazing destinations and discover detailed information
                   about culture, climate, cost of living and tourist attractions
@@ -162,7 +197,7 @@ export default function HeroSection() {
               <h2 className="flex overflow-visible mb-component-1/3 text-display-mobile-6 md:text-display-7 break-auto">
                 Visa Types
               </h2>
-              <div className="text-card-sub-content flex text-body-2 md:flex-grow [&_ol]:list-decimal [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-6 [&_ol]:ml-10 [&_ul]:ml-10 [&_ul]:list-disc [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-2 [&_a]:underline [&_a]:text-generic-card-hyperlink [&_a]:font-medium text-card-sub-content [&_p+p]:mt-4 [&_p]:leading-[1.58] [&_p]:max-w-[100%] [&_p]:whitespace-pre-wrap [&_ul]:list-disc [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-y-3 [&_ul]:pl-[1.5em] [&_ul]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))] [&_a]:underline [&_a]:text-hyperlink [&_a]:font-medium hover:[&_a]:text-hyperlink-hover [&_ol]:list-decimal [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-3 [&_ol]:pl-[1.5em] [&_ol]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))]">
+              <div className="text-card-sub-content flex text-body-2 md:flex-grow">
                 <p>
                   Understand the different types of visas available, specific
                   requirements and application processes for each destination
@@ -176,7 +211,7 @@ export default function HeroSection() {
               <h2 className="flex overflow-visible mb-component-1/3 text-display-mobile-6 md:text-display-7 break-auto">
                 Required Documents
               </h2>
-              <div className="text-card-sub-content flex text-body-2 md:flex-grow [&_ul]:gap-2 [&_a]:text-generic-card-hyperlink text-card-sub-content [&_p+p]:mt-4 [&_p]:leading-[1.58] [&_p]:max-w-[100%] [&_p]:whitespace-pre-wrap [&_ul]:list-disc [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-y-3 [&_ul]:pl-[1.5em] [&_ul]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))] [&_a]:underline [&_a]:text-hyperlink [&_a]:font-medium hover:[&_a]:text-hyperlink-hover [&_ol]:list-decimal [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-3 [&_ol]:pl-[1.5em] [&_ol]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))]">
+              <div className="text-card-sub-content flex text-body-2 md:flex-grow">
                 <p>
                   Get a personalized list of documents needed for your trip,
                   with specific guidance for each type of visa and destination.
@@ -189,7 +224,7 @@ export default function HeroSection() {
               <h2 className="flex overflow-visible mb-component-1/3 text-display-mobile-6 md:text-display-7 break-auto">
                 Personalized AI
               </h2>
-              <div className="text-card-sub-content flex text-body-2 md:flex-grow [&_ul]:gap-2 [&_a]:text-generic-card-hyperlink text-card-sub-content [&_p+p]:mt-4 [&_p]:leading-[1.58] [&_p]:max-w-[100%] [&_p]:whitespace-pre-wrap [&_ul]:list-disc [&_ul]:flex [&_ul]:flex-col [&_ul]:gap-y-3 [&_ul]:pl-[1.5em] [&_ul]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))] [&_a]:underline [&_a]:text-hyperlink [&_a]:font-medium hover:[&_a]:text-hyperlink-hover [&_ol]:list-decimal [&_ol]:flex [&_ol]:flex-col [&_ol]:gap-3 [&_ol]:pl-[1.5em] [&_ol]:ml-[calc((1/25)*clamp(var(--screen-xs),_100vw,_var(--screen-2xl)))]">
+              <div className="text-card-sub-content flex text-body-2 md:flex-grow">
                 <p>
                   Our AI analyzes your profile and goals to provide personalized
                   recommendations about destinations, visas and travel planning.

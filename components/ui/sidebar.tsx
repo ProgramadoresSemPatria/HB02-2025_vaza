@@ -78,7 +78,7 @@ export const SidebarBody = ({
   return (
     <div
       className={cn(
-        "flex flex-col h-full justify-between gap-10",
+        "flex flex-col h-full justify-between gap-10 overflow-hidden",
         className
       )}
       {...props}
@@ -93,7 +93,7 @@ export const DesktopSidebar = ({
   return (
     <div
       className={cn(
-        "h-screen px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
+        "fixed left-0 top-0 h-screen px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0 z-50",
         className
       )}
     >
@@ -128,7 +128,7 @@ export const MobileSidebar = ({
               ease: "easeInOut",
             }}
             className={cn(
-              "fixed h-screen w-80 inset-y-0 left-0 bg-neutral-100 dark:bg-neutral-800 p-10 z-[100] flex flex-col justify-between shadow-lg",
+              "fixed h-screen w-80 inset-y-0 left-0 bg-neutral-100 dark:bg-neutral-800 p-10 z-[100] flex flex-col justify-between shadow-lg overflow-hidden",
               className
             )}
           >

@@ -57,7 +57,7 @@ export default function DashboardLayout({
       <div className="min-h-screen bg-background flex">
         <SidebarProvider>
           <DashboardSidebar />
-          <main className="flex-1 overflow-auto relative">
+          <main className="flex-1 overflow-auto relative md:ml-[300px]">
             <div className="md:hidden absolute top-4 left-4 z-50">
               <MobileMenuButton />
             </div>

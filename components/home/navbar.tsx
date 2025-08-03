@@ -35,14 +35,14 @@ export default function Navbar() {
                 href="/login"
                 className="hidden lg:block text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer"
               >
-                Entrar
+                Login
               </Link>
               <Link
                 href="/register"
                 className="group relative overflow-hidden bg-[#28313a] text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2 cursor-pointer"
               >
                 <span className="relative z-10 transition-all duration-500 group-hover:text-white">
-                  Inscrever-se
+                  Sign Up
                 </span>
                 <svg
                   className="w-4 h-4 relative z-10 transition-all duration-500 group-hover:translate-x-1"

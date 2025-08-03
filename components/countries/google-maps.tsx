@@ -5,7 +5,6 @@ import { fetchCountryDetails } from "@/services/countries";
 import { CountryData } from "@/types/country";
 import { useCreatePlan } from "@/hooks/useCreatePlan";
 import { useChatContext } from "@/components/chat/ChatContext";
-import Image from "next/image";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 
@@ -39,7 +38,7 @@ export const GoogleMaps = ({
   });
 
   // Chat integration
-  const { openChatWithMessage, country } = enableChatIntegration ? useChatContext() : { openChatWithMessage: null, country: null };
+  const { openChatWithMessage } = enableChatIntegration ? useChatContext() : { openChatWithMessage: null };
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {

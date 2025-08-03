@@ -57,7 +57,6 @@ export async function POST(request: Request) {
   const { messages, character = "Travel Wizard", country } = await request.json();
 
   let userProfile = null;
-  let countryRecord = null;
 
   try {
     const supabase = await createClient();

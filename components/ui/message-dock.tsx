@@ -91,7 +91,7 @@ export function MessageDock({
   onCharacterSelect,
   onDockToggle,
   className,
-  expandedWidth = 448,
+  expandedWidth = 480,
   position = "bottom",
   showSparkleButton = true,
   showMenuButton = true,
@@ -250,8 +250,8 @@ export function MessageDock({
 
   const positionClasses =
     position === "top"
-      ? "fixed top-6 left-1/2 -translate-x-1/2 z-50"
-      : "fixed bottom-6 left-1/2 -translate-x-1/2 z-50";
+      ? "fixed top-4 left-1/2 -translate-x-1/2 z-50 message-dock-container"
+      : "fixed bottom-4 left-1/2 -translate-x-1/2 z-50 message-dock-container";
 
   return (
     <motion.div
@@ -262,17 +262,17 @@ export function MessageDock({
       variants={enableAnimations ? containerVariants : undefined}
     >
       <motion.div
-        className="rounded-full px-4 py-2 shadow-2xl border border-gray-200/50"
+        className="rounded-2xl px-4 py-2 shadow-xl border border-gray-200/50 backdrop-blur-sm chat-backdrop"
         animate={{
           width: isExpanded ? expandedWidth : collapsedWidth,
           background:
             isExpanded && selectedCharacter
-              ? `linear-gradient(to right, ${getGradientColors(
+              ? `linear-gradient(135deg, ${getGradientColors(
                   selectedCharacter
                 )})`
               : theme === "dark"
-              ? "#1f2937"
-              : "#ffffff",
+              ? "rgba(31, 41, 55, 0.95)"
+              : "rgba(255, 255, 255, 0.95)",
         }}
         transition={
           enableAnimations
@@ -306,7 +306,7 @@ export function MessageDock({
               }}
             >
               <motion.button
-                className="w-12 h-12 flex items-center justify-center cursor-pointer"
+                className="w-11 h-11 flex items-center justify-center cursor-pointer rounded-xl hover:bg-white/10 transition-colors chat-hover"
                 whileHover={
                   !isExpanded
                     ? {
@@ -323,24 +323,10 @@ export function MessageDock({
                 whileTap={{ scale: 0.95 }}
                 aria-label="Sparkle"
               >
-                <span className="text-2xl">✨</span>
+                <span className="text-xl">✨</span>
               </motion.button>
             </motion.div>
           )}
-
-          <motion.div
-            className="w-px h-6 bg-gray-300 mr-2 -ml-2"
-            animate={{
-              opacity: isExpanded ? 0 : 1,
-              scaleY: isExpanded ? 0 : 1,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 300,
-              damping: 30,
-              delay: isExpanded ? 0 : 0.3,
-            }}
-          />
 
           {characters.map((character, index) => {
             const isSelected = expandedCharacter === index;
@@ -377,9 +363,9 @@ export function MessageDock({
               >
                 <motion.button
                   className={cn(
-                    "relative w-10 h-10 rounded-full flex items-center justify-center text-xl cursor-pointer",
+                    "relative w-10 h-10 rounded-xl flex items-center justify-center text-lg cursor-pointer shadow-sm hover:shadow-md transition-all duration-200 chat-hover",
                     isSelected && isExpanded
-                      ? "bg-white/90"
+                      ? "bg-white/90 shadow-lg"
                       : character.backgroundColor
                   )}
                   onClick={() => handleCharacterClick(index)}
@@ -387,11 +373,11 @@ export function MessageDock({
                   whileTap={{ scale: 0.95 }}
                   aria-label={`Message ${character.name}`}
                 >
-                  <span className="text-2xl">{character.emoji}</span>
+                  <span className="text-lg">{character.emoji}</span>
 
                   {character.online && (
                     <motion.div
-                      className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"
+                      className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 border-2 border-white rounded-full shadow-sm"
                       initial={{ scale: 0 }}
                       animate={{ scale: isExpanded && !isSelected ? 0 : 1 }}
                       transition={{
@@ -431,11 +417,11 @@ export function MessageDock({
                 placeholder={placeholder(selectedCharacter?.name || "")}
                 className={cn(
                   showSparkleButton
-                    ? "w-[300px] absolute left-14 right-0 bg-transparent border-none outline-none text-sm font-medium z-50"
-                    : "w-[300px] absolute left-4 right-0 bg-transparent border-none outline-none text-sm font-medium z-50",
+                    ? "w-[300px] absolute left-14 right-0 bg-transparent border-none outline-none text-sm font-medium z-50 placeholder:text-gray-500"
+                    : "w-[400px] absolute left-4 pl-10 right-0 bg-transparent border-none outline-none text-sm font-medium z-50 placeholder:text-gray-500",
                   theme === "dark"
-                    ? "text-gray-100 placeholder-gray-400"
-                    : "text-gray-700 placeholder-gray-600"
+                    ? "text-gray-100 placeholder:text-gray-400"
+                    : "text-gray-700 placeholder:text-gray-500"
                 )}
                 autoFocus={autoFocus}
                 initial={{ opacity: 0, x: 20 }}
@@ -461,7 +447,7 @@ export function MessageDock({
           </AnimatePresence>
 
           <motion.div
-            className="w-px h-6 bg-gray-300 ml-2 -mr-2"
+            className="w-px h-6 bg-gray-300/50 ml-2 -mr-2"
             animate={{
               opacity: isExpanded ? 0 : 1,
               scaleY: isExpanded ? 0 : 1,
@@ -490,7 +476,7 @@ export function MessageDock({
                 {!isExpanded ? (
                   <motion.button
                     key="menu"
-                    className="w-12 h-12 flex items-center justify-center cursor-pointer"
+                    className="w-11 h-11 flex items-center justify-center cursor-pointer rounded-xl hover:bg-white/10 transition-colors chat-hover"
                     whileHover={{
                       scale: 1.02,
                       y: -2,
@@ -531,7 +517,7 @@ export function MessageDock({
                   <motion.button
                     key="send"
                     onClick={handleSendMessage}
-                    className="w-10 h-10 flex items-center justify-center rounded-full bg-white/90 hover:bg-white transition-colors disabled:opacity-50 cursor-pointer relative z-30"
+                    className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/90 hover:bg-white transition-all duration-200 disabled:opacity-50 cursor-pointer relative z-30 shadow-sm hover:shadow-md chat-hover"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     disabled={!messageInput.trim()}

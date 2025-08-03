@@ -88,35 +88,14 @@ export default function ExpandedChat({
       console.log("Initializing chat with message:", initialMessage);
       setHasInitialized(true);
 
-      const newLocalMessages: ChatMessage[] = [
-        {
-          role: "user",
-          content: initialMessage,
-          timestamp: new Date(),
-        },
-      ];
-
-      setLocalMessages(newLocalMessages);
-
-      if (onSaveConversation) {
-        onSaveConversation(newLocalMessages);
-      }
-
       append({
         role: "user",
         content: initialMessage,
       });
 
-      console.log("Initial message sent to API via append:", initialMessage);
+      console.log("Initial message sent to API");
     }
-  }, [
-    isOpen,
-    initialMessage,
-    hasInitialized,
-    messages.length,
-    append,
-    onSaveConversation,
-  ]);
+  }, [isOpen, initialMessage, hasInitialized, messages.length, append]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -154,7 +133,7 @@ export default function ExpandedChat({
         }
       }
     }
-  }, [messages, localMessages, onSaveConversation]);
+  }, [localMessages, messages, onSaveConversation]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {

@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function HeroSection() {
   return (
     <section
@@ -85,20 +87,34 @@ export default function HeroSection() {
                       <svg
                         width="20px"
                         height="20px"
-                        viewBox="0 0 20 20"
+                        viewBox="0 0 24 24"
+                        fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         className="shrink-0 fill-btn-hover-content transition-all motion-reduce:transition-none duration-500 ease-in-out group-hover:ml-0 -ml-8 mr-0"
                       >
-                        <use href="/extracted-icons/icon-62.svg#icon-62"></use>
+                        <path
+                          d="M5 12h14M12 5l7 7-7 7"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                       <svg
                         width="20px"
                         height="20px"
-                        viewBox="0 0 20 20"
+                        viewBox="0 0 24 24"
+                        fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         className="shrink-0 mx-0 fill-btn-content"
                       >
-                        <use href="/extracted-icons/icon-63.svg#icon-63"></use>
+                        <path
+                          d="M5 12h14M12 5l7 7-7 7"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
                       </svg>
                     </span>
                   </span>
@@ -108,17 +124,19 @@ export default function HeroSection() {
           </div>
           <div className="w-full h-full rounded-2xl md:rounded-standard -z-[1] col-[1_/_span_23] p-0 md:absolute md:w-full md:h-full row-[1_/_span_1] md:row-[1_/_span_2]">
             <div className="w-full h-full relative hidden md:block z-0">
-              <img
+              <Image
                 src="https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                 alt="Mapa mundial e destinos"
-                className="relative z-[1] w-full h-full rounded-2xl md:rounded-standard object-cover"
+                fill
+                className="relative z-[1] rounded-2xl md:rounded-standard object-cover"
               />
             </div>
             <div className="w-full h-full relative block md:hidden z-0">
-              <img
+              <Image
                 src="https://images.pexels.com/photos/3155666/pexels-photo-3155666.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                 alt="Mapa mundial e destinos"
-                className="relative z-[1] w-full h-full rounded-2xl md:rounded-standard object-cover"
+                fill
+                className="relative z-[1] rounded-2xl md:rounded-standard object-cover"
               />
             </div>
           </div>

@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import {
   Baby,
   Briefcase,
@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 interface ProfileDetailsProps {
-  profile: UserProfile | null;
+  profile: Profile | null;
 }
 
 export function ProfileDetails({ profile }: ProfileDetailsProps) {

@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import {
   Briefcase,
   Calendar,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 interface ProfileStatsOverviewProps {
-  profile: UserProfile | null;
+  profile: Profile | null;
 }
 
 export function ProfileStatsOverview({ profile }: ProfileStatsOverviewProps) {

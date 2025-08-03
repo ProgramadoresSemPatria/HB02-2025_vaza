@@ -1,11 +1,12 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import { CheckCircle, GraduationCap, Heart, MapPin, Users } from "lucide-react";
 
 interface ProfileStatsProps {
-  profile: UserProfile | null;
+  profile: Profile | null;
+  
 }
 
 export const ProfileStats = ({ profile }: ProfileStatsProps) => {

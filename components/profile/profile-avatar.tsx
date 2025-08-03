@@ -1,10 +1,10 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 
 interface ProfileAvatarProps {
-  profile: UserProfile | null;
+  profile: Profile | null;
   size?: "sm" | "md" | "lg" | "xl";
 }
 

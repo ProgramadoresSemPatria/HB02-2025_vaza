@@ -1,8 +1,12 @@
 "use client";
 
 import { GoogleMaps } from "@/components/countries/google-maps";
+import { ChatCards } from "@/components/countries/chat-cards";
+import { useProfile } from "@/hooks/useProfile";
 
 const CountriesPage = () => {
+  const { profile } = useProfile();
+
   return (
     <div className="w-full h-full bg-gray-50 p-6">
       <div className="w-full space-y-6">
@@ -15,8 +19,9 @@ const CountriesPage = () => {
       <div className="mt-6">
         <GoogleMaps
           height="600px"
-          className="w-full"
+          className="w-full mb-8"
         />
+        {profile && <ChatCards profileId={profile.id} />}
       </div>
     </div>
   );

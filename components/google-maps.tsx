@@ -9,6 +9,7 @@ import {
 import { fetchCountryDetails } from "@/services/countries";
 import { CountryData } from "@/types/country";
 import { useCreatePlan } from "@/hooks/useCreatePlan";
+import { useChatContext } from "@/components/chat/ChatContext";
 import Image from "next/image";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
@@ -21,6 +22,7 @@ interface GoogleMapsProps {
   ) => void;
   className?: string;
   height?: string;
+  enableChatIntegration?: boolean;
 }
 
 declare global {
@@ -33,6 +35,7 @@ export const GoogleMaps = ({
   onCountrySelect,
   className = "",
   height = "600px",
+  enableChatIntegration = false,
 }: GoogleMapsProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -45,6 +48,9 @@ export const GoogleMaps = ({
       setPopoverData(null);
     }
   });
+
+  // Chat integration
+  const { openChatWithMessage } = enableChatIntegration ? useChatContext() : { openChatWithMessage: null };
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {
@@ -168,6 +174,13 @@ export const GoogleMaps = ({
   const handleCountrySelect = () => {
     if (popoverData) {
       onCountrySelect?.(popoverData.name, popoverData.code, popoverData);
+      
+      if (enableChatIntegration && openChatWithMessage) {
+        openChatWithMessage(
+          `I'd like to move to ${popoverData.name}. What's the process like?`
+        );
+      }
+      
       setIsPopoverOpen(false);
       setPopoverData(null);
     }

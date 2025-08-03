@@ -4,9 +4,12 @@ import { anthropic } from "@ai-sdk/anthropic";
 import { streamText } from "ai";
 
 export async function POST(request: Request) {
-  const { messages, character = "Travel Wizard" } = await request.json();
+  const { messages, character = "Travel Wizard", country } = await request.json();
+  console.log("Chat request", messages, character, country);
 
   let userProfile = null;
+  let countryRecord = null;
+
   try {
     const supabase = await createClient();
     const {
@@ -14,6 +17,7 @@ export async function POST(request: Request) {
       error: userError,
     } = await supabase.auth.getUser();
 
+    console.log("User", user, userError);
     if (user && !userError) {
       const { data: profile } = await supabase
         .from("profiles")
@@ -22,9 +26,45 @@ export async function POST(request: Request) {
         .single();
 
       userProfile = profile;
+
+      // If country is provided, get or create country record
+      if (country && userProfile) {
+        let { data: countryData, error: countryError } = await supabase
+          .from("countries")
+          .select("*")
+          .eq("profile_id", userProfile.id)
+          .eq("name", country)
+          .single();
+
+        console.log("Country", countryData, countryError);
+
+        if (countryError && countryError.code === "PGRST116") {
+          // Country doesn't exist, create it with empty chat
+          const { data: newCountry, error: createCountryError } = await supabase
+            .from("countries")
+            .insert({
+              profile_id: userProfile.id,
+              name: country,
+              chat: [],
+            })
+            .select()
+            .single();
+
+          console.log("New country", newCountry, createCountryError);
+          if (createCountryError) {
+            console.log("Error creating country:", createCountryError);
+          } else {
+            countryRecord = newCountry;
+          }
+        } else if (countryError) {
+          console.log("Error fetching country:", countryError);
+        } else {
+          countryRecord = countryData;
+        }
+      }
     }
   } catch (error) {
-    console.log("Error fetching user profile:", error);
+    console.log("Error fetching user profile or country:", error);
   }
 
   const characterPrompts = {
@@ -60,14 +100,12 @@ export async function POST(request: Request) {
       - Current Country: ${profile.country || "Not specified"}
       - Job Title: ${profile.job_title || "Not specified"}
       - Age: ${profile.age || "Not specified"}
-      - Education: ${profile.degree || "Not specified"} ${
-        profile.institution ? `from ${profile.institution}` : ""
-      }
-      - Citizenships: ${
-        profile.citizenships
+      - Education: ${profile.degree || "Not specified"} ${profile.institution ? `from ${profile.institution}` : ""
+        }
+      - Citizenships: ${profile.citizenships
           ? profile.citizenships.join(", ")
           : "Not specified"
-      }
+        }
       - Marital Status: ${profile.marital_status || "Not specified"}
       - Children: ${profile.children || "Not specified"}
 
@@ -87,12 +125,49 @@ export async function POST(request: Request) {
   };
 
   const allMessages = [systemMessage, ...messages];
+  console.log("All messages", allMessages);
 
   const result = streamText({
     model: anthropic("claude-3-haiku-20240307"),
     messages: allMessages,
     maxTokens: 500,
     temperature: 0.7,
+    onFinish: async (completion) => {
+      // Save AI response to country record if available
+      if (countryRecord) {
+        try {
+          const supabase = await createClient();
+
+          // Get current chat messages - ensure it's always an array
+          const currentChat = Array.isArray(countryRecord.chat) ? countryRecord.chat : [];
+
+          // Convert user messages to the required format
+          const userMessages = messages.map((msg: { role: string; content: string }) => ({
+            message: msg.content,
+            sender: msg.role === "user" ? "user" : "ai"
+          }));
+
+          // Add AI response
+          const aiMessage = {
+            message: completion.text,
+            sender: "ai"
+          };
+
+          // Append all messages to existing chat
+          const updatedChat = [...currentChat, ...userMessages, aiMessage];
+          console.log("Updated chat", updatedChat);
+
+          // Update the country record
+          await supabase
+            .from("countries")
+            .update({ chat: updatedChat })
+            .eq("id", countryRecord.id);
+
+        } catch (error) {
+          console.log("Error saving AI response:", error);
+        }
+      }
+    },
   });
 
   return result.toDataStreamResponse();

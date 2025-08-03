@@ -46,6 +46,7 @@ export default function FloatingChat() {
     null
   );
   const [initialMessage, setInitialMessage] = useState("");
+  const [country, setCountry] = useState<string | undefined>(undefined);
   const [conversations, setConversations] = useState<Map<string, Conversation>>(
     new Map()
   );
@@ -57,7 +58,8 @@ export default function FloatingChat() {
     initialMessage: contextInitialMessage, 
     clearInitialMessage,
     shouldClearMessages,
-    clearMessageFlag 
+    clearMessageFlag,
+    country: contextCountry
   } = useChatContext();
 
   // Listen for ChatContext openChatWithMessage calls
@@ -68,6 +70,7 @@ export default function FloatingChat() {
       if (visaExpert) {
         setSelectedCharacter(visaExpert);
         setInitialMessage(contextInitialMessage);
+        setCountry(contextCountry || undefined);
         setExpandedChatOpen(true);
         
         // Clear messages if requested
@@ -85,7 +88,7 @@ export default function FloatingChat() {
       }
       setIsOpen(false); // Reset the context state
     }
-  }, [isOpen, contextInitialMessage, clearInitialMessage, setIsOpen, shouldClearMessages, clearMessageFlag]);
+  }, [isOpen, contextInitialMessage, contextCountry, clearInitialMessage, setIsOpen, shouldClearMessages, clearMessageFlag]);
 
   const handleMessageSend = (
     message: string,
@@ -192,6 +195,7 @@ export default function FloatingChat() {
             conversations.get(selectedCharacter.name)?.messages || []
           }
           onSaveConversation={handleSaveConversation}
+          country={country}
         />
       )}
     </>

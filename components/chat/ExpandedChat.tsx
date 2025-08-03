@@ -43,7 +43,7 @@ export default function ExpandedChat({
     messages,
     input,
     handleInputChange,
-    handleSubmit,
+    handleSubmit: originalHandleSubmit,
     isLoading,
     setMessages,
     append,
@@ -54,12 +54,23 @@ export default function ExpandedChat({
       country,
     },
     onFinish: (message) => {
-      console.log("AI response finished:", message);
+      console.log("AI response finished in useChat");
     },
     onError: (error) => {
       console.error("AI response error:", error);
     },
   });
+
+  // Wrap handleSubmit to prevent double submissions
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isLoading) {
+      console.log("Submission blocked - already loading");
+      return;
+    }
+    console.log("Handling chat submission");
+    await originalHandleSubmit(event);
+  };
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const [hasInitialized, setHasInitialized] = useState(false);
@@ -138,10 +149,16 @@ export default function ExpandedChat({
     }
   }, [localMessages, messages, onSaveConversation]);
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      handleSubmit(event as unknown as React.FormEvent<HTMLFormElement>);
+      if (isLoading) {
+        console.log("Keyboard submission blocked - already loading");
+        return;
+      }
+      console.log("Handling keyboard submission");
+      const formEvent = new Event("submit") as unknown as React.FormEvent<HTMLFormElement>;
+      await handleSubmit(formEvent);
     }
   };
 

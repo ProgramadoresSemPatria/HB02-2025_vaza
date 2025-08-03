@@ -149,7 +149,9 @@ Create a detailed immigration plan that includes:
   ]
 }
 
-Ensure all information is current, accurate, and tailored to the user's specific situation. If certain information varies by region or consulate, mention this explicitly.`;
+Ensure all information is current, accurate, and tailored to the user's specific situation. If certain information varies by region or consulate, mention this explicitly.
+
+You must understand how the country's immigration system works and never return a vague answer like "get a job and apply for work visa". EXAMPLE: In Canada you apply through the Canadian Express Entry, which requires you to have a certain amount of points in order to be called for a Permanent Residency.`;
     };
 
     const result = await generateObject({

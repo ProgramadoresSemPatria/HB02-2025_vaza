@@ -1,19 +1,26 @@
-'use client'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import React from 'react'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { ArrowRight, Lock, Mail } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import LoginFormSchema, { LoginFormSchemaType } from '@/lib/validators/LoginFormSchema'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
-import Image from 'next/image'
-import { useLogin } from '@/hooks/auth/useLogin'
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useLogin } from "@/hooks/auth/useLogin";
+import LoginFormSchema, {
+  LoginFormSchemaType,
+} from "@/lib/validators/LoginFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight, Lock, Mail } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 export default function LoginForm() {
-  const login = useLogin()
+  const login = useLogin();
 
   const {
     register,
@@ -21,19 +28,25 @@ export default function LoginForm() {
     formState: { errors },
   } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
-  })
+  });
 
   const onSubmit = (data: LoginFormSchemaType) => {
-    login.mutate(data)
-  }
+    login.mutate(data);
+  };
 
-  const isSubmitting = login.isPending
+  const isSubmitting = login.isPending;
 
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1 text-center">
-        <Image src="/vaza-logo.webp" alt="Vaza Logo" width={100} height={100} className="mx-auto" />
-        <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+        <Image
+          src="/vaza-logo.webp"
+          alt="Vaza Logo"
+          width={100}
+          height={100}
+          className="mx-auto"
+        />
+        <CardTitle className="text-xl font-bold">Welcome Back</CardTitle>
         <CardDescription>
           Sign in to your account to continue your journey
         </CardDescription>
@@ -41,7 +54,6 @@ export default function LoginForm() {
 
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
           {/* Email Field */}
           <div className="space-y-2">
             <Label htmlFor="email">
@@ -52,7 +64,7 @@ export default function LoginForm() {
               id="email"
               type="email"
               placeholder="Enter your email"
-              {...register('email')}
+              {...register("email")}
               aria-invalid={!!errors.email}
             />
             {errors.email && (
@@ -69,9 +81,9 @@ export default function LoginForm() {
             <div className="relative">
               <Input
                 id="password"
-                type={'password'}
+                type={"password"}
                 placeholder="Enter your password"
-                {...register('password')}
+                {...register("password")}
                 aria-invalid={!!errors.password}
               />
               <Button
@@ -79,22 +91,19 @@ export default function LoginForm() {
                 variant="ghost"
                 size="icon"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-              >
-              </Button>
+              ></Button>
             </div>
             {errors.password && (
-              <p className="text-sm text-destructive">{errors.password.message}</p>
+              <p className="text-sm text-destructive">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting}
-          >
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
             {isSubmitting ? (
-              'Signing In...'
+              "Signing In..."
             ) : (
               <>
                 Sign In
@@ -107,7 +116,7 @@ export default function LoginForm() {
         {/* Register Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="font-medium text-primary hover:underline"
@@ -118,5 +127,5 @@ export default function LoginForm() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

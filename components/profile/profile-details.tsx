@@ -29,16 +29,18 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
 
   if (!profile) {
     return (
-      <Card>
+      <Card className="border-gray-200 shadow-sm">
         <CardContent className="pt-6">
-          <div className="text-center py-8">
-            <User className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">
-              Nenhuma informação de perfil encontrada
-            </p>
-            <p className="text-gray-400 text-sm mt-2">
-              Complete seu perfil para ver suas informações aqui
-            </p>
+          <div className="text-center py-8 space-y-3">
+            <User className="h-12 w-12 text-gray-400 mx-auto" />
+            <div className="space-y-1">
+              <p className="text-gray-600 text-lg font-medium">
+                No profile information found
+              </p>
+              <p className="text-gray-500 text-base">
+                Complete your profile to see your information here
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -56,7 +58,7 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
     value?: string | number;
     color?: string;
   }) => (
-    <div className="flex items-start sm:items-center gap-3 sm:gap-4 py-3">
+    <div className="flex items-start sm:items-center gap-3 py-2">
       <div className="flex-shrink-0 mt-0.5 sm:mt-0">
         <Icon className="h-5 w-5 text-gray-500" />
       </div>
@@ -67,7 +69,7 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
             ? typeof value === "string"
               ? capitalize(value)
               : value
-            : "Não informado"}
+            : "Not provided"}
         </p>
       </div>
     </div>
@@ -75,53 +77,63 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
 
   return (
     <div className="space-y-6">
-      <Card>
+      <Card className="border-gray-200 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <User className="h-5 w-5 text-blue-600" />
-            Informações Pessoais
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
+            <User className="h-6 w-6 text-blue-600" />
+            Personal Information
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1">
+        <CardContent>
           <InfoItem icon={Mail} label="Email" value={profile.email} />
-          <Separator />
-          <InfoItem icon={MapPin} label="País Atual" value={profile.country} />
-          <Separator />
-          <InfoItem icon={Briefcase} label="Cargo" value={profile.job_title} />
-          <Separator />
+          <Separator className="my-2" />
+          <InfoItem
+            icon={MapPin}
+            label="Current Country"
+            value={profile.country}
+          />
+          <Separator className="my-2" />
+          <InfoItem
+            icon={Briefcase}
+            label="Job Title"
+            value={profile.job_title}
+          />
+          <Separator className="my-2" />
           <InfoItem
             icon={Calendar}
-            label="Idade"
-            value={profile.age ? `${profile.age} anos` : undefined}
+            label="Age"
+            value={profile.age ? `${profile.age} years` : undefined}
           />
         </CardContent>
       </Card>
-      <Card>
+
+      <Card className="border-gray-200 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <GraduationCap className="h-5 w-5 text-green-600" />
-            Educação
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
+            <GraduationCap className="h-6 w-6 text-green-600" />
+            Education
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1">
+        <CardContent>
           <InfoItem
             icon={GraduationCap}
-            label="Formação"
+            label="Degree"
             value={profile.degree}
           />
-          <Separator />
+          <Separator className="my-2" />
           <InfoItem
             icon={Building}
-            label="Instituição"
+            label="Institution"
             value={profile.institution}
           />
         </CardContent>
       </Card>
-      <Card>
+
+      <Card className="border-gray-200 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <Globe className="h-5 w-5 text-purple-600" />
-            Cidadanias
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
+            <Globe className="h-6 w-6 text-purple-600" />
+            Citizenships
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -131,39 +143,39 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
                 <Badge
                   key={index}
                   variant="secondary"
-                  className="text-sm bg-purple-100 text-purple-800 hover:bg-purple-200"
+                  className="text-sm bg-purple-100 text-purple-800 hover:bg-purple-200 px-3 py-1"
                 >
-                  <Globe className="h-3 w-3 mr-1" />
+                  <Globe className="h-3 w-3 mr-2" />
                   {citizenship}
                 </Badge>
               ))}
             </div>
           ) : (
-            <div className="flex items-center gap-3 py-3">
+            <div className="flex items-center gap-3 py-2">
               <Globe className="h-5 w-5 text-gray-400" />
               <p className="text-gray-500 italic">
-                Nenhuma cidadania informada
+                No citizenship information provided
               </p>
             </div>
           )}
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-gray-200 shadow-sm">
         <CardHeader>
-          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-2">
-            <Heart className="h-5 w-5 text-pink-600" />
-            Informações Familiares
+          <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
+            <Heart className="h-6 w-6 text-pink-600" />
+            Family Information
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-1">
+        <CardContent>
           <InfoItem
             icon={Heart}
-            label="Estado Civil"
+            label="Marital Status"
             value={profile.marital_status}
           />
-          <Separator />
-          <InfoItem icon={Baby} label="Filhos" value={profile.children} />
+          <Separator className="my-2" />
+          <InfoItem icon={Baby} label="Children" value={profile.children} />
         </CardContent>
       </Card>
     </div>

@@ -17,14 +17,14 @@ interface PopularDestinationsProps {
 
 export function PopularDestinations({
   locations = [
-    { name: "Toronto", country: "Canadá", users: 125000, growth: "+15%" },
-    { name: "Melbourne", country: "Austrália", users: 89000, growth: "+12%" },
-    { name: "Berlim", country: "Alemanha", users: 67000, growth: "+18%" },
-    { name: "Amsterdã", country: "Holanda", users: 54000, growth: "+22%" },
-    { name: "Dublin", country: "Irlanda", users: 98000, growth: "+25%" },
+    { name: "Toronto", country: "Canada", users: 125000, growth: "+15%" },
+    { name: "Melbourne", country: "Australia", users: 89000, growth: "+12%" },
+    { name: "Berlin", country: "Germany", users: 67000, growth: "+18%" },
+    { name: "Amsterdam", country: "Netherlands", users: 54000, growth: "+22%" },
+    { name: "Dublin", country: "Ireland", users: 98000, growth: "+25%" },
     {
       name: "Wellington",
-      country: "Nova Zelândia",
+      country: "New Zealand",
       users: 34000,
       growth: "+20%",
     },
@@ -34,10 +34,10 @@ export function PopularDestinations({
     <div className="space-y-4">
       <div className="text-center mb-8">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-          Destinos Populares
+          Popular Destinations
         </h2>
         <p className="text-muted-foreground text-lg">
-          Os países mais escolhidos pelos nossos clientes
+          The countries most chosen by our clients
         </p>
       </div>
 

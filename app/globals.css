@@ -174,6 +174,56 @@
   .animate-fade-in {
     animation: fade-in 0.3s ease-out forwards;
   }
+
+  .text-display-mobile-4\.5 {
+    font-size: 2.5rem;
+    line-height: 1;
+    letter-spacing: -0.125rem;
+    font-weight: 500;
+  }
+
+  .text-display-mobile-6 {
+    font-size: 2rem;
+    line-height: 1;
+    letter-spacing: -0.08rem;
+    font-weight: 500;
+  }
+
+  @media (min-width: 768px) {
+    .text-display-3 {
+      font-size: 5.75rem;
+      line-height: 1;
+      letter-spacing: -0.2875rem;
+      font-weight: 500;
+    }
+
+    .md\:text-display-7 {
+      font-size: 2rem;
+      line-height: 1.1;
+      letter-spacing: -0.08rem;
+      font-weight: 500;
+    }
+  }
+
+  .text-display-2 {
+    font-size: 7.5rem;
+    line-height: 1;
+    letter-spacing: -0.375rem;
+    font-weight: 500;
+  }
+
+  .break-auto {
+    word-break: auto-phrase;
+  }
+
+  @media (min-width: 768px) {
+    .md\:text-display-2 {
+      font-size: 7.5rem;
+      line-height: 1;
+      letter-spacing: -0.375rem;
+      font-weight: 500;
+    }
+  }
 }
 
 @theme inline {

@@ -3,4 +3,7 @@ export { GlobeSection } from "./globe-section";
 export { HeroBackground } from "./hero-background";
 export { HeroHeader } from "./hero-header";
 export { PopularDestinations } from "./popular-destinations";
-export { StatsSection } from "./stats-section";
+export { GallerySection } from "./gallery-section";
+export { HeroBackgroundSection } from "./hero-background-section";
+export { StatsDestinationsSection } from "./stats-destinations-section";
+export { VideoExpansionSectionComponent } from "./video-expansion-section";

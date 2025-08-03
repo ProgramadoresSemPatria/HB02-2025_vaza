@@ -12,6 +12,7 @@ interface UseCountryReturn {
   createCountry: (countryName: string, profileId: string) => Promise<Country | null>;
   getCountries: (profileId: string) => Promise<Country[]>;
   getCountryById: (countryId: string) => Promise<Country | null>;
+  getCountryByNameAndProfileId: (countryName: string, profileId: string) => Promise<Country | null>;
   updateCountry: (countryId: string, updates: Partial<Country>) => Promise<Country | null>;
   deleteCountry: (countryId: string) => Promise<boolean>;
 }
@@ -164,6 +165,31 @@ export const useCountry = (): UseCountryReturn => {
     }
   }, []);
 
+  // Get a country by name and profile ID
+  const getCountryByNameAndProfileId = useCallback(async (countryName: string, profileId: string): Promise<Country | null> => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const { data: country, error: fetchError } = await supabase
+        .from('countries')
+        .select('*')
+        .eq('profile_id', profileId)
+        .eq('name', countryName)
+        .single();
+
+      if (fetchError) throw new Error(fetchError.message);
+
+      return country;
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch country';
+      setError(errorMessage);
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   return {
     isLoading,
     error,
@@ -171,6 +197,7 @@ export const useCountry = (): UseCountryReturn => {
     createCountry,
     getCountries,
     getCountryById,
+    getCountryByNameAndProfileId,
     updateCountry,
     deleteCountry
   };

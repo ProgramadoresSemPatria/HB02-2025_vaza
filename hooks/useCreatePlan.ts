@@ -8,6 +8,7 @@ interface CreatePlanPayload {
 }
 
 interface CreatePlanResponse {
+  id: string;
   plan: Plan;
   steps: Step[];
   country: Country;
@@ -44,7 +45,7 @@ export function useCreatePlan(options: UseCreatePlanOptions = {}) {
       toast.success(`Immigration plan for ${data.country.name} created successfully!`);
 
       if (redirectToGenerated) {
-        router.push('/dashboard/plan/generated');
+        router.push(`/dashboard/plan/${data.plan.id}`);
       }
 
       onSuccess?.(data);

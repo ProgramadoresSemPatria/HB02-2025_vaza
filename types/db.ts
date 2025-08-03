@@ -40,6 +40,11 @@ export type Country = {
   id: string;
   profile_id: string;
   name: string;
-  chat: JSON;
+  chat: [ // IMPORTANT: index 0 is the first ever message, index 1 is the second message, etc.
+    {
+      message: string;
+      sender: "user" | "ai";
+    }
+  ]
   created_at: Date;
 }

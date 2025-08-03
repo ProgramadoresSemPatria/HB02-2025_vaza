@@ -59,7 +59,7 @@ export default function PlanPage() {
           {plans.length === 0 ? (
             <div className="text-center py-8 space-y-4">
               <p className="text-muted-foreground">
-                You don't have any immigration plans yet.
+                You don&apos;t have any immigration plans yet.
               </p>
             </div>
           ) : (

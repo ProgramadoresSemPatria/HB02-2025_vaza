@@ -9,6 +9,7 @@ import {
 import { fetchCountryDetails } from "@/services/countries";
 import { CountryData } from "@/types/country";
 import { useCreatePlan } from "@/hooks/useCreatePlan";
+import Image from "next/image";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 
@@ -172,11 +173,6 @@ export const GoogleMaps = ({
     }
   };
 
-  const handlePopoverClose = () => {
-    setIsPopoverOpen(false);
-    setPopoverData(null);
-  };
-
   const handleCreatePlan = () => {
     if (!popoverData) return;
 
@@ -221,7 +217,7 @@ export const GoogleMaps = ({
                   {/* Header with flag */}
                   <div className="flex items-center gap-3">
                     {popoverData.flag && !popoverData.isLoading && (
-                      <img
+                      <Image
                         src={popoverData.flag}
                         alt={`${popoverData.name} flag`}
                         className="w-8 h-6 object-cover rounded border"

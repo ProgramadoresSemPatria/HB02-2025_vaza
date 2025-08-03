@@ -2,7 +2,6 @@ import { Profile } from "@/types/db";
 import { createClient } from "@/utils/supabase/server";
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject, jsonSchema } from "ai";
-import { Plan, Step, Country } from "@/types/db";
 
 // Type for the AI-generated immigration plan
 interface GeneratedImmigrationPlan {
@@ -199,6 +198,8 @@ Ensure all information is current, accurate, and tailored to the user's specific
       if (createCountryError) {
         throw createCountryError;
       }
+
+      countryError = null
       country = newCountry;
     } else if (countryError) {
       throw countryError;

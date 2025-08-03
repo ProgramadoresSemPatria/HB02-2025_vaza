@@ -1,6 +1,7 @@
 import {
   GallerySection,
   StatsDestinationsSection,
+  TestimonialSection,
   VideoExpansionSectionComponent,
 } from "@/components/home";
 import HeroSection from "@/components/home/hero-section";
@@ -35,6 +36,8 @@ export default function Home() {
           },
         ]}
       />
+
+      <TestimonialSection />
 
       <VideoExpansionSectionComponent />
     </>

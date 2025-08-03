@@ -5,4 +5,5 @@ export { HeroBackground } from "./hero-background";
 export { HeroHeader } from "./hero-header";
 export { PopularDestinations } from "./popular-destinations";
 export { StatsDestinationsSection } from "./stats-destinations-section";
+export { TestimonialSection } from "./testimonial-section";
 export { VideoExpansionSectionComponent } from "./video-expansion-section";

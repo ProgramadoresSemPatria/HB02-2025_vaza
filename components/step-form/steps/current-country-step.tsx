@@ -162,7 +162,7 @@ export const CurrentCountryStep = ({
         </div>
       )}
 
-      {/* Modal para outros países */}
+      {/* Modal for other countries */}
       {showMap && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 z-[60]">
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden">
@@ -181,7 +181,6 @@ export const CurrentCountryStep = ({
 
             <div className="p-3 sm:p-4">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-                {/* Lista de países */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-gray-700 mb-3 text-sm sm:text-base">
                     Outros países da América do Sul:

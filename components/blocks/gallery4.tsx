@@ -89,7 +89,7 @@ const Gallery4 = ({
           </div>
         </div>
       </div>
-      <div className="pl-14">
+      <div className="w-full">
         <Carousel
           setApi={setCarouselApi}
           opts={{
@@ -126,7 +126,7 @@ const Gallery4 = ({
                         {item.description}
                       </div>
                       <div className="flex items-center text-sm text-white">
-                        Criar meu plano{" "}
+                        Create my plan{" "}
                         <ArrowRight className="ml-2 size-5 transition-transform group-hover:translate-x-1" />
                       </div>
                     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlan } from "@/hooks/usePlan";
+import { usePlan } from "@/hooks/plans/usePlan";
 import { 
   Card, 
   CardHeader, 

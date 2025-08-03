@@ -98,7 +98,7 @@ export default function ExpandedChat({
 
       console.log("Initial message sent to API");
     }
-  }, [isOpen, initialMessage, hasInitialized, messages.length, append]);
+  }, [isOpen, initialMessage, hasInitialized, messages.length]);
 
   useEffect(() => {
     if (!isOpen) {

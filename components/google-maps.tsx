@@ -59,6 +59,15 @@ export const GoogleMaps = ({
       mapTypeId: "roadmap",
       minZoom: 2,
       maxZoom: 18,
+      restriction: {
+        latLngBounds: {
+          north: 85,
+          south: -85,
+          west: -180,
+          east: 180,
+        },
+        strictBounds: true,
+      },
       styles: [
         {
           featureType: "administrative.country",

@@ -38,7 +38,8 @@ export const GoogleMaps = ({
   });
 
   // Chat integration
-  const { openChatWithMessage } = enableChatIntegration ? useChatContext() : { openChatWithMessage: null };
+  const chatContext = enableChatIntegration ? useChatContext() : null;
+  const openChatWithMessage = chatContext?.openChatWithMessage ?? null;
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {

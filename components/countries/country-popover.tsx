@@ -49,7 +49,7 @@ export const CountryPopover = ({
     };
 
     checkCountryExists();
-  }, [profile?.id, popoverData.name, getCountryByNameAndProfileId]);
+  }, [profile?.id, popoverData.name, getCountryByNameAndProfileId, countryExists]);
 
   return (
     <div

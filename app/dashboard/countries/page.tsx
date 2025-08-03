@@ -1,6 +1,6 @@
 "use client";
 
-import { GoogleMaps } from "@/components/google-maps";
+import { GoogleMaps } from "@/components/countries/google-maps";
 
 const CountriesPage = () => {
   return (

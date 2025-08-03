@@ -15,11 +15,6 @@ import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 
 interface GoogleMapsProps {
-  onCountrySelect?: (
-    country: string,
-    countryCode: string,
-    countryData?: CountryData
-  ) => void;
   className?: string;
   height?: string;
   enableChatIntegration?: boolean;
@@ -32,7 +27,6 @@ declare global {
 }
 
 export const GoogleMaps = ({
-  onCountrySelect,
   className = "",
   height = "600px",
   enableChatIntegration = false,
@@ -173,7 +167,6 @@ export const GoogleMaps = ({
 
   const handleCountrySelect = () => {
     if (popoverData) {
-      onCountrySelect?.(popoverData.name, popoverData.code, popoverData);
       
       if (enableChatIntegration && openChatWithMessage) {
         openChatWithMessage(

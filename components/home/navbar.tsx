@@ -26,10 +26,16 @@ export default function Navbar() {
             </a>
 
             <div className="flex items-center space-x-4">
-              <button className="hidden lg:block text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer">
+              <a
+                href="/login"
+                className="hidden lg:block text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer"
+              >
                 Entrar
-              </button>
-              <button className="group relative overflow-hidden bg-[#28313a] text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2 cursor-pointer">
+              </a>
+              <a
+                href="/register"
+                className="group relative overflow-hidden bg-[#28313a] text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2 cursor-pointer"
+              >
                 <span className="relative z-10 transition-all duration-500 group-hover:text-white">
                   Inscrever-se
                 </span>
@@ -47,22 +53,7 @@ export default function Navbar() {
                   ></path>
                 </svg>
                 <div className="absolute inset-0 bg-blue-600 transform translate-x-full transition-transform duration-300 ease-in-out group-hover:translate-x-0"></div>
-              </button>
-              <button className="lg:hidden text-gray-700 p-2 cursor-pointer">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 6h16M4 12h16M4 18h16"
-                  ></path>
-                </svg>
-              </button>
+              </a>
             </div>
           </div>
         </div>

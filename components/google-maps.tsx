@@ -13,8 +13,6 @@ import { useChatContext } from "@/components/chat/ChatContext";
 import Image from "next/image";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
-import { useCountry } from "@/hooks/country/useCountry";
-import { useProfile } from "@/hooks/useProfile";
 
 interface GoogleMapsProps {
   className?: string;
@@ -37,8 +35,6 @@ export const GoogleMaps = ({
   const [isLoaded, setIsLoaded] = useState(false);
   const [popoverData, setPopoverData] = useState<CountryData | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
-  const { profile } = useProfile();
-  const { createCountry } = useCountry();
 
   const createPlanMutation = useCreatePlan({
     onSuccess: () => {
@@ -48,7 +44,7 @@ export const GoogleMaps = ({
   });
 
   // Chat integration
-  const { openChatWithMessage } = enableChatIntegration ? useChatContext() : { openChatWithMessage: null };
+  const { openChatWithMessage, country } = enableChatIntegration ? useChatContext() : { openChatWithMessage: null, country: null };
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {
@@ -174,11 +170,10 @@ export const GoogleMaps = ({
       
       if (enableChatIntegration && openChatWithMessage) {
         openChatWithMessage(
-          `I'd like to move to ${popoverData.name}. What's the process like?`
+          `I'd like to move to ${popoverData.name}. What's the process like?`,
+          popoverData.name
         );
       }
-
-      createCountry(popoverData.name, profile?.id || "");
       
       setIsPopoverOpen(false);
       setPopoverData(null);

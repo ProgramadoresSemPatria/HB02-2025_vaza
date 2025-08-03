@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/card";
 export const TestimonialSection = () => {
   return (
     <section className="w-full bg-background">
-      <div className="container mx-auto w-full max-w-7xl px-12 py-32 md:px-16">
+      <div className="container mx-auto w-full max-w-7xl px-8 py-32 md:px-16">
         <Card className="bg-blue-600 text-white flex flex-col w-full rounded-lg md:rounded-xl pt-[7.25rem] pb-16 px-[1.873rem] md:px-[calc((2/21)*100%)] gap-[5.5rem] border-blue-600">
           <blockquote>
             <span className="block text-2xl md:text-4xl font-semibold leading-tight">

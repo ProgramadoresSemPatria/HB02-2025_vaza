@@ -89,7 +89,7 @@ const Gallery4 = ({
           </div>
         </div>
       </div>
-      <div className="w-full">
+      <div className="container mx-auto w-full">
         <Carousel
           setApi={setCarouselApi}
           opts={{
@@ -100,7 +100,7 @@ const Gallery4 = ({
             },
           }}
         >
-          <CarouselContent className="ml-0">
+          <CarouselContent className="ml-0 pl-4 md:pl-0">
             {items.map((item, index) => (
               <CarouselItem
                 key={item.id}

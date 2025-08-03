@@ -6,25 +6,20 @@ import { streamText } from "ai";
 const saveChat = async (profile_id: string, user_message: string, ai_message: string, country_name: string) => {
   const supabase = await createClient();
 
-  // First try to get the existing country
-  const { data: country, error: fetchError } = await supabase
-    .from("countries")
-    .select("*")
-    .eq("name", country_name)
-    .single();
-
-  if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 is "not found" error
-    console.error("Error fetching country:", fetchError);
-    throw fetchError;
-  }
-
   const chatMessages = [
     { message: user_message, sender: "user" },
     { message: ai_message, sender: "ai" }
   ];
 
+  // First try to get the existing country
+  const { data: country } = await supabase
+    .from("countries")
+    .select("*")
+    .eq("name", country_name)
+    .eq("profile_id", profile_id)
+    .single();
+
   if (!country) {
-    // Create new country with initial chat messages
     const { data: newCountry, error: createError } = await supabase
       .from("countries")
       .insert({
@@ -45,20 +40,17 @@ const saveChat = async (profile_id: string, user_message: string, ai_message: st
 
   // Update existing country with appended chat messages
   const updatedChat = [...(country.chat || []), ...chatMessages];
-
-  const { data: updatedCountry, error: updateError } = await supabase
+  const { error: updateError } = await supabase
     .from("countries")
     .update({ chat: updatedChat })
-    .eq("name", country_name)
-    .select()
-    .single();
+    .eq("id", country.id);  // Use the specific ID we already have
 
   if (updateError) {
     console.error("Error updating country chat:", updateError);
     throw updateError;
   }
 
-  return updatedCountry;
+  return country;
 }
 
 export async function POST(request: Request) {
@@ -153,7 +145,6 @@ export async function POST(request: Request) {
     temperature: 0.7,
     onFinish: async (completion) => {
       console.log("Starting onFinish");
-      console.log("User profile", userProfile);
       console.log("Country", country);
       if (userProfile && country) {
         try {

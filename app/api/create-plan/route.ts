@@ -2,6 +2,25 @@ import { UserProfile } from "@/types/profile";
 import { createClient } from "@/utils/supabase/server";
 import { anthropic } from "@ai-sdk/anthropic";
 import { generateObject, jsonSchema } from "ai";
+import { Plan, Step, Country } from "@/types/db";
+
+// Type for the AI-generated immigration plan
+interface GeneratedImmigrationPlan {
+  plan: {
+    recommended_visa_type: string;
+    visa_explanation: string;
+    expected_timeline: string;
+    timeline_explanation: string;
+    expected_cost: string;
+    cost_explanation: string;
+  };
+  steps: Array<{
+    order: number;
+    title: string;
+    description: string;
+    is_completed: boolean;
+  }>;
+}
 
 const ImmigrationPlanSchema = jsonSchema({
   type: "object",
@@ -141,7 +160,99 @@ Ensure all information is current, accurate, and tailored to the user's specific
       temperature: 0.3,
     });
 
-    return new Response(JSON.stringify(result.object), {
+    // Cast the result to our typed interface
+    const generatedPlan = result.object as GeneratedImmigrationPlan;
+
+    // Save to database
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return new Response(
+        JSON.stringify({ error: "Authentication required" }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Create or find country record
+    let { data: country, error: countryError } = await supabase
+      .from("countries")
+      .select("*")
+      .eq("profile_id", user.id)
+      .eq("name", targetCountry)
+      .single();
+
+    if (countryError && countryError.code === "PGRST116") {
+      // Country doesn't exist, create it
+      const { data: newCountry, error: createCountryError } = await supabase
+        .from("countries")
+        .insert({
+          profile_id: user.id,
+          name: targetCountry,
+          chat: {},
+        })
+        .select()
+        .single();
+
+      if (createCountryError) {
+        throw createCountryError;
+      }
+      country = newCountry;
+    } else if (countryError) {
+      throw countryError;
+    }
+
+    // Create plan record
+    const { data: plan, error: planError } = await supabase
+      .from("plans")
+      .insert({
+        country_id: country.id,
+        recommended_visa_type: generatedPlan.plan.recommended_visa_type,
+        visa_explanation: generatedPlan.plan.visa_explanation,
+        expected_timeline: generatedPlan.plan.expected_timeline,
+        timeline_explanation: generatedPlan.plan.timeline_explanation,
+        expected_cost: generatedPlan.plan.expected_cost,
+        cost_explanation: generatedPlan.plan.cost_explanation,
+      })
+      .select()
+      .single();
+
+    if (planError) {
+      throw planError;
+    }
+
+    // Create step records
+    const stepsData = generatedPlan.steps.map((step) => ({
+      plan_id: plan.id,
+      order: step.order,
+      title: step.title,
+      description: step.description,
+      is_completed: step.is_completed,
+    }));
+
+    const { data: steps, error: stepsError } = await supabase
+      .from("steps")
+      .insert(stepsData)
+      .select();
+
+    if (stepsError) {
+      throw stepsError;
+    }
+
+    // Return the complete data with database IDs
+    const responseData = {
+      plan: {
+        id: plan.id,
+        country_id: plan.country_id,
+        ...generatedPlan.plan,
+      },
+      steps: steps,
+      country: country,
+    };
+
+    return new Response(JSON.stringify(responseData), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vaza - Your Immigration Assistant
+- **Live Project: [vaza.ai](https://hb-02-2025-vaza.vercel.app)**
 
-## Getting Started
+## Problem Statement
+Immigration processes are often complex, confusing, and overwhelming. People struggle to understand visa requirements, gather the right documentation, and follow the correct procedures for their specific situation. Vaza solves this by providing personalized immigration guidance and planning through AI-powered assistance.
 
-First, run the development server:
+## Tech Stack
+- **Frontend:**
+  - Next.js (App Router)
+  - TypeScript
+  - Tailwind CSS
+  - Google Maps API
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Backend:**
+  - Supabase (Database & Authentication)
+  - Anthropic Claude AI (Chat & Plan Generation)
+  - Next.js API Routes
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **AI Features:**
+  - Claude-3-Haiku for chat interactions
+  - Claude-Sonnet-4 for immigration plan generation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Key Features
+1. **Interactive Country Selection**
+   - Visual country selection through Google Maps integration
+   - Country-specific chat and planning interfaces
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **AI Travel Assistants**
+   - Travel Wizard: For general travel planning and advice
+   - Visa Expert: Specialized in visa requirements and documentation
+   - Local Guide: Provides authentic local insights and recommendations
 
-## Learn More
+3. **Personalized Immigration Planning**
+   - Custom immigration plans based on user profile
+   - Step-by-step guidance with detailed explanations
+   - Real-time cost and timeline estimates
+   - Progress tracking for each step
 
-To learn more about Next.js, take a look at the following resources:
+4. **Smart Chat System**
+   - Context-aware conversations
+   - Personalized responses based on user profile
+   - Chat history preservation for each country
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Local Setup
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Prerequisites**
+   ```bash
+   - Node.js (v18 or higher)
+   - npm or yarn
+   - A Supabase account
+   - An Anthropic API key
+   - A Google Maps API key
+   ```
 
-## Deploy on Vercel
+2. **Environment Setup**
+   - Clone the repository
+   - Copy `.env.example` to `.env.local`
+   - Fill in the required environment variables:
+     - Supabase credentials
+     - Anthropic API key
+     - Google Maps API key
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Installation**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Database Setup**
+   - Setup the Supabase database based on /types/db.ts
+
+5. **Start the Development Server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+6. **Access the Application**
+   - Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Team Credits
+
+- **Arthur Duarte:** Full-stack
+- **Eduardo Zago:** Backend
+- **Luiz Renan:** Frontend

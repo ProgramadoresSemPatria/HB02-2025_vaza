@@ -1,9 +1,9 @@
-import { UserProfile } from "@/types/profile";
+import { Profile } from "@/types/db";
 import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 
 export const useProfile = () => {
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

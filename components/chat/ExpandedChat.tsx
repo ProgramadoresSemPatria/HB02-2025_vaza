@@ -27,6 +27,7 @@ interface ExpandedChatProps {
   initialMessage?: string;
   existingMessages?: ChatMessage[];
   onSaveConversation?: (messages: ChatMessage[]) => void;
+  country?: string;
 }
 
 export default function ExpandedChat({
@@ -36,6 +37,7 @@ export default function ExpandedChat({
   initialMessage = "",
   existingMessages = [],
   onSaveConversation,
+  country,
 }: ExpandedChatProps) {
   const {
     messages,
@@ -49,6 +51,7 @@ export default function ExpandedChat({
     api: "/api/chat",
     body: {
       character: character.name,
+      country,
     },
     onFinish: (message) => {
       console.log("AI response finished:", message);
@@ -95,7 +98,7 @@ export default function ExpandedChat({
 
       console.log("Initial message sent to API");
     }
-  }, [isOpen, initialMessage, hasInitialized, messages.length, append]);
+  }, [isOpen, initialMessage, hasInitialized, messages.length]);
 
   useEffect(() => {
     if (!isOpen) {

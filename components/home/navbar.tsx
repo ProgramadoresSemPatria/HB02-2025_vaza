@@ -1,5 +1,8 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
+
 export default function Navbar() {
   return (
     <div
@@ -17,22 +20,24 @@ export default function Navbar() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200">
         <div className="max-w-screen-2xl mx-auto px-8">
           <div className="flex items-center justify-between h-16">
-            <a href="/" className="flex items-center">
-              <img
+            <Link href="/" className="flex items-center">
+              <Image
                 src="/vaza-logo.webp"
                 alt="Vaza Logo"
                 className="h-8 w-auto"
+                width={100}
+                height={100}
               />
-            </a>
+            </Link>
 
             <div className="flex items-center space-x-4">
-              <a
+              <Link
                 href="/login"
                 className="hidden lg:block text-sm text-gray-700 hover:text-blue-600 transition-colors duration-300 cursor-pointer"
               >
                 Entrar
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/register"
                 className="group relative overflow-hidden bg-[#28313a] text-white px-6 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center space-x-2 cursor-pointer"
               >
@@ -53,7 +58,7 @@ export default function Navbar() {
                   ></path>
                 </svg>
                 <div className="absolute inset-0 bg-blue-600 transform translate-x-full transition-transform duration-300 ease-in-out group-hover:translate-x-0"></div>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

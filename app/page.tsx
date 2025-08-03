@@ -1,5 +1,6 @@
 import {
   GallerySection,
+  Navbar,
   StatsDestinationsSection,
   TestimonialSection,
   VideoExpansionSectionComponent,
@@ -8,6 +9,7 @@ import HeroSection from "@/components/home/hero-section";
 export default function Home() {
   return (
     <>
+      <Navbar />
       <HeroSection />
       <GallerySection />
 

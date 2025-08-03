@@ -57,11 +57,12 @@ export default function DashboardLayout({
       <div className="min-h-screen bg-background flex">
         <SidebarProvider>
           <DashboardSidebar />
-          <main className="flex-1 overflow-auto relative">
-            <div className="md:hidden absolute top-4 left-4 z-50">
+          <main className="flex-1 overflow-auto relative md:ml-[250px]">
+            <div className="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 px-4 py-3 z-40">
               <MobileMenuButton />
             </div>
-            {children}
+            <div className="md:hidden pt-16">{children}</div>
+            <div className="hidden md:block">{children}</div>
           </main>
         </SidebarProvider>
         <FloatingChat />
@@ -76,7 +77,7 @@ function MobileMenuButton() {
   return (
     <button
       onClick={() => setOpen(true)}
-      className="p-2 bg-white rounded-lg shadow-md hover:bg-gray-50 transition-colors"
+      className="p-2 hover:bg-gray-50 rounded-lg transition-colors"
     >
       <Menu className="h-5 w-5 text-gray-700" />
     </button>

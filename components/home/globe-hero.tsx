@@ -7,7 +7,6 @@ import { GlobeSection } from "./globe-section";
 import { HeroBackground } from "./hero-background";
 import { HeroHeader } from "./hero-header";
 import { PopularDestinations } from "./popular-destinations";
-import { StatsSection } from "./stats-section";
 
 interface LocationData {
   name: string;
@@ -57,7 +56,6 @@ export default function GlobeHero({
             transition={{ duration: 0.8, delay: 0.8 }}
             className="w-full"
           >
-            <StatsSection />
             <PopularDestinations locations={locations} />
           </motion.div>
         </div>

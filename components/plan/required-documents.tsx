@@ -23,25 +23,29 @@ export function RequiredDocuments({
     (completedDocuments / requiredDocumentsCount) * 100;
 
   return (
-    <Card>
+    <Card className="border-gray-200 shadow-sm">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg">Required Documents</CardTitle>
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <span>
+          <CardTitle className="text-lg font-semibold text-gray-900">
+            Required Documents
+          </CardTitle>
+          <div className="flex items-center gap-3 text-sm text-gray-600">
+            <span className="font-medium">
               {completedDocuments}/{requiredDocumentsCount}
             </span>
             <span>•</span>
-            <span>{Math.round(documentsProgressPercentage)}%</span>
+            <span className="font-semibold">
+              {Math.round(documentsProgressPercentage)}%
+            </span>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {documents.map((doc, index) => (
             <div
               key={index}
-              className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 ${
+              className={`flex items-center gap-4 p-5 rounded-xl border transition-all duration-200 ${
                 doc.status === "completed"
                   ? "bg-green-50 border-green-200"
                   : "bg-white border-gray-200 hover:bg-gray-50"
@@ -53,7 +57,7 @@ export function RequiredDocuments({
                 className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
               />
               <div className="flex-1">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 mb-2">
                   <span
                     className={`text-sm font-medium ${
                       doc.status === "completed"
@@ -70,7 +74,7 @@ export function RequiredDocuments({
                   )}
                 </div>
                 {doc.status === "completed" && (
-                  <div className="text-xs text-green-600 mt-1">
+                  <div className="text-xs text-green-600 font-medium">
                     ✓ Document obtained
                   </div>
                 )}
@@ -88,7 +92,7 @@ export function RequiredDocuments({
                 {doc.status}
               </Badge>
               {doc.status === "completed" && (
-                <CheckIcon className="h-4 w-4 text-green-600" />
+                <CheckIcon className="h-5 w-5 text-green-600" />
               )}
             </div>
           ))}

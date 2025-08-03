@@ -16,7 +16,7 @@ export const ContactStep = ({
 }: ContactStepProps) => (
   <div className="space-y-6">
     <div className="text-center">
-      <h2 className="text-2xl font-bold mb-2">Seus dados de contato</h2>
+      <h2 className="text-xl font-bold mb-2">Seus dados de contato</h2>
       <p className="text-gray-600">Para criarmos seu plano personalizado</p>
     </div>
     <div className="space-y-4">

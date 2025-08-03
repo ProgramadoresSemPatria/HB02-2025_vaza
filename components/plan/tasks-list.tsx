@@ -14,16 +14,18 @@ interface TasksListProps {
 
 export function TasksList({ tasks, onToggleTask }: TasksListProps) {
   return (
-    <Card>
+    <Card className="border-gray-200 shadow-sm">
       <CardHeader>
-        <CardTitle className="text-lg">Application Steps</CardTitle>
+        <CardTitle className="text-lg font-semibold text-gray-900">
+          Application Steps
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {tasks.map((task) => (
             <div
               key={task.id}
-              className={`flex items-center gap-4 p-4 rounded-lg border transition-all duration-200 ${
+              className={`flex items-center gap-4 p-5 rounded-xl border transition-all duration-200 ${
                 task.completed
                   ? "bg-green-50 border-green-200"
                   : "bg-white border-gray-200 hover:bg-gray-50"
@@ -35,7 +37,7 @@ export function TasksList({ tasks, onToggleTask }: TasksListProps) {
                 className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
               />
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-3 mb-2">
                   {getCategoryIcon(task.category)}
                   <span
                     className={`text-sm font-medium ${
@@ -48,7 +50,7 @@ export function TasksList({ tasks, onToggleTask }: TasksListProps) {
                   </span>
                 </div>
                 <div className="flex items-center gap-4 text-xs text-gray-500">
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-2">
                     <ClockIcon className="h-3 w-3" />
                     {task.estimatedDays} days
                   </span>
@@ -58,7 +60,7 @@ export function TasksList({ tasks, onToggleTask }: TasksListProps) {
                 </div>
               </div>
               {task.completed && (
-                <CheckIcon className="h-4 w-4 text-green-600" />
+                <CheckIcon className="h-5 w-5 text-green-600" />
               )}
             </div>
           ))}

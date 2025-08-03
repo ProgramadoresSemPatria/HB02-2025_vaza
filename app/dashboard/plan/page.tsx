@@ -39,12 +39,7 @@ export default function PlanPage() {
   return (
     <div className="w-full h-full bg-gray-50 p-6">
       <div className="w-full space-y-6">
-        <PlanHeader
-          planStatus={planStatus.status}
-          onStartPlan={startPlan}
-          onPausePlan={pausePlan}
-          onCompletePlan={completePlan}
-        />
+        <PlanHeader />
 
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
           <div className="xl:col-span-1 space-y-6">

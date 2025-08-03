@@ -7,7 +7,7 @@ export default function HeroSection() {
     <section
       data-bp-location="header"
       id="conheça-o-vaza-ai"
-      className="container-v3 w-full bg-container-background black overflow-visible"
+      className="container-v3 w-full bg-container-background black overflow-visible pt-32"
     >
       <div className="container-inner grid grid-cols-25 mx-auto w-full max-w-screen-2xl auto-rows-auto md:gap-y-8 pt-component pb-component">
         <div
@@ -33,11 +33,11 @@ export default function HeroSection() {
                   href="/dashboard/get-started"
                   className="box-border button bg-transparent border-none no-underline blue group p-0 w-full text-left"
                 >
-                  <span className="cursor-pointer w-full md:w-auto button-inner max-w-full border-0 p-0 inline-flex items-center justify-between font-sans font-medium no-underline rounded-xl relative overflow-hidden gap-4 z-0 group-focus-within:outline-btn-focus-outline before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:bg-btn-background before:transition-all motion-reduce:before:transition-none before:delay-0 before:duration-0 before:-z-20 after:content-[''] after:absolute after:left-full after:top-0 after:h-full after:w-full after:rounded-xl after:border after:border-btn-hover-background after:bg-btn-hover-background after:transition-all motion-reduce:after:transition-none after:ease-in-out after:duration-350 after:-z-10 py-3.5 px-5 text-body-2 group-hover:before:bg-btn-hover-background group-hover:before:delay-350 group-hover:after:left-0">
-                    <span className="button-title leading-body-1 font-medium text-btn-content transition-all motion-reduce:transition-none ease-in-out duration-500 group-hover:text-btn-hover-content">
+                  <span className="cursor-pointer w-full md:w-auto button-inner max-w-full border-0 p-0 inline-flex items-center justify-between font-sans font-medium no-underline rounded-xl relative overflow-hidden gap-4 z-0 group-focus-within:outline-btn-focus-outline before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:bg-blue-600 before:transition-all motion-reduce:before:transition-none before:delay-0 before:duration-0 before:-z-20 after:content-[''] after:absolute after:left-full after:top-0 after:h-full after:w-full after:rounded-xl after:border after:border-blue-700 after:bg-blue-700 after:transition-all motion-reduce:after:transition-none after:ease-in-out after:duration-350 after:-z-10 py-3.5 px-5 text-body-2 group-hover:before:bg-blue-700 group-hover:before:delay-350 group-hover:after:left-0">
+                    <span className="button-title leading-body-1 font-medium text-white transition-all motion-reduce:transition-none ease-in-out duration-500 group-hover:text-white">
                       Get Started
                     </span>
-                    <span className="button-icon-container overflow-hidden flex justify-start transition-all motion-reduce:transition-none duration-500 ease-in-out gap-3 py-1 px-3.5 rounded-md w-12 bg-btn-icon-container group-hover:bg-btn-hover-icon-container group-focus-within:bg-btn-hover-icon-container">
+                    <span className="button-icon-container overflow-hidden flex justify-start transition-all motion-reduce:transition-none duration-500 ease-in-out gap-3 py-1 px-3.5 rounded-md w-12 bg-white/20 group-hover:bg-white/30 group-focus-within:bg-white/30">
                       <svg
                         width="20px"
                         height="20px"
@@ -79,11 +79,11 @@ export default function HeroSection() {
                   href="/dashboard/plan"
                   className="box-border button bg-transparent border-none no-underline dark-gray group p-0 w-full text-left"
                 >
-                  <span className="cursor-pointer w-full md:w-auto button-inner max-w-full border-0 p-0 inline-flex items-center justify-between font-sans font-medium no-underline rounded-xl relative overflow-hidden gap-4 z-0 group-focus-within:outline-btn-focus-outline before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:bg-btn-background before:transition-all motion-reduce:before:transition-none before:delay-0 before:duration-0 before:-z-20 after:content-[''] after:absolute after:left-full after:top-0 after:h-full after:w-full after:rounded-xl after:border after:border-btn-hover-background after:bg-btn-hover-background after:transition-all motion-reduce:after:transition-none after:ease-in-out after:duration-350 after:-z-10 py-3.5 px-5 text-body-2 group-hover:before:bg-btn-hover-background group-hover:before:delay-350 group-hover:after:left-0">
-                    <span className="button-title leading-body-1 font-medium text-btn-content transition-all motion-reduce:transition-none ease-in-out duration-500 group-hover:text-btn-hover-content">
+                  <span className="cursor-pointer w-full md:w-auto button-inner max-w-full border-0 p-0 inline-flex items-center justify-between font-sans font-medium no-underline rounded-xl relative overflow-hidden gap-4 z-0 group-focus-within:outline-btn-focus-outline before:content-[''] before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-xl before:bg-[#28313a] before:transition-all motion-reduce:before:transition-none before:delay-0 before:duration-0 before:-z-20 after:content-[''] after:absolute after:left-full after:top-0 after:h-full after:w-full after:rounded-xl after:border after:border-blue-600 after:bg-blue-600 after:transition-all motion-reduce:after:transition-none after:ease-in-out after:duration-350 after:-z-10 py-3.5 px-5 text-body-2 group-hover:before:bg-blue-600 group-hover:before:delay-350 group-hover:after:left-0">
+                    <span className="button-title leading-body-1 font-medium text-white transition-all motion-reduce:transition-none ease-in-out duration-500 group-hover:text-white">
                       Plan Trip
                     </span>
-                    <span className="button-icon-container overflow-hidden flex justify-start transition-all motion-reduce:transition-none duration-500 ease-in-out gap-3 py-1 px-3.5 rounded-md w-12 bg-btn-icon-container group-hover:bg-btn-hover-icon-container group-focus-within:bg-btn-hover-icon-container">
+                    <span className="button-icon-container overflow-hidden flex justify-start transition-all motion-reduce:transition-none duration-500 ease-in-out gap-3 py-1 px-3.5 rounded-md w-12 bg-white/20 group-hover:bg-white/30 group-focus-within:bg-white/30">
                       <svg
                         width="20px"
                         height="20px"

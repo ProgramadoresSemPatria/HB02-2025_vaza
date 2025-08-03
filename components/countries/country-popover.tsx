@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CountryData } from "@/types/country";
+import { useCountry } from "@/hooks/country/useCountry";
+import { useEffect, useState } from "react";
+import { useProfile } from "@/hooks/useProfile";
 import Image from "next/image";
+import { Lock } from "lucide-react";
 
 interface CountryPopoverProps {
   data: CountryData;
@@ -22,6 +26,31 @@ export const CountryPopover = ({
   onCreatePlan: handleCreatePlan,
   createPlanMutation,
 }: CountryPopoverProps) => {
+  const { profile } = useProfile();
+  const { getCountryByNameAndProfileId } = useCountry();
+  const [countryExists, setCountryExists] = useState<boolean>(false);
+  const [isCheckingCountry, setIsCheckingCountry] = useState(false);
+
+  useEffect(() => {
+    const checkCountryExists = async () => {
+      if (!profile?.id || !popoverData.name) return;
+      
+      setIsCheckingCountry(true);
+      try {
+        const existingCountry = await getCountryByNameAndProfileId(popoverData.name, profile.id);
+        console.log("existingCountry", existingCountry);
+        setCountryExists(!!existingCountry);
+        console.log("countryExists", countryExists);
+      } catch (error) {
+        console.error('Error checking country existence:', error);
+      } finally {
+        setIsCheckingCountry(false);
+      }
+    };
+
+    checkCountryExists();
+  }, [profile?.id, popoverData.name, getCountryByNameAndProfileId]);
+
   return (
     <div
       style={{
@@ -159,17 +188,30 @@ export const CountryPopover = ({
               <Button
                 onClick={handleCountrySelect}
                 className="flex-1"
-                disabled={popoverData.isLoading}
+                disabled={popoverData.isLoading || isCheckingCountry || countryExists}
+                title={countryExists ? "Plan already exists" : ""}
               >
-                Select {popoverData.name}
+                {isCheckingCountry ? "Loading..." : (
+                  <>
+                    {countryExists && <Lock className="w-4 h-4 mr-2" />}
+                    {`Discover ${popoverData.name}`}
+                  </>
+                )}
               </Button>
               <Button
-                variant="outline"
+                // variant="outline"
                 onClick={handleCreatePlan}
                 className="flex-1"
-                disabled={popoverData.isLoading || createPlanMutation.isPending}
+                disabled={popoverData.isLoading || createPlanMutation.isPending || isCheckingCountry || !countryExists}
+                title={!countryExists ? "You need to create a plan first" : ""}
               >
-                {createPlanMutation.isPending ? "Creating..." : "Create Plan"}
+                {createPlanMutation.isPending ? "Creating..." : 
+                 isCheckingCountry ? "Loading..." : (
+                   <>
+                     {!countryExists && <Lock className="w-4 h-4 mr-2" />}
+                     Create Plan
+                   </>
+                 )}
               </Button>
             </div>
           </div>

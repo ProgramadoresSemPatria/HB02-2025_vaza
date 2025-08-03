@@ -11,7 +11,6 @@ import { useEffect, useRef, useState } from "react";
 interface GoogleMapsProps {
   className?: string;
   height?: string;
-  enableChatIntegration?: boolean;
 }
 
 declare global {
@@ -23,7 +22,6 @@ declare global {
 export const GoogleMaps = ({
   className = "",
   height = "600px",
-  enableChatIntegration = false,
 }: GoogleMapsProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -38,8 +36,7 @@ export const GoogleMaps = ({
   });
 
   // Chat integration
-  const chatContext = enableChatIntegration ? useChatContext() : null;
-  const openChatWithMessage = chatContext?.openChatWithMessage ?? null;
+  const { openChatWithMessage } =  useChatContext();
 
   useEffect(() => {
     if (isLoaded && mapRef.current && window.google) {
@@ -163,13 +160,11 @@ export const GoogleMaps = ({
   const handleCountrySelect = () => {
     if (popoverData) {
       
-      if (enableChatIntegration && openChatWithMessage) {
         openChatWithMessage(
           `I'd like to move to ${popoverData.name}. What's the process like?`,
           popoverData.name
         );
-      }
-      
+
       setIsPopoverOpen(false);
       setPopoverData(null);
     }

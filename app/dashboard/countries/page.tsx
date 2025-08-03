@@ -16,7 +16,6 @@ const CountriesPage = () => {
         <GoogleMaps
           height="600px"
           className="w-full"
-          enableChatIntegration={true}
         />
       </div>
     </div>

@@ -27,7 +27,7 @@ const CountriesPage = () => {
       <div className="mt-6">
         <GoogleMaps
           onCountrySelect={handleCountrySelect}
-          height="400px"
+          height="600px"
           className="w-full"
         />
       </div>

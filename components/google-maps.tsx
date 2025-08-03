@@ -30,7 +30,7 @@ declare global {
 export const GoogleMaps = ({
   onCountrySelect,
   className = "",
-  height = "500px",
+  height = "600px",
 }: GoogleMapsProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -57,6 +57,8 @@ export const GoogleMaps = ({
       zoom: 2,
       center: { lat: 20, lng: 0 }, // Center of the world
       mapTypeId: "roadmap",
+      minZoom: 2,
+      maxZoom: 18,
       styles: [
         {
           featureType: "administrative.country",

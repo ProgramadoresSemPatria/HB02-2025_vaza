@@ -35,10 +35,10 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
             <User className="h-12 w-12 text-gray-400 mx-auto" />
             <div className="space-y-1">
               <p className="text-gray-600 text-lg font-medium">
-                Nenhuma informação de perfil encontrada
+                No profile information found
               </p>
               <p className="text-gray-500 text-base">
-                Complete seu perfil para ver suas informações aqui
+                Complete your profile to see your information here
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
             ? typeof value === "string"
               ? capitalize(value)
               : value
-            : "Não informado"}
+            : "Not provided"}
         </p>
       </div>
     </div>
@@ -81,20 +81,28 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
             <User className="h-6 w-6 text-blue-600" />
-            Informações Pessoais
+            Personal Information
           </CardTitle>
         </CardHeader>
         <CardContent>
           <InfoItem icon={Mail} label="Email" value={profile.email} />
           <Separator className="my-2" />
-          <InfoItem icon={MapPin} label="País Atual" value={profile.country} />
+          <InfoItem
+            icon={MapPin}
+            label="Current Country"
+            value={profile.country}
+          />
           <Separator className="my-2" />
-          <InfoItem icon={Briefcase} label="Cargo" value={profile.job_title} />
+          <InfoItem
+            icon={Briefcase}
+            label="Job Title"
+            value={profile.job_title}
+          />
           <Separator className="my-2" />
           <InfoItem
             icon={Calendar}
-            label="Idade"
-            value={profile.age ? `${profile.age} anos` : undefined}
+            label="Age"
+            value={profile.age ? `${profile.age} years` : undefined}
           />
         </CardContent>
       </Card>
@@ -103,19 +111,19 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
             <GraduationCap className="h-6 w-6 text-green-600" />
-            Educação
+            Education
           </CardTitle>
         </CardHeader>
         <CardContent>
           <InfoItem
             icon={GraduationCap}
-            label="Formação"
+            label="Degree"
             value={profile.degree}
           />
           <Separator className="my-2" />
           <InfoItem
             icon={Building}
-            label="Instituição"
+            label="Institution"
             value={profile.institution}
           />
         </CardContent>
@@ -125,7 +133,7 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
             <Globe className="h-6 w-6 text-purple-600" />
-            Cidadanias
+            Citizenships
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -146,7 +154,7 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
             <div className="flex items-center gap-3 py-2">
               <Globe className="h-5 w-5 text-gray-400" />
               <p className="text-gray-500 italic">
-                Nenhuma cidadania informada
+                No citizenship information provided
               </p>
             </div>
           )}
@@ -157,17 +165,17 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
         <CardHeader>
           <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
             <Heart className="h-6 w-6 text-pink-600" />
-            Informações Familiares
+            Family Information
           </CardTitle>
         </CardHeader>
         <CardContent>
           <InfoItem
             icon={Heart}
-            label="Estado Civil"
+            label="Marital Status"
             value={profile.marital_status}
           />
           <Separator className="my-2" />
-          <InfoItem icon={Baby} label="Filhos" value={profile.children} />
+          <InfoItem icon={Baby} label="Children" value={profile.children} />
         </CardContent>
       </Card>
     </div>

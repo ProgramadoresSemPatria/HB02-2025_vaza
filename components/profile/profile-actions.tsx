@@ -19,32 +19,32 @@ export function ProfileActions({ onEditProfile }: ProfileActionsProps) {
   const actions = [
     {
       icon: Edit,
-      label: "Editar Perfil",
-      description: "Atualize suas informações pessoais",
+      label: "Edit Profile",
+      description: "Update your personal information",
       action: onEditProfile,
       color: "bg-blue-50 text-blue-700 hover:bg-blue-100",
       iconColor: "text-blue-600",
     },
     {
       icon: Download,
-      label: "Exportar Dados",
-      description: "Baixe suas informações em PDF",
+      label: "Export Data",
+      description: "Download your information as PDF",
       action: () => console.log("Export data"),
       color: "bg-green-50 text-green-700 hover:bg-green-100",
       iconColor: "text-green-600",
     },
     {
       icon: Share2,
-      label: "Compartilhar Perfil",
-      description: "Compartilhe com consultores",
+      label: "Share Profile",
+      description: "Share with consultants",
       action: () => console.log("Share profile"),
       color: "bg-purple-50 text-purple-700 hover:bg-purple-100",
       iconColor: "text-purple-600",
     },
     {
       icon: Settings,
-      label: "Configurações",
-      description: "Gerencie suas preferências",
+      label: "Settings",
+      description: "Manage your preferences",
       action: () => console.log("Settings"),
       color: "bg-gray-50 text-gray-700 hover:bg-gray-100",
       iconColor: "text-gray-600",
@@ -57,7 +57,7 @@ export function ProfileActions({ onEditProfile }: ProfileActionsProps) {
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <UserPlus className="h-5 w-5 text-blue-600" />
-            Ações Rápidas
+            Quick Actions
           </CardTitle>
         </CardHeader>
         <CardContent>

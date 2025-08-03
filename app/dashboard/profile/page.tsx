@@ -33,15 +33,15 @@ export default function ProfilePage() {
         <div className="max-w-7xl mx-auto space-y-6">
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
             <div className="text-center space-y-3">
-              <h1 className="text-3xl font-bold text-gray-900">Erro</h1>
+              <h1 className="text-3xl font-bold text-gray-900">Error</h1>
               <p className="text-red-600 text-lg">
-                Erro ao carregar perfil: {error}
+                Error loading profile: {error}
               </p>
               <button
                 onClick={refetch}
                 className="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 font-medium"
               >
-                Tentar Novamente
+                Try Again
               </button>
             </div>
           </div>

@@ -94,26 +94,61 @@ export const FooterSection = () => {
 
           <div className="text-xs mt-26 flex justify-center items-center gap-x-2 lg:hidden">
             <div className="flex gap-x-2 items-center">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span className="whitespace-nowrap">
                 Based in São Paulo, Brazil
               </span>
             </div>
             <div className="w-1 h-1 flex-shrink-0 bg-black"></div>
             <div className="flex gap-x-2 items-center">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span className="whitespace-nowrap">Working Globally</span>
             </div>
           </div>
 
           <div className="hidden lg:flex lg:items-center lg:gap-x-6 text-black">
             <div className="flex gap-x-1 items-center">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span className="whitespace-nowrap">VAZAI 2025</span>
             </div>
             <div className="flex gap-x-2 items-center">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span className="whitespace-nowrap">
                 Based in São Paulo, Brazil
               </span>
             </div>
             <div className="flex gap-x-2 items-center">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"
+                  clipRule="evenodd"
+                />
+              </svg>
               <span className="whitespace-nowrap">Working Globally</span>
             </div>
           </div>

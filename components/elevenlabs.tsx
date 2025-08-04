@@ -7,14 +7,14 @@ import { Button } from './ui/button';
 import { useProfile } from '@/hooks/useProfile';
 
 export function Conversation({target_country}: {target_country: string}) {
-  const { profile, isLoading, error } = useProfile();
+  const { profile, isLoading } = useProfile();
 
   const conversation = useConversation({
     onConnect: () => console.log('Connected'),
     onDisconnect: () => console.log('Disconnected'),
     onMessage: (message) => console.log('Message:', message),
     onError: (error) => console.error('Error:', error),
-    onAudio: (audio) => console.log('Audio received'),
+    onAudio: () => console.log('Audio received'),
   });
 
   const getSignedUrl = async (): Promise<string> => {
@@ -45,8 +45,6 @@ export function Conversation({target_country}: {target_country: string}) {
         user__marital_status: profile?.marital_status || '',
         user__children: profile?.children || 0,
       }
-
-      console.log(dynamicVariables);
 
       // Start the conversation with your agent
       await conversation.startSession({ signedUrl: signedUrl, dynamicVariables });

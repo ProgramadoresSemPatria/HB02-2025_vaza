@@ -107,7 +107,7 @@ export async function POST(request: Request) {
     }
 
     // Transform transcript into our chat format
-    const chatMessages = body.data.transcript.map((turn: any) => ({
+    const chatMessages = body.data.transcript.map((turn: { message: string; role: string }) => ({
       message: turn.message,
       sender: turn.role === "agent" ? "ai" : "user"
     }));

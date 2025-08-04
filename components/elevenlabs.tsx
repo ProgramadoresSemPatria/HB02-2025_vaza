@@ -2,12 +2,13 @@
 
 import { useConversation } from '@elevenlabs/react';
 import { useCallback } from 'react';
-import { Headphones, HeadphoneOff } from 'lucide-react';
+import { Headphones, HeadphoneOff, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useProfile } from '@/hooks/useProfile';
 
 export function Conversation({target_country}: {target_country: string}) {
-  const { profile } = useProfile();
+  const { profile, isLoading, error } = useProfile();
+
   const conversation = useConversation({
     onConnect: () => console.log('Connected'),
     onDisconnect: () => console.log('Disconnected'),
@@ -24,8 +25,6 @@ export function Conversation({target_country}: {target_country: string}) {
     const { signedUrl } = await response.json();
     return signedUrl;
   };
-
-
 
   const startConversation = useCallback(async () => {
     try {
@@ -46,7 +45,7 @@ export function Conversation({target_country}: {target_country: string}) {
         user__marital_status: profile?.marital_status || '',
         user__children: profile?.children || 0,
       }
-      
+
       console.log(dynamicVariables);
 
       // Start the conversation with your agent
@@ -69,8 +68,11 @@ export function Conversation({target_country}: {target_country: string}) {
           ? 'bg-red-500 hover:bg-red-600'
           : 'bg-primary hover:bg-primary/80'
       }`}
+      disabled={isLoading}
     >
-      {conversation.status === 'connected' ? (
+      {isLoading ? (
+        <Loader2 className="h-5 w-5 animate-spin" />
+      ) : conversation.status === 'connected' ? (
         <HeadphoneOff className="w-5 h-5" />
       ) : (
         <Headphones className="w-5 h-5" />

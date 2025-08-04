@@ -5,7 +5,7 @@ import { useCountry } from "@/hooks/country/useCountry";
 import { useEffect, useState } from "react";
 import { useProfile } from "@/hooks/useProfile";
 import Image from "next/image";
-import { Lock } from "lucide-react";
+import { Lock, MessageCircle, Play} from "lucide-react";
 
 interface CountryPopoverProps {
   data: CountryData;
@@ -193,22 +193,29 @@ export const CountryPopover = ({
               >
                 {isCheckingCountry ? "Loading..." : (
                   <>
-                    {countryExists && <Lock className="w-4 h-4 mr-2" />}
+                    {countryExists ? (
+                      <Lock className="w-4 h-4 mr-2" />
+                    ) : (
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                    )}
                     {`Discover ${popoverData.name}`}
                   </>
                 )}
               </Button>
               <Button
-                // variant="outline"
                 onClick={handleCreatePlan}
-                className="flex-1"
+                className="flex-1 bg-brand-primary hover:bg-brand-primary/80 text-white"
                 disabled={popoverData.isLoading || createPlanMutation.isPending || isCheckingCountry || !countryExists}
                 title={!countryExists ? "You need to create a plan first" : ""}
               >
                 {createPlanMutation.isPending ? "Creating..." : 
                  isCheckingCountry ? "Loading..." : (
                    <>
-                     {!countryExists && <Lock className="w-4 h-4 mr-2" />}
+                     {!countryExists ? (
+                      <Lock className="w-4 h-4 mr-2" />
+                     ) : (
+                      <Play className="w-4 h-4 mr-2" />
+                     )}
                      Create Plan
                    </>
                  )}

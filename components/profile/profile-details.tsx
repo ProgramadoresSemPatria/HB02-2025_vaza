@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Profile } from "@/types/db";
-import { UserProfile } from "@/types/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Baby,
@@ -24,35 +23,73 @@ import { useForm } from "react-hook-form";
 import z, { email } from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Button, Input } from "../ui";
+import { useEditProfile } from "@/hooks/useEditProfile";
+import { CurrentCountryStep } from "../step-form/steps/current-country-step";
 
 const FormSchema = z.object({
   email: z.string("E-mail is required").email("Invalid e-mail"),
-  country: z.string(),
+  country: z.string("Country is required"),
   job_title: z.string("Job title is required"),
-  age: z.number()
+  age: z.string("Age is required")
 })
 
 type FormData = z.infer<typeof FormSchema>
 
 interface ProfileDetailsProps {
   profile: Profile | null;
+  refetch: () => Promise<void>
+  onEdit: {
+    isEditing: boolean,
+    closeEditForm: () => void
+  }
 }
 
-export function ProfileDetails({ profile }: ProfileDetailsProps) {
-  const [ isEditing, setIsEditing ] = useState(false)
-
+export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: profile?.email || "",
       country: profile?.country || "",
       job_title: profile?.job_title || "",
-      age: profile?.age
+      age: profile?.age ? String(profile.age) : ""
     }
   })
 
+  const [ newCountry, setNewCountry ] = useState<string|undefined>()
+
+  function handleNewCountry(country: string) {
+    setNewCountry(country)
+  }
+
+  const { editProfile, error } = useEditProfile()
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data)
+    if (!profile) {
+      form.setError("root", {
+        message: "No profile information found"
+      })
+      return
+    }
+    
+    const profileData = {
+      ...profile,
+      email: data.email,
+      country: newCountry ?? data.country,
+      job_title: data.job_title,
+      age: Number(data.age)
+    }
+
+    const result = await editProfile({ profile: profileData})
+
+    if (!error && !result?.error) {
+      onEdit.closeEditForm()
+      await refetch()
+    } else {
+      form.setError("root", {
+        message: "Something went wrong, please try again."
+      })
+      return
+    }
   }
  
   const capitalize = (str: string) => {
@@ -98,23 +135,40 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-700 mb-1">{label}</p>
-        { isEditing && field ? (
-          <FormField 
-            control={form.control}
-            name={field}
-            render={({ field: formField }) => (
-              <FormItem>
-                <FormControl>
-                  <Input 
-                    {...formField}
-                    type={ field === "age" ? "number" : "text" }
-                    className={form.formState.errors[field] ? "border-red-500" : ""}
-                  />
-                </FormControl>
-                <FormMessage /> 
-              </FormItem>
-            )}
-          />
+        { onEdit.isEditing && field ? (
+          field === "country" ? (
+            <>
+              <CurrentCountryStep 
+                currentCountry={field}
+                onUpdate={handleNewCountry}
+              />
+              { newCountry && 
+                <p className={`text-md ${color} ${!value ? "italic" : ""} break-words`}>
+                  New country:
+                  <span className="font-bold">
+                    {` ${capitalize(newCountry)}`}
+                  </span>
+                </p>
+              }
+            </>
+          ) : (
+            <FormField 
+              control={form.control}
+              name={field}
+              render={({ field: formField }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input 
+                      {...formField}
+                      type={ field === "age" ? "number" : "text" }
+                      className={form.formState.errors[field] ? "border-red-500" : ""}
+                    />
+                  </FormControl>
+                  <FormMessage /> 
+                </FormItem>
+              )}
+            />
+          )
         ) : (
           <p className={`text-sm ${color} ${!value ? "italic" : ""} break-words`}>
             {value
@@ -169,7 +223,17 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
               />
             </CardContent>
           </Card>
-
+          <FormMessage />
+          { onEdit.isEditing && (
+            <div className="flex justify-end gap-4">
+              <Button type="button" variant="outline" onClick={onEdit.closeEditForm}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="default">
+                Save 
+              </Button>
+            </div>
+          )}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
@@ -241,16 +305,6 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
               <InfoItem icon={Baby} label="Children" value={profile.children} />
             </CardContent>
           </Card>
-          { isEditing && (
-            <div className="flex justify-end gap-4">
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
-              <Button type="submit" variant="default">
-                Save 
-              </Button>
-            </div>
-          )}
         </div>
       </form>
     </Form>

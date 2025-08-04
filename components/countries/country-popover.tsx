@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Lock, MessageCircle, Play} from "lucide-react";
 import { CreatePlanDialog } from "@/components/plan/create-plan-dialog";
 import { useState } from "react";
+import { Conversation } from "@/components/elevenlabs";
 
 interface CountryPopoverProps {
   data: CountryData;
@@ -186,6 +187,7 @@ export const CountryPopover = ({
 
             {/* Action Buttons */}
             <div className="flex gap-2 pt-2 border-t">
+              <Conversation />
               <Button
                 onClick={handleCountrySelect}
                 className="flex-1"

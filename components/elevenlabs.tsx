@@ -45,7 +45,11 @@ export function Conversation() {
   return (
     <Button
       onClick={conversation.status === 'connected' ? stopConversation : startConversation}
-      className="p-2 bg-primary text-white rounded hover:bg-primary/80 transition-colors"
+      className={`p-2 text-white transition-colors ${
+        conversation.status === 'connected' 
+          ? 'bg-red-500 hover:bg-red-600'
+          : 'bg-primary hover:bg-primary/80'
+      }`}
     >
       {conversation.status === 'connected' ? (
         <HeadphoneOff className="w-5 h-5" />

@@ -16,6 +16,8 @@ import {
   LucideIcon,
   Mail,
   MapPin,
+  PenOff,
+  Save,
   User,
 } from "lucide-react";
 import { useState } from "react";
@@ -25,26 +27,40 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Button, Input } from "../ui";
 import { useEditProfile } from "@/hooks/useEditProfile";
 import { CurrentCountryStep } from "../step-form/steps/current-country-step";
+import { FamilyStep } from "../step-form/steps/family-step";
 
 const FormSchema = z.object({
-  email: z.string("E-mail is required").email("Invalid e-mail"),
-  country: z.string("Country is required"),
-  job_title: z.string("Job title is required"),
-  age: z.string("Age is required"),
-  degree: z.string("Degree is required"),
-  institution: z.string("Insitution is required"),
-  citizenships: z.string("Citizenships are required")
+  email: z.string().email(),
+  country: z.string(),
+  job_title: z.string().nonempty({
+      message: "Job title is required",
+    }),
+  age: z
+    .string().nonempty({
+      message: "Age is required",
+    }),
+  degree: z.string().nonempty({
+      message: "Degree is required"
+    }),
+  institution: z.string().nonempty({
+      message: "Insitution is required"
+    }),
+  citizenships: z.string().nonempty({
+      message: "Citizenships are required"
+    }),
+  marital_status: z.string(),
+  children: z.string()
 })
 
 type FormData = z.infer<typeof FormSchema>
 
 interface ProfileDetailsProps {
   profile: Profile | null;
-  refetch: () => Promise<void>
+  refetch: () => Promise<void>;
   onEdit: {
     isEditing: boolean,
     closeEditForm: () => void
-  }
+  };
 }
 
 export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps) {
@@ -57,14 +73,26 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
       age: profile?.age ? String(profile.age) : "",
       degree: profile?.degree || "",
       institution: profile?.institution || "",
-      citizenships: profile?.citizenships.join(', ') || ""
+      citizenships: profile?.citizenships.join(', ') || "",
+      marital_status: profile?.marital_status || "",
+      children: profile?.children ? String(profile.children) : ""
     }
   })
 
-  const [ newCountry, setNewCountry ] = useState<string|undefined>()
+  const [ newCountry, setNewCountry ] = useState<string | undefined>(profile?.country)
+  const [ maritalStatus, setMaritalStatus ] = useState<string | undefined>(profile?.marital_status)
+  const [ children, setChildren ] = useState<string | undefined>(profile?.children ? String(profile.children) : undefined)
 
   function handleNewCountry(country: string) {
     setNewCountry(country)
+  }
+
+  function handleFamily(field: string, value: string) {
+    if (field === "maritalStatus") {
+      setMaritalStatus(value)
+    } else if (field === "children") {
+      setChildren(value)
+    }
   }
 
   const { editProfile, error } = useEditProfile()
@@ -76,16 +104,24 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
       })
       return
     }
+
+    if (Number(data.age) < 0) {
+      form.setError("age", {
+        message: "Age must be a valid number"
+      })
+      return
+    }
     
     const profileData: Profile = {
       ...profile,
-      email: data.email,
       country: newCountry ?? profile.country,
       job_title: data.job_title,
       age: Number(data.age),
       degree: data.degree,
       institution: data.institution,
-      citizenships: data.citizenships.split(",").map(citizenship => citizenship.trim())
+      citizenships: data.citizenships.split(",").map(citizenship => citizenship.trim()),
+      marital_status: maritalStatus ?? profile.marital_status,
+      children: children ? Number(children) : profile.children
     }
 
     const result = await editProfile({ profile: profileData})
@@ -146,38 +182,41 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
         <p className="text-sm font-medium text-gray-700 mb-1">{label}</p>
         { onEdit.isEditing && field ? (
           field === "country" ? (
-            <>
+            <div className="mt-4">
               <CurrentCountryStep 
-                currentCountry={field}
+                currentCountry={newCountry ?? profile.country}
                 onUpdate={handleNewCountry}
+                isEditForm={true}
               />
               { newCountry && 
                 <p className={`text-md ${color} ${!value ? "italic" : ""} break-words`}>
-                  New country:
+                  Current country:
                   <span className="font-bold">
                     {` ${capitalize(newCountry)}`}
                   </span>
                 </p>
               }
-            </>
-          ) :  ( 
-            <FormField 
-              control={form.control}
-              name={field}
-              render={({ field: formField }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input 
-                      {...formField}
-                      type={ field === "age" ? "number" : "text" }
-                      className={form.formState.errors[field] ? "border-red-500" : ""}
-                    />
-                  </FormControl>
-                  <FormMessage /> 
-                </FormItem>
-              )}
-            />
-          )
+            </div>
+          ) : field === "email" ? (
+              <Input disabled type="email" value={profile.email} />
+            ) : ( 
+              <FormField 
+                control={form.control}
+                name={field}
+                render={({ field: formField }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input 
+                        {...formField}
+                        type={ field === "age" ? "number" : "text" }
+                        className={form.formState.errors[field] ? "border-red-500" : ""}
+                      />
+                    </FormControl>
+                    <FormMessage /> 
+                  </FormItem>
+                )}
+              />
+            )
         ) : (
           <p className={`text-sm ${color} ${!value ? "italic" : ""} break-words`}>
             {value
@@ -320,21 +359,43 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <InfoItem
-                icon={Heart}
-                label="Marital Status"
-                value={profile.marital_status}
-              />
-              <Separator className="my-2" />
-              <InfoItem icon={Baby} label="Children" value={profile.children} />
+              { onEdit.isEditing ? (
+                <FamilyStep 
+                  maritalStatus={maritalStatus ?? profile.marital_status}
+                  childrenCount={children ?? String(profile.children)}
+                  onUpdate={handleFamily}
+                  isEditForm={true}
+                />
+              ) : (
+                <>
+                  <InfoItem
+                    icon={Heart}
+                    label="Marital Status"
+                    value={profile.marital_status}
+                  />
+                  <Separator className="my-2" />
+                  <InfoItem icon={Baby} label="Children" value={profile.children} />
+                </>
+              )}
             </CardContent>
           </Card>
           { onEdit.isEditing && (
             <div className="flex justify-end gap-4">
-              <Button type="button" variant="outline" onClick={onEdit.closeEditForm}>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onEdit.closeEditForm}
+                className="flex gap-2"
+              >
+                <PenOff />
                 Cancel
               </Button>
-              <Button type="submit" variant="default">
+              <Button 
+                type="submit" 
+                variant="default"
+                className="flex gap-2"
+              >
+                <Save />
                 Save 
               </Button>
             </div>

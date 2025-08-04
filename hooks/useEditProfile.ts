@@ -1,7 +1,6 @@
 import { Profile } from "@/types/db";
-import { UserProfile } from "@/types/profile";
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface ProfileData {
   profile: Profile
@@ -34,7 +33,10 @@ export function useEditProfile() {
           email: profile.email,
           country: profile.country,
           job_title: profile.job_title,
-          age: profile.age
+          age: profile.age,
+          degree: profile.degree,
+          institution: profile.institution,
+          citizenships: profile.citizenships
         })
         .eq("id", profile.id)
 

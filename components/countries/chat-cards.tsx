@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { useCountry } from "@/hooks/country/useCountry";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Play } from "lucide-react";
+import { Play, MessageCircle } from "lucide-react";
 import ExpandedChat from "@/components/chat/ExpandedChat";
+import { CreatePlanDialog } from "@/components/plan/create-plan-dialog";
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -15,13 +16,23 @@ import { Country } from "@/types/db";
 
 interface ChatCardsProps {
   profileId: string;
+  onCreatePlan?: () => void;
+  createPlanMutation?: {
+    isPending: boolean;
+  };
 }
 
-export const ChatCards = ({ profileId }: ChatCardsProps) => {
+export const ChatCards = ({ 
+  profileId,
+  onCreatePlan,
+  createPlanMutation = { isPending: false }
+}: ChatCardsProps) => {
   const { countries, getCountries, getCountryByNameAndProfileId } = useCountry();
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false);
+  const [planCountry, setPlanCountry] = useState<string>("");
 
   useEffect(() => {
     const loadCountries = async () => {
@@ -84,12 +95,32 @@ export const ChatCards = ({ profileId }: ChatCardsProps) => {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {countries.map((country) => (
-          <Card key={country.id} className="p-6 flex flex-row justify-between items-center">
-            <h3 className="text-xl font-semibold">{country.name}</h3>
-            <Button onClick={() => handleContinueChat(country)}>
-              <Play className="w-4 h-4 mr-2" />
-              Continue
-            </Button>
+          <Card key={country.id} className="p-6">
+            <div className="flex flex-col lg:flex-row justify-between items-center">
+              <h3 className="text-xl font-semibold lg:mb-0 md:mb-4">{country.name}</h3>
+              <div className="flex gap-2">
+                <Button
+                  className="bg-brand-primary hover:bg-brand-primary/80 text-white"
+                  onClick={() => {
+                    setPlanCountry(country.name);
+                    setIsPlanDialogOpen(true);
+                  }}
+                  disabled={createPlanMutation.isPending}
+                >
+                  {createPlanMutation.isPending ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                  ) : null}
+                  <Play className="w-4 h-4 mr-1" />
+                  Create Plan
+                </Button>
+                <Button 
+                  onClick={() => handleContinueChat(country)}
+                >
+                  <MessageCircle className="w-4 h-4 mr-1" />
+                  Continue Chat
+                </Button>
+              </div>
+            </div>
           </Card>
         ))}
       </div>
@@ -115,6 +146,12 @@ export const ChatCards = ({ profileId }: ChatCardsProps) => {
           }}
         />
       )}
+
+      <CreatePlanDialog
+        isOpen={isPlanDialogOpen}
+        onOpenChange={setIsPlanDialogOpen}
+        targetCountry={planCountry}
+      />
     </>
   );
 };

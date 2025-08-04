@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CountryData } from "@/types/country";
 import { useCountry } from "@/hooks/country/useCountry";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useProfile } from "@/hooks/useProfile";
 import Image from "next/image";
-import { Lock } from "lucide-react";
+import { Lock, MessageCircle, Play} from "lucide-react";
+import { CreatePlanDialog } from "@/components/plan/create-plan-dialog";
+import { useState } from "react";
 
 interface CountryPopoverProps {
   data: CountryData;
@@ -30,6 +32,7 @@ export const CountryPopover = ({
   const { getCountryByNameAndProfileId } = useCountry();
   const [countryExists, setCountryExists] = useState<boolean>(false);
   const [isCheckingCountry, setIsCheckingCountry] = useState(false);
+  const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false);
 
   useEffect(() => {
     const checkCountryExists = async () => {
@@ -193,22 +196,32 @@ export const CountryPopover = ({
               >
                 {isCheckingCountry ? "Loading..." : (
                   <>
-                    {countryExists && <Lock className="w-4 h-4 mr-2" />}
+                    {countryExists ? (
+                      <Lock className="w-4 h-4 mr-2" />
+                    ) : (
+                      <MessageCircle className="w-4 h-4 mr-2" />
+                    )}
                     {`Discover ${popoverData.name}`}
                   </>
                 )}
               </Button>
               <Button
-                // variant="outline"
-                onClick={handleCreatePlan}
-                className="flex-1"
+                onClick={() => {
+                  onOpenChange(false); // Close the popover
+                  setIsPlanDialogOpen(true); // Open the plan dialog
+                }}
+                className="flex-1 bg-brand-primary hover:bg-brand-primary/80 text-white"
                 disabled={popoverData.isLoading || createPlanMutation.isPending || isCheckingCountry || !countryExists}
                 title={!countryExists ? "You need to create a plan first" : ""}
               >
                 {createPlanMutation.isPending ? "Creating..." : 
                  isCheckingCountry ? "Loading..." : (
                    <>
-                     {!countryExists && <Lock className="w-4 h-4 mr-2" />}
+                     {!countryExists ? (
+                      <Lock className="w-4 h-4 mr-2" />
+                     ) : (
+                      <Play className="w-4 h-4 mr-2" />
+                     )}
                      Create Plan
                    </>
                  )}
@@ -217,6 +230,12 @@ export const CountryPopover = ({
           </div>
         </PopoverContent>
       </Popover>
+
+      <CreatePlanDialog
+        isOpen={isPlanDialogOpen}
+        onOpenChange={setIsPlanDialogOpen}
+        targetCountry={popoverData.name}
+      />
     </div>
   );
 };

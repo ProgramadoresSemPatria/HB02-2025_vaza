@@ -1,0 +1,19 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { GlobeComponent } from "./globe-component";
+
+export function GlobeSection() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, delay: 0.6 }}
+      className="relative flex items-center justify-center w-full h-full overflow-visible"
+    >
+      <GlobeComponent />
+
+      <div className="absolute inset-0 bg-gradient-radial from-[#4a7c4a]/40 via-[#2d5a2d]/30 to-transparent rounded-full blur-3xl" />
+    </motion.div>
+  );
+}

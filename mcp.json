@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "shadcn-ui-server": {
+      "command": "npx",
+      "args": [
+        "@heilgar/shadcn-ui-mcp-server"
+      ]
+    }
+  }
+}

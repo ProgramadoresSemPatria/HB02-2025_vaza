@@ -1,0 +1,155 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useCountry } from "@/hooks/country/useCountry";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Play, MessageCircle } from "lucide-react";
+import ExpandedChat from "@/components/chat/ExpandedChat";
+import { CreatePlanDialog } from "@/components/plan/create-plan-dialog";
+interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+}
+import { Country } from "@/types/db";
+
+interface ChatCardsProps {
+  profileId: string;
+  createPlanMutation?: {
+    isPending: boolean;
+  };
+}
+
+export const ChatCards = ({ 
+  profileId,
+  createPlanMutation = { isPending: false }
+}: ChatCardsProps) => {
+  const { countries, getCountries, getCountryByNameAndProfileId } = useCountry();
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false);
+  const [planCountry, setPlanCountry] = useState<string>("");
+
+  useEffect(() => {
+    const loadCountries = async () => {
+      await getCountries(profileId);
+      setIsInitialLoading(false);
+    };
+    loadCountries();
+  }, [getCountries, profileId]);
+
+  if (isInitialLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[1, 2, 3].map((i) => (
+          <Card key={i} className="p-6 animate-pulse">
+            <div className="h-4 bg-gray-200 rounded w-3/4 mb-4"></div>
+            <div className="h-8 bg-gray-200 rounded w-1/2"></div>
+          </Card>
+        ))}
+      </div>
+    );
+  }
+
+  if (!countries.length) {
+    return (
+      <Card className="p-6">
+        <p className="text-gray-600">No countries added yet.</p>
+      </Card>
+    );
+  }
+
+  const handleContinueChat = async (country: Country) => {
+    try {
+      const freshCountry = await getCountryByNameAndProfileId(country.name, profileId);
+      if (freshCountry) {
+        setSelectedCountry(freshCountry);
+        setIsChatOpen(true);
+      }
+    } catch (error) {
+      console.error("Failed to load country chat:", error);
+    }
+  };
+
+  const handleCloseChat = () => {
+    setIsChatOpen(false);
+    setSelectedCountry(null);
+  };
+
+  // Transform country chat messages to ExpandedChat format
+  const transformChatMessages = (country: Country | null): ChatMessage[] => {
+    if (!country?.chat) return [];
+    
+    return country.chat.map((msg) => ({
+      role: msg.sender === "user" ? "user" : "assistant",
+      content: msg.message,
+      timestamp: new Date() // Since we don't have timestamp in the original data
+    }));
+  };
+
+  return (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {countries.map((country) => (
+          <Card key={country.id} className="p-6">
+            <div className="flex flex-col lg:flex-row justify-between items-center">
+              <h3 className="text-xl font-semibold lg:mb-0 md:mb-4">{country.name}</h3>
+              <div className="flex gap-2">
+                <Button
+                  className="bg-brand-primary hover:bg-brand-primary/80 text-white"
+                  onClick={() => {
+                    setPlanCountry(country.name);
+                    setIsPlanDialogOpen(true);
+                  }}
+                  disabled={createPlanMutation.isPending}
+                >
+                  {createPlanMutation.isPending ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                  ) : null}
+                  <Play className="w-4 h-4 mr-1" />
+                  Create Plan
+                </Button>
+                <Button 
+                  onClick={() => handleContinueChat(country)}
+                >
+                  <MessageCircle className="w-4 h-4 mr-1" />
+                  Continue Chat
+                </Button>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      {selectedCountry && (
+        <ExpandedChat
+          character={{
+            name: "Travel Wizard",
+            avatar: "/vaza-logo.webp",
+            emoji: "✈️",
+            online: true
+          }}
+          isOpen={isChatOpen}
+          onClose={handleCloseChat}
+          existingMessages={transformChatMessages(selectedCountry)}
+          country={selectedCountry.name}
+          onSendMessage={(message, character) => {
+            console.log("Message sent:", message, character);
+          }}
+          onSaveConversation={(messages) => {
+            // TODO: Implement saving conversation back to the country
+            console.log("Save conversation:", messages);
+          }}
+        />
+      )}
+
+      <CreatePlanDialog
+        isOpen={isPlanDialogOpen}
+        onOpenChange={setIsPlanDialogOpen}
+        targetCountry={planCountry}
+      />
+    </>
+  );
+};

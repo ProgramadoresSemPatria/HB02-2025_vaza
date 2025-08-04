@@ -38,49 +38,49 @@ const otherCountries: CountryOption[] = [
     id: "venezuela",
     name: "Venezuela",
     flag: "🇻🇪",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: 6.42375, lng: -66.58973 },
   },
   {
     id: "peru",
     name: "Peru",
     flag: "🇵🇪",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: -9.19, lng: -75.0152 },
   },
   {
     id: "chile",
     name: "Chile",
     flag: "🇨🇱",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: -35.6751, lng: -71.543 },
   },
   {
     id: "ecuador",
-    name: "Equador",
+    name: "Ecuador",
     flag: "🇪🇨",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: -1.8312, lng: -78.1834 },
   },
   {
     id: "bolivia",
-    name: "Bolívia",
+    name: "Bolivia",
     flag: "🇧🇴",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: -16.2902, lng: -63.5887 },
   },
   {
     id: "paraguay",
-    name: "Paraguai",
+    name: "Paraguay",
     flag: "🇵🇾",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: -23.4425, lng: -58.4438 },
   },
   {
     id: "uruguay",
-    name: "Uruguai",
+    name: "Uruguay",
     flag: "🇺🇾",
-    description: "América do Sul",
+    description: "South America",
     coordinates: { lat: -32.5228, lng: -55.7658 },
   },
 ];
@@ -101,10 +101,10 @@ export const CurrentCountryStep = ({
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">
-          De onde você está partindo? 🛫
+          Where are you leaving from? 🛫
         </h2>
         <p className="text-xs sm:text-sm md:text-base text-gray-600">
-          Seu país de origem
+          Your origin country
         </p>
       </div>
 
@@ -114,7 +114,7 @@ export const CurrentCountryStep = ({
           onClick={() => onUpdate("brazil")}
           icon={MapPin}
         >
-          🇧🇷 Brasil
+          🇧🇷 Brazil
         </OptionButton>
 
         <OptionButton
@@ -130,7 +130,7 @@ export const CurrentCountryStep = ({
           onClick={() => onUpdate("colombia")}
           icon={MapPin}
         >
-          🇨🇴 Colômbia
+          🇨🇴 Colombia
         </OptionButton>
 
         <OptionButton
@@ -138,7 +138,7 @@ export const CurrentCountryStep = ({
           onClick={() => setShowMap(true)}
           icon={Globe}
         >
-          🌍 Outro país
+          🌍 Another country
         </OptionButton>
       </div>
 
@@ -157,7 +157,7 @@ export const CurrentCountryStep = ({
             />
           </div>
           <p className="text-xs sm:text-sm text-gray-600 mt-2 text-center">
-            Localização do seu país de origem
+            Location of your home country
           </p>
         </div>
       )}
@@ -169,7 +169,7 @@ export const CurrentCountryStep = ({
             {/* Header */}
             <div className="p-3 sm:p-4 border-b flex justify-between items-center">
               <h3 className="text-sm sm:text-base lg:text-lg font-semibold">
-                Escolha seu país de origem
+                Choose your origin country
               </h3>
               <button
                 onClick={() => setShowMap(false)}
@@ -183,7 +183,7 @@ export const CurrentCountryStep = ({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-2">
                   <h4 className="font-medium text-gray-700 mb-3 text-sm sm:text-base">
-                    Outros países da América do Sul:
+                    Other countries in South America:
                   </h4>
                   <div className="max-h-48 sm:max-h-64 md:max-h-80 overflow-y-auto space-y-2 scrollbar-hide">
                     {otherCountries.map((country) => (
@@ -226,8 +226,7 @@ export const CurrentCountryStep = ({
 
               <div className="mt-3 sm:mt-4 text-center">
                 <p className="text-xs sm:text-sm text-gray-600">
-                  Clique em um país da lista ou explore o mapa para escolher seu
-                  país de origem
+                  Click on a country from the list or explore the map to choose your home country
                 </p>
               </div>
             </div>

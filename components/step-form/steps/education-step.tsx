@@ -18,21 +18,21 @@ export const EducationStep = ({
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
-          Formação Acadêmica
+          Education
         </h2>
-        <p className="text-xs sm:text-sm md:text-base text-gray-600">Conte-nos sobre sua educação</p>
+        <p className="text-xs sm:text-sm md:text-base text-gray-600">Tell us about your academic background</p>
       </div>
 
       <div className="space-y-3 sm:space-y-4">
         {/* Degree */}
         <div className="space-y-1 sm:space-y-2">
           <Label htmlFor="degree" className="text-sm font-medium text-gray-700">
-            Formação / Diploma
+            Degree / Diploma
           </Label>
           <Input
             id="degree"
             type="text"
-            placeholder="Ex: Bacharel em Ciência da Computação, Medicina, Administração..."
+            placeholder="e.g. Bachelor of Computer Science, Medicine, Business Administration..."
             value={degree}
             onChange={(e) => onUpdate("degree", e.target.value)}
             className="w-full h-11 sm:h-10 text-sm sm:text-base"
@@ -45,12 +45,12 @@ export const EducationStep = ({
             htmlFor="institution"
             className="text-sm font-medium text-gray-700"
           >
-            Instituição
+            Institution
           </Label>
           <Input
             id="institution"
             type="text"
-            placeholder="Ex: Universidade de São Paulo, Harvard, MIT..."
+            placeholder="e.g. University of São Paulo, Harvard, MIT..."
             value={institution}
             onChange={(e) => onUpdate("institution", e.target.value)}
             className="w-full h-11 sm:h-10 text-sm sm:text-base"

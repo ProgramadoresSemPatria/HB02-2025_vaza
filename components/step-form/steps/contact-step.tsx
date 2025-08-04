@@ -16,15 +16,15 @@ export const ContactStep = ({
 }: ContactStepProps) => (
   <div className="space-y-6">
     <div className="text-center">
-      <h2 className="text-xl font-bold mb-2">Seus dados de contato</h2>
-      <p className="text-gray-600">Para criarmos seu plano personalizado</p>
+      <h2 className="text-xl font-bold mb-2">Your Contact Information</h2>
+      <p className="text-gray-600">So we can create your personalized plan</p>
     </div>
     <div className="space-y-4">
       <div>
-        <Label htmlFor="name">Nome completo *</Label>
+        <Label htmlFor="name">Full Name *</Label>
         <Input
           id="name"
-          placeholder="Seu nome"
+          placeholder="Your name"
           value={name}
           onChange={(e) => onUpdate("name", e.target.value)}
           className="mt-1"
@@ -35,14 +35,14 @@ export const ContactStep = ({
         <Input
           id="email"
           type="email"
-          placeholder="seu@email.com"
+          placeholder="your@email.com"
           value={email}
           onChange={(e) => onUpdate("email", e.target.value)}
           className="mt-1"
         />
       </div>
       <div>
-        <Label htmlFor="phone">Telefone *</Label>
+        <Label htmlFor="phone">Phone *</Label>
         <Input
           id="phone"
           type="tel"

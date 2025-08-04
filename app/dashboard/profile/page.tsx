@@ -7,14 +7,19 @@ import {
   ProfileStatsOverview,
 } from "@/components/profile";
 import { useProfile } from "@/hooks/useProfile";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function ProfilePage() {
   const { profile, isLoading, error, refetch } = useProfile();
-  const router = useRouter();
+
+  const [ isEditing, setIsEditing ] = useState(false)
 
   const handleEditProfile = () => {
-    router.push("/dashboard/get-started");
+    setIsEditing(true);
+  };
+
+  const closeEditForm = () => {
+    setIsEditing(false);
   };
 
   if (isLoading) {
@@ -61,7 +66,14 @@ export default function ProfilePage() {
           </div>
 
           <div className="lg:col-span-2">
-            <ProfileDetails profile={profile} />
+            <ProfileDetails 
+              profile={profile}
+              refetch={refetch} 
+              onEdit={{
+                isEditing, 
+                closeEditForm
+              }} 
+            />
           </div>
         </div>
       </div>

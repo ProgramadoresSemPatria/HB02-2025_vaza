@@ -16,10 +16,10 @@ export const CitizenshipStep = ({
     <div className="space-y-4 sm:space-y-6">
       <div className="text-center">
         <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
-          Cidadanias
+          Citizenships
         </h2>
         <p className="text-xs sm:text-sm md:text-base text-gray-600">
-          Quais cidadanias você possui?
+          Which citizenships do you hold?
         </p>
       </div>
 
@@ -29,18 +29,18 @@ export const CitizenshipStep = ({
             htmlFor="citizenships"
             className="text-sm font-medium text-gray-700"
           >
-            Cidadanias (separadas por vírgula)
+            Citizenships (separated by commas)
           </Label>
           <Input
             id="citizenships"
             type="text"
-            placeholder="Ex: Brasileira, Italiana, Americana..."
+            placeholder="e.g. Brazilian, Italian, American..."
             value={citizenships}
             onChange={(e) => onUpdate(e.target.value)}
             className="w-full h-11 sm:h-10 text-sm sm:text-base"
           />
           <p className="text-xs text-gray-500">
-            Se você tem múltiplas cidadanias, separe-as por vírgula
+            If you have multiple citizenships, separate them with commas
           </p>
         </div>
       </div>

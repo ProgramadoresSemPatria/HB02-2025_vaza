@@ -208,9 +208,9 @@ export const StepForm = ({ onClose }: StepFormProps) => {
               >
                 {currentStep === totalSteps
                   ? isLoading
-                    ? "Salvando..."
-                    : "Salvar informações"
-                  : "Próximo"}
+                    ? "Saving..."
+                    : "Save"
+                  : "Next"}
               </Button>
             </div>
           </div>

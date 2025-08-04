@@ -12,46 +12,46 @@ export const SummaryStep = ({ formData }: SummaryStepProps) => (
     </div>
     <div>
       <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">
-        Perfeito! 🎉
+        Perfect! 🎉
       </h2>
       <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-4 sm:mb-6">
-        Vamos criar seu plano personalizado para conquistar seu passaporte!
+        Let's create your personalized plan to help you get your passport!
       </p>
     </div>
     <div className="bg-gray-50 rounded-lg p-3 sm:p-4 text-left space-y-2 border">
       <h3 className="font-semibold text-gray-900 mb-2 sm:mb-3 text-sm sm:text-base">
-        Resumo das suas informações:
+        Summary of your information:
       </h3>
       <div className="space-y-1 text-xs sm:text-sm">
         <p>
-          <span className="text-gray-500">De:</span>{" "}
+          <span className="text-gray-500">From:</span>{" "}
           {formData.currentCountry.charAt(0).toUpperCase() +
             formData.currentCountry.slice(1)}
         </p>
         <p>
-          <span className="text-gray-500">Profissão:</span> {formData.jobTitle}
+          <span className="text-gray-500">Occupation:</span> {formData.jobTitle}
         </p>
         <p>
-          <span className="text-gray-500">Idade:</span> {formData.age} anos
+          <span className="text-gray-500">Age:</span> {formData.age} years
         </p>
         <p>
-          <span className="text-gray-500">Formação:</span> {formData.degree}
+          <span className="text-gray-500">Degree:</span> {formData.degree}
         </p>
         <p>
-          <span className="text-gray-500">Instituição:</span>{" "}
+          <span className="text-gray-500">Institution:</span>{" "}
           {formData.institution}
         </p>
         <p>
-          <span className="text-gray-500">Cidadanias:</span>{" "}
+          <span className="text-gray-500">Citizenships:</span>{" "}
           {formData.citizenships}
         </p>
         <p>
-          <span className="text-gray-500">Estado Civil:</span>{" "}
+          <span className="text-gray-500">Marital Status:</span>{" "}
           {formData.maritalStatus.charAt(0).toUpperCase() +
             formData.maritalStatus.slice(1)}
         </p>
         <p>
-          <span className="text-gray-500">Filhos:</span> {formData.children}
+          <span className="text-gray-500">Children:</span> {formData.children}
         </p>
       </div>
     </div>

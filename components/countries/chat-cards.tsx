@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Play, MessageCircle } from "lucide-react";
 import ExpandedChat from "@/components/chat/ExpandedChat";
+import { CreatePlanDialog } from "@/components/plan/create-plan-dialog";
 interface ChatMessage {
   role: "user" | "assistant";
   content: string;
@@ -30,6 +31,8 @@ export const ChatCards = ({
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false);
+  const [planCountry, setPlanCountry] = useState<string>("");
 
   useEffect(() => {
     const loadCountries = async () => {
@@ -98,7 +101,10 @@ export const ChatCards = ({
               <div className="flex gap-2">
                 <Button
                   className="bg-brand-primary hover:bg-brand-primary/80 text-white"
-                  onClick={() => onCreatePlan?.()}
+                  onClick={() => {
+                    setPlanCountry(country.name);
+                    setIsPlanDialogOpen(true);
+                  }}
                   disabled={createPlanMutation.isPending}
                 >
                   {createPlanMutation.isPending ? (
@@ -140,6 +146,12 @@ export const ChatCards = ({
           }}
         />
       )}
+
+      <CreatePlanDialog
+        isOpen={isPlanDialogOpen}
+        onOpenChange={setIsPlanDialogOpen}
+        targetCountry={planCountry}
+      />
     </>
   );
 };

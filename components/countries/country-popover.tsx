@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CountryData } from "@/types/country";
 import { useCountry } from "@/hooks/country/useCountry";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useProfile } from "@/hooks/useProfile";
 import Image from "next/image";
 import { Lock, MessageCircle, Play} from "lucide-react";
+import { CreatePlanDialog } from "@/components/plan/create-plan-dialog";
+import { useState } from "react";
 
 interface CountryPopoverProps {
   data: CountryData;
@@ -30,6 +32,7 @@ export const CountryPopover = ({
   const { getCountryByNameAndProfileId } = useCountry();
   const [countryExists, setCountryExists] = useState<boolean>(false);
   const [isCheckingCountry, setIsCheckingCountry] = useState(false);
+  const [isPlanDialogOpen, setIsPlanDialogOpen] = useState(false);
 
   useEffect(() => {
     const checkCountryExists = async () => {
@@ -203,7 +206,10 @@ export const CountryPopover = ({
                 )}
               </Button>
               <Button
-                onClick={handleCreatePlan}
+                onClick={() => {
+                  onOpenChange(false); // Close the popover
+                  setIsPlanDialogOpen(true); // Open the plan dialog
+                }}
                 className="flex-1 bg-brand-primary hover:bg-brand-primary/80 text-white"
                 disabled={popoverData.isLoading || createPlanMutation.isPending || isCheckingCountry || !countryExists}
                 title={!countryExists ? "You need to create a plan first" : ""}
@@ -224,6 +230,12 @@ export const CountryPopover = ({
           </div>
         </PopoverContent>
       </Popover>
+
+      <CreatePlanDialog
+        isOpen={isPlanDialogOpen}
+        onOpenChange={setIsPlanDialogOpen}
+        targetCountry={popoverData.name}
+      />
     </div>
   );
 };

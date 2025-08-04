@@ -2,6 +2,8 @@
 
 import { useConversation } from '@elevenlabs/react';
 import { useCallback } from 'react';
+import { Headphones, HeadphoneOff } from 'lucide-react';
+import { Button } from './ui/button';
 
 export function Conversation() {
   const conversation = useConversation({
@@ -41,28 +43,15 @@ export function Conversation() {
   }, [conversation]);
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex gap-2">
-        <button
-          onClick={startConversation}
-          disabled={conversation.status === 'connected'}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:bg-gray-300"
-        >
-          Start Conversation
-        </button>
-        <button
-          onClick={stopConversation}
-          disabled={conversation.status !== 'connected'}
-          className="px-4 py-2 bg-red-500 text-white rounded disabled:bg-gray-300"
-        >
-          Stop Conversation
-        </button>
-      </div>
-
-      <div className="flex flex-col items-center">
-        <p>Status: {conversation.status}</p>
-        <p>Agent is {conversation.isSpeaking ? 'speaking' : 'listening'}</p>
-      </div>
-    </div>
+    <Button
+      onClick={conversation.status === 'connected' ? stopConversation : startConversation}
+      className="p-2 bg-primary text-white rounded hover:bg-primary/80 transition-colors"
+    >
+      {conversation.status === 'connected' ? (
+        <HeadphoneOff className="w-5 h-5" />
+      ) : (
+        <Headphones className="w-5 h-5" />
+      )}
+    </Button>
   );
 }

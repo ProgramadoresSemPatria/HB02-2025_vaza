@@ -16,6 +16,8 @@ import {
   LucideIcon,
   Mail,
   MapPin,
+  PenOff,
+  Save,
   User,
 } from "lucide-react";
 import { useState } from "react";
@@ -25,23 +27,40 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form"
 import { Button, Input } from "../ui";
 import { useEditProfile } from "@/hooks/useEditProfile";
 import { CurrentCountryStep } from "../step-form/steps/current-country-step";
+import { FamilyStep } from "../step-form/steps/family-step";
 
 const FormSchema = z.object({
-  email: z.string("E-mail is required").email("Invalid e-mail"),
-  country: z.string("Country is required"),
-  job_title: z.string("Job title is required"),
-  age: z.string("Age is required")
+  email: z.string().email(),
+  country: z.string(),
+  job_title: z.string().nonempty({
+      message: "Job title is required",
+    }),
+  age: z
+    .string().nonempty({
+      message: "Age is required",
+    }),
+  degree: z.string().nonempty({
+      message: "Degree is required"
+    }),
+  institution: z.string().nonempty({
+      message: "Insitution is required"
+    }),
+  citizenships: z.string().nonempty({
+      message: "Citizenships are required"
+    }),
+  marital_status: z.string(),
+  children: z.string()
 })
 
 type FormData = z.infer<typeof FormSchema>
 
 interface ProfileDetailsProps {
   profile: Profile | null;
-  refetch: () => Promise<void>
+  refetch: () => Promise<void>;
   onEdit: {
     isEditing: boolean,
     closeEditForm: () => void
-  }
+  };
 }
 
 export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps) {
@@ -51,14 +70,29 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
       email: profile?.email || "",
       country: profile?.country || "",
       job_title: profile?.job_title || "",
-      age: profile?.age ? String(profile.age) : ""
+      age: profile?.age ? String(profile.age) : "",
+      degree: profile?.degree || "",
+      institution: profile?.institution || "",
+      citizenships: profile?.citizenships.join(', ') || "",
+      marital_status: profile?.marital_status || "",
+      children: profile?.children ? String(profile.children) : ""
     }
   })
 
-  const [ newCountry, setNewCountry ] = useState<string|undefined>()
+  const [ newCountry, setNewCountry ] = useState<string | undefined>(profile?.country)
+  const [ maritalStatus, setMaritalStatus ] = useState<string | undefined>(profile?.marital_status)
+  const [ children, setChildren ] = useState<string | undefined>(profile?.children ? String(profile.children) : undefined)
 
   function handleNewCountry(country: string) {
     setNewCountry(country)
+  }
+
+  function handleFamily(field: string, value: string) {
+    if (field === "maritalStatus") {
+      setMaritalStatus(value)
+    } else if (field === "children") {
+      setChildren(value)
+    }
   }
 
   const { editProfile, error } = useEditProfile()
@@ -70,13 +104,24 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
       })
       return
     }
+
+    if (Number(data.age) < 0) {
+      form.setError("age", {
+        message: "Age must be a valid number"
+      })
+      return
+    }
     
-    const profileData = {
+    const profileData: Profile = {
       ...profile,
-      email: data.email,
-      country: newCountry ?? data.country,
+      country: newCountry ?? profile.country,
       job_title: data.job_title,
-      age: Number(data.age)
+      age: Number(data.age),
+      degree: data.degree,
+      institution: data.institution,
+      citizenships: data.citizenships.split(",").map(citizenship => citizenship.trim()),
+      marital_status: maritalStatus ?? profile.marital_status,
+      children: children ? Number(children) : profile.children
     }
 
     const result = await editProfile({ profile: profileData})
@@ -137,38 +182,41 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
         <p className="text-sm font-medium text-gray-700 mb-1">{label}</p>
         { onEdit.isEditing && field ? (
           field === "country" ? (
-            <>
+            <div className="mt-4">
               <CurrentCountryStep 
-                currentCountry={field}
+                currentCountry={newCountry ?? profile.country}
                 onUpdate={handleNewCountry}
+                isEditForm={true}
               />
               { newCountry && 
                 <p className={`text-md ${color} ${!value ? "italic" : ""} break-words`}>
-                  New country:
+                  Current country:
                   <span className="font-bold">
                     {` ${capitalize(newCountry)}`}
                   </span>
                 </p>
               }
-            </>
-          ) : (
-            <FormField 
-              control={form.control}
-              name={field}
-              render={({ field: formField }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input 
-                      {...formField}
-                      type={ field === "age" ? "number" : "text" }
-                      className={form.formState.errors[field] ? "border-red-500" : ""}
-                    />
-                  </FormControl>
-                  <FormMessage /> 
-                </FormItem>
-              )}
-            />
-          )
+            </div>
+          ) : field === "email" ? (
+              <Input disabled type="email" value={profile.email} />
+            ) : ( 
+              <FormField 
+                control={form.control}
+                name={field}
+                render={({ field: formField }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input 
+                        {...formField}
+                        type={ field === "age" ? "number" : "text" }
+                        className={form.formState.errors[field] ? "border-red-500" : ""}
+                      />
+                    </FormControl>
+                    <FormMessage /> 
+                  </FormItem>
+                )}
+              />
+            )
         ) : (
           <p className={`text-sm ${color} ${!value ? "italic" : ""} break-words`}>
             {value
@@ -224,16 +272,6 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
             </CardContent>
           </Card>
           <FormMessage />
-          { onEdit.isEditing && (
-            <div className="flex justify-end gap-4">
-              <Button type="button" variant="outline" onClick={onEdit.closeEditForm}>
-                Cancel
-              </Button>
-              <Button type="submit" variant="default">
-                Save 
-              </Button>
-            </div>
-          )}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
@@ -246,11 +284,13 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
                 icon={GraduationCap}
                 label="Degree"
                 value={profile.degree}
+                field="degree"
               />
               <Separator className="my-2" />
               <InfoItem
                 icon={Building}
                 label="Institution"
+                field="institution"
                 value={profile.institution}
               />
             </CardContent>
@@ -266,16 +306,39 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
             <CardContent>
               {profile.citizenships && profile.citizenships.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
-                  {profile.citizenships.map((citizenship, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="text-sm bg-purple-100 text-purple-800 hover:bg-purple-200 px-3 py-1"
-                    >
-                      <Globe className="h-3 w-3 mr-2" />
-                      {citizenship}
-                    </Badge>
-                  ))}
+                  { onEdit.isEditing ? (
+                    <div className="flex flex-col gap-2">
+                      <FormField 
+                        control={form.control}
+                        name="citizenships"
+                        render={({ field: formField }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input 
+                                {...formField}
+                                className={form.formState.errors["citizenships"] ? "border-red-500" : ""}
+                              />
+                            </FormControl>
+                            <FormMessage /> 
+                          </FormItem>
+                        )}
+                      />
+                      <p className="text-xs text-gray-500">
+                        If you have multiple citizenships, separate them with commas
+                      </p>
+                    </div>
+                  ) : (
+                    profile.citizenships.map((citizenship, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="text-sm bg-purple-100 text-purple-800 hover:bg-purple-200 px-3 py-1"
+                      >
+                        <Globe className="h-3 w-3 mr-2" />
+                        {citizenship}
+                      </Badge>
+                    ))
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center gap-3 py-2">
@@ -296,15 +359,47 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <InfoItem
-                icon={Heart}
-                label="Marital Status"
-                value={profile.marital_status}
-              />
-              <Separator className="my-2" />
-              <InfoItem icon={Baby} label="Children" value={profile.children} />
+              { onEdit.isEditing ? (
+                <FamilyStep 
+                  maritalStatus={maritalStatus ?? profile.marital_status}
+                  childrenCount={children ?? String(profile.children)}
+                  onUpdate={handleFamily}
+                  isEditForm={true}
+                />
+              ) : (
+                <>
+                  <InfoItem
+                    icon={Heart}
+                    label="Marital Status"
+                    value={profile.marital_status}
+                  />
+                  <Separator className="my-2" />
+                  <InfoItem icon={Baby} label="Children" value={profile.children} />
+                </>
+              )}
             </CardContent>
           </Card>
+          { onEdit.isEditing && (
+            <div className="flex justify-end gap-4">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onEdit.closeEditForm}
+                className="flex gap-2"
+              >
+                <PenOff />
+                Cancel
+              </Button>
+              <Button 
+                type="submit" 
+                variant="default"
+                className="flex gap-2"
+              >
+                <Save />
+                Save 
+              </Button>
+            </div>
+          )}
         </div>
       </form>
     </Form>

@@ -27,7 +27,7 @@ export const EducationStep = ({
         {/* Degree */}
         <div className="space-y-1 sm:space-y-2">
           <Label htmlFor="degree" className="text-sm font-medium text-gray-700">
-            Degree / Diploma
+            Degree
           </Label>
           <Input
             id="degree"

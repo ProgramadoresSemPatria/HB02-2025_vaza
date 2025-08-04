@@ -5,6 +5,7 @@ import { OptionButton } from "../option-button";
 interface CurrentCountryStepProps {
   currentCountry: string;
   onUpdate: (value: string) => void;
+  isEditForm?: boolean;
 }
 
 interface CountryOption {
@@ -88,6 +89,7 @@ const otherCountries: CountryOption[] = [
 export const CurrentCountryStep = ({
   currentCountry,
   onUpdate,
+  isEditForm = false
 }: CurrentCountryStepProps) => {
   const [showMap, setShowMap] = useState(false);
   const coordinates = getCountryCoordinates(currentCountry);
@@ -99,14 +101,16 @@ export const CurrentCountryStep = ({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div className="text-center">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">
-          Where are you leaving from? 🛫
-        </h2>
-        <p className="text-xs sm:text-sm md:text-base text-gray-600">
-          Your origin country
-        </p>
-      </div>
+      { !isEditForm && 
+        <div className="text-center">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2">
+            Where are you leaving from? 🛫
+          </h2>
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">
+            Your origin country
+          </p>
+        </div>
+      }
 
       <div className="space-y-2 sm:space-y-3">
         <OptionButton

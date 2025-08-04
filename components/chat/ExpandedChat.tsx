@@ -53,9 +53,6 @@ export default function ExpandedChat({
       character: character.name,
       country,
     },
-    onFinish: (message) => {
-      console.log("AI response finished in useChat");
-    },
     onError: (error) => {
       console.error("AI response error:", error);
     },

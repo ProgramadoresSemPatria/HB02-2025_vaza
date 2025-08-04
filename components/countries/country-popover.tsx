@@ -14,7 +14,6 @@ interface CountryPopoverProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onSelect: () => void;
-  onCreatePlan: () => void;
   createPlanMutation: {
     isPending: boolean;
   };
@@ -25,7 +24,6 @@ export const CountryPopover = ({
   isOpen,
   onOpenChange,
   onSelect: handleCountrySelect,
-  onCreatePlan: handleCreatePlan,
   createPlanMutation,
 }: CountryPopoverProps) => {
   const { profile } = useProfile();

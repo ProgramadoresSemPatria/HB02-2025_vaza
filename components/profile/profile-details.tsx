@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import z, { email } from "zod";
+import z from "zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "../ui/form";
 import { Button, Input } from "../ui";
 import { useEditProfile } from "@/hooks/useEditProfile";

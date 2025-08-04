@@ -16,7 +16,6 @@ import { Country } from "@/types/db";
 
 interface ChatCardsProps {
   profileId: string;
-  onCreatePlan?: () => void;
   createPlanMutation?: {
     isPending: boolean;
   };
@@ -24,7 +23,6 @@ interface ChatCardsProps {
 
 export const ChatCards = ({ 
   profileId,
-  onCreatePlan,
   createPlanMutation = { isPending: false }
 }: ChatCardsProps) => {
   const { countries, getCountries, getCountryByNameAndProfileId } = useCountry();

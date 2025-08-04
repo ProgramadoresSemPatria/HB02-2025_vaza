@@ -15,7 +15,7 @@ export const SummaryStep = ({ formData }: SummaryStepProps) => (
         Perfect! 🎉
       </h2>
       <p className="text-xs sm:text-sm md:text-base text-gray-600 mb-4 sm:mb-6">
-        Let's create your personalized plan to help you get your passport!
+        Let&apos;s create your personalized plan to help you get your passport!
       </p>
     </div>
     <div className="bg-gray-50 rounded-lg p-3 sm:p-4 text-left space-y-2 border">

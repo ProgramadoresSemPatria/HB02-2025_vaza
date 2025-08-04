@@ -187,7 +187,7 @@ export const CountryPopover = ({
 
             {/* Action Buttons */}
             <div className="flex gap-2 pt-2 border-t">
-              <Conversation />
+              <Conversation target_country={popoverData.name} />
               <Button
                 onClick={handleCountrySelect}
                 className="flex-1"

@@ -4,14 +4,16 @@ import { useConversation } from '@elevenlabs/react';
 import { useCallback } from 'react';
 import { Headphones, HeadphoneOff } from 'lucide-react';
 import { Button } from './ui/button';
+import { useProfile } from '@/hooks/useProfile';
 
-export function Conversation() {
+export function Conversation({target_country}: {target_country: string}) {
+  const { profile } = useProfile();
   const conversation = useConversation({
     onConnect: () => console.log('Connected'),
     onDisconnect: () => console.log('Disconnected'),
     onMessage: (message) => console.log('Message:', message),
     onError: (error) => console.error('Error:', error),
-    onAudio: (audio) => console.log('Audio received:', audio),
+    onAudio: (audio) => console.log('Audio received'),
   });
 
   const getSignedUrl = async (): Promise<string> => {
@@ -23,6 +25,8 @@ export function Conversation() {
     return signedUrl;
   };
 
+
+
   const startConversation = useCallback(async () => {
     try {
       // Request microphone permission
@@ -30,8 +34,23 @@ export function Conversation() {
 
       const signedUrl = await getSignedUrl();
 
+      const dynamicVariables = {
+        user__target__country: target_country || '',
+        user__name: profile?.full_name?.split(' ')[0] || '',
+        user__age: profile?.age || 0,
+        user__degree: profile?.degree || '',
+        user__institution: profile?.institution || '',
+        user__job_title: profile?.job_title || '',
+        user__current_country: profile?.country || '',
+        user__citizenships: profile?.citizenships?.join(',') || '',
+        user__marital_status: profile?.marital_status || '',
+        user__children: profile?.children || 0,
+      }
+      
+      console.log(dynamicVariables);
+
       // Start the conversation with your agent
-      await conversation.startSession({ signedUrl: signedUrl });
+      await conversation.startSession({ signedUrl: signedUrl, dynamicVariables });
 
     } catch (error) {
       console.error('Failed to start conversation:', error);

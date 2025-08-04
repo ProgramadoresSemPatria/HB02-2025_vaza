@@ -10,6 +10,7 @@ import { GlobeIcon, LayoutIcon, LogOut, UserIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Conversation } from "@/components/elevenlabs";
 
 const navigationItems = [
   {
@@ -57,6 +58,7 @@ export function DashboardSidebar() {
           ))}
         </div>
       </div>
+      <Conversation />
       <button
         onClick={handleLogout}
         className="flex items-center gap-2 group/sidebar cursor-pointer py-2 px-2 rounded-md hover:bg-neutral-200 dark:hover:bg-neutral-700 transition duration-150 text-neutral-700 dark:text-neutral-200 text-sm w-full text-left"

@@ -93,8 +93,8 @@ export const ChatCards = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {countries.map((country) => (
           <Card key={country.id} className="p-6">
-            <div className="flex flex-row justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold">{country.name}</h3>
+            <div className="flex flex-col lg:flex-row justify-between items-center">
+              <h3 className="text-xl font-semibold lg:mb-0 md:mb-4">{country.name}</h3>
               <div className="flex gap-2">
                 <Button
                   className="bg-brand-primary hover:bg-brand-primary/80 text-white"

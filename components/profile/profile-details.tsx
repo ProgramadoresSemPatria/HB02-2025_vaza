@@ -30,7 +30,10 @@ const FormSchema = z.object({
   email: z.string("E-mail is required").email("Invalid e-mail"),
   country: z.string("Country is required"),
   job_title: z.string("Job title is required"),
-  age: z.string("Age is required")
+  age: z.string("Age is required"),
+  degree: z.string("Degree is required"),
+  institution: z.string("Insitution is required"),
+  citizenships: z.string("Citizenships are required")
 })
 
 type FormData = z.infer<typeof FormSchema>
@@ -51,7 +54,10 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
       email: profile?.email || "",
       country: profile?.country || "",
       job_title: profile?.job_title || "",
-      age: profile?.age ? String(profile.age) : ""
+      age: profile?.age ? String(profile.age) : "",
+      degree: profile?.degree || "",
+      institution: profile?.institution || "",
+      citizenships: profile?.citizenships.join(', ') || ""
     }
   })
 
@@ -71,12 +77,15 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
       return
     }
     
-    const profileData = {
+    const profileData: Profile = {
       ...profile,
       email: data.email,
-      country: newCountry ?? data.country,
+      country: newCountry ?? profile.country,
       job_title: data.job_title,
-      age: Number(data.age)
+      age: Number(data.age),
+      degree: data.degree,
+      institution: data.institution,
+      citizenships: data.citizenships.split(",").map(citizenship => citizenship.trim())
     }
 
     const result = await editProfile({ profile: profileData})
@@ -151,7 +160,7 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
                 </p>
               }
             </>
-          ) : (
+          ) :  ( 
             <FormField 
               control={form.control}
               name={field}
@@ -224,16 +233,6 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
             </CardContent>
           </Card>
           <FormMessage />
-          { onEdit.isEditing && (
-            <div className="flex justify-end gap-4">
-              <Button type="button" variant="outline" onClick={onEdit.closeEditForm}>
-                Cancel
-              </Button>
-              <Button type="submit" variant="default">
-                Save 
-              </Button>
-            </div>
-          )}
           <Card className="border-gray-200 shadow-sm">
             <CardHeader>
               <CardTitle className="text-lg sm:text-xl font-semibold flex items-center gap-3 text-gray-900">
@@ -246,11 +245,13 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
                 icon={GraduationCap}
                 label="Degree"
                 value={profile.degree}
+                field="degree"
               />
               <Separator className="my-2" />
               <InfoItem
                 icon={Building}
                 label="Institution"
+                field="institution"
                 value={profile.institution}
               />
             </CardContent>
@@ -266,16 +267,39 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
             <CardContent>
               {profile.citizenships && profile.citizenships.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
-                  {profile.citizenships.map((citizenship, index) => (
-                    <Badge
-                      key={index}
-                      variant="secondary"
-                      className="text-sm bg-purple-100 text-purple-800 hover:bg-purple-200 px-3 py-1"
-                    >
-                      <Globe className="h-3 w-3 mr-2" />
-                      {citizenship}
-                    </Badge>
-                  ))}
+                  { onEdit.isEditing ? (
+                    <div className="flex flex-col gap-2">
+                      <FormField 
+                        control={form.control}
+                        name="citizenships"
+                        render={({ field: formField }) => (
+                          <FormItem>
+                            <FormControl>
+                              <Input 
+                                {...formField}
+                                className={form.formState.errors["citizenships"] ? "border-red-500" : ""}
+                              />
+                            </FormControl>
+                            <FormMessage /> 
+                          </FormItem>
+                        )}
+                      />
+                      <p className="text-xs text-gray-500">
+                        If you have multiple citizenships, separate them with commas
+                      </p>
+                    </div>
+                  ) : (
+                    profile.citizenships.map((citizenship, index) => (
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="text-sm bg-purple-100 text-purple-800 hover:bg-purple-200 px-3 py-1"
+                      >
+                        <Globe className="h-3 w-3 mr-2" />
+                        {citizenship}
+                      </Badge>
+                    ))
+                  )}
                 </div>
               ) : (
                 <div className="flex items-center gap-3 py-2">
@@ -305,6 +329,16 @@ export function ProfileDetails({ profile, refetch, onEdit }: ProfileDetailsProps
               <InfoItem icon={Baby} label="Children" value={profile.children} />
             </CardContent>
           </Card>
+          { onEdit.isEditing && (
+            <div className="flex justify-end gap-4">
+              <Button type="button" variant="outline" onClick={onEdit.closeEditForm}>
+                Cancel
+              </Button>
+              <Button type="submit" variant="default">
+                Save 
+              </Button>
+            </div>
+          )}
         </div>
       </form>
     </Form>

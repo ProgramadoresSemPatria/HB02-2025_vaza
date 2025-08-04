@@ -1,6 +1,9 @@
 # Vaza - Your Immigration Assistant
 - **Live Project: [vaza.ai](https://hb-02-2025-vaza.vercel.app)**
 
+## Video
+[Click here to see our walkthrough](https://www.loom.com/share/aa32b578a9cf4a5589785e799720ff6b) - Portuguese
+
 ## Problem Statement
 Immigration processes are often complex, confusing, and overwhelming. People struggle to understand visa requirements, gather the right documentation, and follow the correct procedures for their specific situation. Vaza solves this by providing personalized immigration guidance and planning through AI-powered assistance.
 

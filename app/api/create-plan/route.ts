@@ -88,7 +88,8 @@ export async function POST(request: Request) {
 
     const createImmigrationPrompt = (
       profile: Profile | null,
-      targetCountry: string
+      targetCountry: string,
+      chatHistory: { message: string; sender: "user" | "ai" }[]
     ) => {
       const profileContext = profile
         ? `
@@ -106,9 +107,18 @@ User Profile Context:
 `
         : "No user profile available - provide general immigration guidance.";
 
+      const chatContext = chatHistory.length > 0
+        ? `
+Previous Chat Context:
+${chatHistory.map(msg => `${msg.sender.toUpperCase()}: ${msg.message}`).join('\n')}
+`
+        : '';
+
       return `You are an expert immigration consultant with access to the most current immigration laws, requirements, and procedures. Your task is to create a comprehensive, personalized immigration plan for someone wanting to immigrate to ${targetCountry}.
 
 ${profileContext}
+
+${chatContext}
 
 CRITICAL INSTRUCTIONS:
 1. Search the web for the most up-to-date immigration requirements, visa categories, processing times, and costs for ${targetCountry}
@@ -154,17 +164,7 @@ Ensure all information is current, accurate, and tailored to the user's specific
 You must understand how the country's immigration system works and never return a vague answer like "get a job and apply for work visa". EXAMPLE: In Canada you apply through the Canadian Express Entry, which requires you to have a certain amount of points in order to be called for a Permanent Residency.`;
     };
 
-    const result = await generateObject({
-      model: anthropic("claude-sonnet-4-20250514"),
-      prompt: createImmigrationPrompt(userProfile, targetCountry),
-      schema: ImmigrationPlanSchema,
-      temperature: 0.3,
-    });
-
-    // Cast the result to our typed interface
-    const generatedPlan = result.object as GeneratedImmigrationPlan;
-
-    // Save to database
+    // Get or create country record first
     const supabase = await createClient();
     const {
       data: { user },
@@ -177,35 +177,23 @@ You must understand how the country's immigration system works and never return 
       );
     }
 
-    // Create or find country record
-    let { data: country, error: countryError } = await supabase
+    // Get country record and its chat history
+    const { data: country } = await supabase
       .from("countries")
       .select("*")
       .eq("profile_id", userProfile?.id)
       .eq("name", targetCountry)
       .single();
 
-    if (countryError && countryError.code === "PGRST116") {
-      // Country doesn't exist, create it
-      const { data: newCountry, error: createCountryError } = await supabase
-        .from("countries")
-        .insert({
-          profile_id: userProfile?.id,
-          name: targetCountry,
-          chat: {},
-        })
-        .select()
-        .single();
+    const result = await generateObject({
+      model: anthropic("claude-sonnet-4-20250514"),
+      prompt: createImmigrationPrompt(userProfile, targetCountry, country?.chat || []),
+      schema: ImmigrationPlanSchema,
+      temperature: 0.3,
+    });
 
-      if (createCountryError) {
-        throw createCountryError;
-      }
-
-      countryError = null
-      country = newCountry;
-    } else if (countryError) {
-      throw countryError;
-    }
+    // Cast the result to our typed interface
+    const generatedPlan = result.object as GeneratedImmigrationPlan;
 
     // Create plan record
     const { data: plan, error: planError } = await supabase

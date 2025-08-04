@@ -169,15 +169,7 @@ export const GoogleMaps = ({
       setPopoverData(null);
     }
   };
-
-  const handleCreatePlan = () => {
-    if (!popoverData) return;
-
-    createPlanMutation.mutate({
-      targetCountry: popoverData.name,
-    });
-  };
-
+  
   return (
     <div className={className}>
       <Script
@@ -201,7 +193,6 @@ export const GoogleMaps = ({
             isOpen={isPopoverOpen}
             onOpenChange={setIsPopoverOpen}
             onSelect={handleCountrySelect}
-            onCreatePlan={handleCreatePlan}
             createPlanMutation={createPlanMutation}
           />
         )}

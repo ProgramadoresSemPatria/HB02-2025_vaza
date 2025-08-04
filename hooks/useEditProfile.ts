@@ -1,6 +1,7 @@
 import { Profile } from "@/types/db";
 import { createClient } from "@/utils/supabase/client";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface ProfileData {
   profile: Profile
@@ -36,11 +37,18 @@ export function useEditProfile() {
           age: profile.age,
           degree: profile.degree,
           institution: profile.institution,
-          citizenships: profile.citizenships
+          citizenships: profile.citizenships,
+          marital_status: profile.marital_status,
+          children: profile.children
         })
         .eq("id", profile.id)
 
-        return { error }
+        if (error) {
+          return { error }
+        } else {
+          toast.success("Profile was successfully updated")
+        }
+
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to edit profile";

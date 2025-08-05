@@ -1,25 +1,9 @@
 import { createClient } from '@/utils/supabase/client'
-import type { User } from '@supabase/supabase-js'
 
-export interface SignUpPayload {
-  fullName: string
-  email: string
-  password: string
-}
-
-export interface SignInPayload {
-  email: string
-  password: string
-}
-
-export async function signUpUser({
-  fullName,
-  email,
-  password,
-}: SignUpPayload): Promise<User> {
+// Simple auth functions - no complex interfaces or abstractions
+export async function signUp(fullName: string, email: string, password: string) {
   const supabase = await createClient()
-  // 1) sign up at the auth layer
-  const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -27,29 +11,23 @@ export async function signUpUser({
     }
   })
 
-  if (signUpError) throw signUpError
-
-  return user!
+  if (error) throw error
+  return data.user
 }
 
-export async function signInUser({
-  email,
-  password,
-}: SignInPayload): Promise<User> {
+export async function signIn(email: string, password: string) {
   const supabase = await createClient()
-  const { data: { user }, error: signInError } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
-  if (signInError) throw signInError
-
-  return user!
+  if (error) throw error
+  return data.user
 }
 
-export async function signOutUser(): Promise<void> {
+export async function signOutUser() {
   const supabase = await createClient()
   const { error } = await supabase.auth.signOut()
-
   if (error) throw error
 }

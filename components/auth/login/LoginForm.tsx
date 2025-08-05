@@ -32,11 +32,15 @@ export default function LoginForm() {
     try {
       const user = await signIn(email, password);
       if (user) {
-        console.log("User logged in: ", user);
-        router.push("/dashboard/get-started");
         toast.success("Logged in successfully!");
+        
+        // Wait for session to be established before redirect
+        // This prevents race conditions with middleware in production
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Use window.location instead of router.push for more reliable redirect
+        window.location.href = "/dashboard/get-started";
       } else {
-        console.log("Invalid email or password. Please try again.");
         toast.error("Invalid email or password. Please try again.");
       }
     } catch (error) {

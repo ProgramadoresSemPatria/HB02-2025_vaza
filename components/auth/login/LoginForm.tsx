@@ -9,32 +9,51 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLogin } from "@/hooks/auth/useLogin";
-import LoginFormSchema, {
-  LoginFormSchemaType,
-} from "@/lib/validators/LoginFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "@/services/auth";
+import { createClient } from "@/utils/supabase/client";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { toast } from "sonner";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function LoginForm() {
-  const login = useLogin();
+  const [isLoading, setIsLoading] = useState(false);
+  const { profile, refetch: fetchProfile } = useProfile();
+  
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormSchemaType>({
-    resolver: zodResolver(LoginFormSchema),
-  });
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-  const onSubmit = (data: LoginFormSchemaType) => {
-    login.mutate(data);
-  };
+    try {
+      const user = await signIn(email, password);
+      if (user) {
+        toast.success("Logged in successfully!");
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
 
-  const isSubmitting = login.isPending;
+        const supabase = createClient();
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
+
+        window.location.href = profileData ? "/dashboard/countries" : "/dashboard/get-started";
+      } else {
+        toast.error("Invalid email or password. Please try again.");
+      }
+    } catch (error) {
+      toast.error("Invalid email or password. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Card className="w-full max-w-md">
@@ -53,7 +72,7 @@ export default function LoginForm() {
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Field */}
           <div className="space-y-2">
             <Label htmlFor="email">
@@ -62,47 +81,29 @@ export default function LoginForm() {
             </Label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="Enter your email"
-              {...register("email")}
-              aria-invalid={!!errors.email}
+              required
             />
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
-            )}
           </div>
 
-          {/* Password Field */}
           <div className="space-y-2">
             <Label htmlFor="password">
               <Lock className="w-4 h-4" />
               Password
             </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={"password"}
-                placeholder="Enter your password"
-                {...register("password")}
-                aria-invalid={!!errors.password}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-              ></Button>
-            </div>
-            {errors.password && (
-              <p className="text-sm text-destructive">
-                {errors.password.message}
-              </p>
-            )}
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter your password"
+              required
+            />
           </div>
 
-          {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? (
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
               "Signing In..."
             ) : (
               <>
@@ -113,7 +114,6 @@ export default function LoginForm() {
           </Button>
         </form>
 
-        {/* Register Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}

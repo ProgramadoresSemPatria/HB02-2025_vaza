@@ -33,7 +33,9 @@ export default function DashboardLayout({
       }
     };
 
+    console.log("Checking user");
     checkUser();
+    console.log("User checked: ", user);
   }, []);
 
   if (loading) {
@@ -48,6 +50,7 @@ export default function DashboardLayout({
   }
 
   if (!user) {
+    console.log("No user found, redirecting to login");
     window.location.href = "/login";
     return null;
   }

@@ -1,17 +1,20 @@
 "use client";
 
+import { boolean } from "zod";
 import { OptionButton } from "../option-button";
 
 interface FamilyStepProps {
   maritalStatus: string;
   childrenCount: string;
   onUpdate: (field: string, value: string) => void;
+  isEditForm?: boolean;
 }
 
 export const FamilyStep = ({
   maritalStatus,
   childrenCount,
   onUpdate,
+  isEditForm = false
 }: FamilyStepProps) => {
   const maritalStatusOptions = [
     { value: "single", label: "Single" },
@@ -30,14 +33,16 @@ export const FamilyStep = ({
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <div className="text-center">
-        <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
-          Family Status
-        </h2>
-        <p className="text-xs sm:text-sm md:text-base text-gray-600">
-          Tell us about your family situation
-        </p>
-      </div>
+      { !isEditForm && 
+        <div className="text-center">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">
+            Family Status
+          </h2>
+          <p className="text-xs sm:text-sm md:text-base text-gray-600">
+            Tell us about your family situation
+          </p>
+        </div>
+      }
 
       <div className="space-y-4 sm:space-y-6">
         {/* Marital Status */}

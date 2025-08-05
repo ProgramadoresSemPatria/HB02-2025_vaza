@@ -2,15 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import { Profile } from "@/types/db";
-import { Edit, Settings, Shield, User } from "lucide-react";
+import { Edit, PenOff, Settings, Shield, User } from "lucide-react";
 import { ProfileAvatar } from "./profile-avatar";
 
 interface ProfileHeaderProps {
   profile: Profile | null;
   onEditProfile: () => void;
+  onEdit: {
+    isEditing: boolean,
+    closeEditForm: () => void
+  };
 }
 
-export function ProfileHeader({ profile, onEditProfile }: ProfileHeaderProps) {
+export function ProfileHeader({ profile, onEditProfile, onEdit }: ProfileHeaderProps) {
   const getProfileStatus = () => {
     if (!profile) return "incomplete";
 
@@ -96,13 +100,23 @@ export function ProfileHeader({ profile, onEditProfile }: ProfileHeaderProps) {
             <Settings className="h-4 w-4 mr-2" />
             Settings
           </Button>
-          <Button
-            onClick={onEditProfile}
-            className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto px-5 py-2"
-          >
-            <Edit className="h-4 w-4 mr-2" />
-            Edit Profile
-          </Button>
+          { !onEdit.isEditing ? (
+            <Button
+              onClick={onEditProfile}
+              className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto px-5 py-2"
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Edit Profile
+            </Button>
+          ) : (
+            <Button
+              onClick={onEdit.closeEditForm}
+              variant="outline"
+            >
+              <PenOff className="h-4 w-4 mr-2" />
+              Cancel Edit
+            </Button>
+          )}
         </div>
       </div>
     </div>

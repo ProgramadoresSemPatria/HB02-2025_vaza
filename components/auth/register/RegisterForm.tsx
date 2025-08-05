@@ -9,32 +9,37 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSignup } from "@/hooks/auth/useSignup";
-import RegisterFormSchema, {
-  RegisterFormSchemaType,
-} from "@/lib/validators/RegisterFormSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { signUp } from "@/services/auth";
 import { ArrowRight, Lock, Mail, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export default function RegisterForm() {
-  const signup = useSignup();
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormSchemaType>({
-    resolver: zodResolver(RegisterFormSchema),
-  });
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsLoading(true);
 
-  const onSubmit = (data: RegisterFormSchemaType) => {
-    signup.mutate(data);
-  };
+    const formData = new FormData(e.currentTarget);
+    const fullName = formData.get("fullName") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-  const isSubmitting = signup.isPending;
+    try {
+      await signUp(fullName, email, password);
+      toast.success("Account created! Please sign in.");
+      router.push("/login");
+    } catch (error) {
+      toast.error("Failed to create account. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Card className="w-full max-w-md">
@@ -53,7 +58,7 @@ export default function RegisterForm() {
       </CardHeader>
 
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Full Name Field */}
           <div className="space-y-2">
             <Label htmlFor="fullName">
@@ -62,16 +67,12 @@ export default function RegisterForm() {
             </Label>
             <Input
               id="fullName"
+              name="fullName"
               type="text"
               placeholder="Enter your full name"
-              {...register("fullName")}
-              aria-invalid={!!errors.fullName}
+              required
+              minLength={1}
             />
-            {errors.fullName && (
-              <p className="text-sm text-destructive">
-                {errors.fullName.message}
-              </p>
-            )}
           </div>
 
           {/* Email Field */}
@@ -82,14 +83,11 @@ export default function RegisterForm() {
             </Label>
             <Input
               id="email"
+              name="email"
               type="email"
               placeholder="Enter your email"
-              {...register("email")}
-              aria-invalid={!!errors.email}
+              required
             />
-            {errors.email && (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
-            )}
           </div>
 
           {/* Password Field */}
@@ -98,31 +96,19 @@ export default function RegisterForm() {
               <Lock className="w-4 h-4" />
               Password
             </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={"password"}
-                placeholder="Create a password"
-                {...register("password")}
-                aria-invalid={!!errors.password}
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-              ></Button>
-            </div>
-            {errors.password && (
-              <p className="text-sm text-destructive">
-                {errors.password.message}
-              </p>
-            )}
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Create a password"
+              required
+              minLength={8}
+            />
           </div>
 
           {/* Submit Button */}
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? (
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
               "Creating Account..."
             ) : (
               <>

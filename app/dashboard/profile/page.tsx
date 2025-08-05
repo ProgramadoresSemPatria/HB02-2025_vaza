@@ -58,7 +58,14 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
-        <ProfileHeader profile={profile} onEditProfile={handleEditProfile} />
+        <ProfileHeader 
+          profile={profile} 
+          onEditProfile={handleEditProfile}
+          onEdit={{
+            isEditing, 
+            closeEditForm,
+          }}  
+        />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
@@ -71,7 +78,7 @@ export default function ProfilePage() {
               refetch={refetch} 
               onEdit={{
                 isEditing, 
-                closeEditForm
+                closeEditForm,
               }} 
             />
           </div>

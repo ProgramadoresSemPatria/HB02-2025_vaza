@@ -47,7 +47,7 @@ export function Conversation({target_country}: {target_country: string}) {
       }
 
       // Start the conversation with your agent
-      await conversation.startSession({ signedUrl: signedUrl, dynamicVariables });
+      await conversation.startSession({ signedUrl: signedUrl, dynamicVariables, userId: profile?.id });
 
     } catch (error) {
       console.error('Failed to start conversation:', error);

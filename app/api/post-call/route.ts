@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextResponse } from "next/server";
 import { createHmac } from "crypto";
+import { Profile } from "@/types/db";
 
 // Webhook secret should be stored in environment variables
 const WEBHOOK_SECRET = process.env.ELEVENLABS_WEBHOOK_SECRET;
@@ -29,23 +30,23 @@ const validateWebhook = (
   return computedSignature === hmacSignature;
 };
 
-const saveChat = async (profile_id: string, messages: { message: string; sender: string }[]) => {
+const saveChat = async (profile: Profile, messages: { message: string; sender: string }[], target_country: string) => {
   const supabase = await createClient();
 
   // First try to get the existing country - we'll use a default country name for voice calls
   const { data: country } = await supabase
     .from("countries")
     .select("*")
-    .eq("name", "Voice Calls")
-    .eq("profile_id", profile_id)
+    .eq("name", target_country)
+    .eq("profile_id", profile.id)
     .single();
 
   if (!country) {
     const { data: newCountry, error: createError } = await supabase
       .from("countries")
       .insert({
-        name: "Voice Calls",
-        profile_id: profile_id,
+        name: target_country,
+        profile_id: profile.id,
         chat: messages,
       })
       .select()
@@ -98,8 +99,8 @@ export async function POST(request: Request) {
     // Get the profile ID from user_id
     const { data: profile } = await supabase
       .from("profiles")
-      .select("id")
-      .eq("user_id", body.data.user_id)
+      .select("*")
+      .eq("id", body.data.user_id)
       .single();
 
     if (!profile) {
@@ -113,7 +114,7 @@ export async function POST(request: Request) {
     }));
 
     // Save the chat
-    await saveChat(profile.id, chatMessages);
+    await saveChat(profile, chatMessages, body.data.conversation_initiation_client_data.dynamic_variables.user__target__country);
 
     return new NextResponse("Webhook processed successfully", { status: 200 });
   } catch (error) {

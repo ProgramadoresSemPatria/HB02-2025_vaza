@@ -10,17 +10,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/services/auth";
+import { createClient } from "@/utils/supabase/client";
 import { ArrowRight, Lock, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-
+  const { profile, refetch: fetchProfile } = useProfile();
+  
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setIsLoading(true);
@@ -34,12 +35,16 @@ export default function LoginForm() {
       if (user) {
         toast.success("Logged in successfully!");
         
-        // Wait for session to be established before redirect
-        // This prevents race conditions with middleware in production
         await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Use window.location instead of router.push for more reliable redirect
-        window.location.href = "/dashboard/get-started";
+
+        const supabase = createClient();
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
+
+        window.location.href = profileData ? "/dashboard/countries" : "/dashboard/get-started";
       } else {
         toast.error("Invalid email or password. Please try again.");
       }
@@ -83,7 +88,6 @@ export default function LoginForm() {
             />
           </div>
 
-          {/* Password Field */}
           <div className="space-y-2">
             <Label htmlFor="password">
               <Lock className="w-4 h-4" />
@@ -98,7 +102,6 @@ export default function LoginForm() {
             />
           </div>
 
-          {/* Submit Button */}
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? (
               "Signing In..."
@@ -111,7 +114,6 @@ export default function LoginForm() {
           </Button>
         </form>
 
-        {/* Register Link */}
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
             Don&apos;t have an account?{" "}

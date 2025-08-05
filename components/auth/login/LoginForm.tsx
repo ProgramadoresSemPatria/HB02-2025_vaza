@@ -30,9 +30,15 @@ export default function LoginForm() {
     const password = formData.get("password") as string;
 
     try {
-      await signIn(email, password);
-      toast.success("Logged in successfully!");
-      router.push("/dashboard/get-started");
+      const user = await signIn(email, password);
+      if (user) {
+        console.log("User logged in: ", user);
+        router.push("/dashboard/get-started");
+        toast.success("Logged in successfully!");
+      } else {
+        console.log("Invalid email or password. Please try again.");
+        toast.error("Invalid email or password. Please try again.");
+      }
     } catch (error) {
       toast.error("Invalid email or password. Please try again.");
     } finally {
